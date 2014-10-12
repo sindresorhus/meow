@@ -1,0 +1,38 @@
+{
+  "name": "meow",
+  "version": "0.0.0",
+  "description": "CLI app helper",
+  "license": "MIT",
+  "repository": "sindresorhus/meow",
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "http://sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "cli",
+    "bin",
+    "util",
+    "utility",
+    "helper",
+    "argv"
+  ],
+  "dependencies": {
+    "camelcase-keys": "^1.0.0",
+    "indent-string": "^1.1.0",
+    "minimist": "^1.1.0",
+    "object-assign": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "0.0.4"
+  }
+}
