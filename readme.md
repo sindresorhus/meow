@@ -2,7 +2,7 @@
 
 > CLI app helper
 
-![](https://cloud.githubusercontent.com/assets/170270/4606307/37c6f73c-5218-11e4-8624-e4008e952859.gif)
+![](meow.gif)
 
 
 ## Features
