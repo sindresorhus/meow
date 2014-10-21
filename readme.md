@@ -11,7 +11,6 @@
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
-- Outputs the above when no input is supplied *[(can be disabled)](#requireinput)*
 
 
 ## Install
@@ -43,9 +42,7 @@ var cli = meow({
 {
 	input: ['unicorns'],
 	flags: {rainbowCake: true},
-	pkg: {
-		name: 'foo-app',
-		...
+	...
 }
 */
 
@@ -62,6 +59,8 @@ Returns an object with:
 - `input` *(array)* - Non-flag arguments
 - `flags` *(object)* - Flags converted to camelCase
 - `pkg` *(object)* - The `package.json` object
+- `help` *(object)* - The help text used with `--help`
+- `showHelp()` *(function)* - Show the help text and exit
 
 #### options
 
@@ -77,13 +76,6 @@ Type: `string`
 Default: `package.json`
 
 Relative path to `package.json`.
-
-##### requireInput
-
-Type: `boolean`  
-Default: `true`
-
-Require there to be at least one input argument.
 
 ##### argv
 
