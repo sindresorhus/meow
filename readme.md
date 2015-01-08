@@ -70,6 +70,8 @@ Type: `string`
 
 The help text you want shown.
 
+If you don't specify anything, it will still show the `package.json` `"description"`. Set it to `null` to disable it all together.
+
 ##### pkg
 
 Type: `string`, `object`  
