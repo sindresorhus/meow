@@ -72,10 +72,10 @@ The help text you want shown.
 
 ##### pkg
 
-Type: `string`  
+Type: `string`, `object`  
 Default: `package.json`
 
-Relative path to `package.json`.
+Relative path to `package.json` or it as an object.
 
 ##### argv
 
