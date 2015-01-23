@@ -28,7 +28,7 @@ module.exports = function (opts, minimistOpts) {
 		process.exit();
 	}
 
-	if (argv.help && opts.help !== null) {
+	if (argv.help && opts.help !== false) {
 		showHelp();
 	}
 
