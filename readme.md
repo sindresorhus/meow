@@ -15,7 +15,7 @@
 
 ## Install
 
-```sh
+```
 $ npm install --save meow
 ```
 
@@ -66,11 +66,22 @@ Returns an object with:
 
 ##### help
 
-Type: `string`  
+Type: `string`, `boolean`
 
 The help text you want shown.
 
-If you don't specify anything, it will still show the `package.json` `"description"`. Set it to `false` to disable it all together.
+If you don't specify anything, it will still show the package.json `"description"`.
+
+Set it to `false` to disable it all together.
+
+##### version
+
+Type: `string`, `boolean`  
+Default: the package.json `"version"` property
+
+Set a custom version output.
+
+Set it to `false` to disable it all together.
 
 ##### pkg
 

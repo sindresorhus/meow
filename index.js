@@ -23,8 +23,8 @@ module.exports = function (opts, minimistOpts) {
 		process.exit();
 	};
 
-	if (argv.version) {
-		console.log(pkg.version);
+	if (argv.version && opts.version !== false) {
+		console.log(typeof opts.version === 'string' ? opts.version : pkg.version);
 		process.exit();
 	}
 
