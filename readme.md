@@ -105,6 +105,11 @@ Default: `{}`
 Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-opts).
 
 
+## Tip
+
+Use [get-stdin](https://github.com/sindresorhus/get-stdin) if you need to accept input from stdin.
+
+
 ## License
 
 MIT © [Sindre Sorhus](http://sindresorhus.com)
