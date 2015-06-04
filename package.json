@@ -30,7 +30,7 @@
     "camelcase-keys": "^1.0.0",
     "indent-string": "^1.1.0",
     "minimist": "^1.1.0",
-    "object-assign": "^2.0.0"
+    "object-assign": "^3.0.0"
   },
   "devDependencies": {
     "ava": "0.0.4"
