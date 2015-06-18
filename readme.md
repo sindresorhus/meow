@@ -107,9 +107,15 @@ Default: `{}`
 Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-opts).
 
 
-## Tip
+## Tips
 
-Use [get-stdin](https://github.com/sindresorhus/get-stdin) if you need to accept input from stdin.
+See [`get-stdin`](https://github.com/sindresorhus/get-stdin) if you want to accept input from stdin.
+
+See [`update-notifier`](https://github.com/yeoman/update-notifier) if you want update notifications.
+
+See [`configstore`](https://github.com/yeoman/configstore) if you need to persist some data.
+
+[More useful CLI utilities.](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
 
 
 ## License
