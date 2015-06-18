@@ -36,7 +36,7 @@ var cli = meow({
 	help: [
 		'Usage',
 		'  foo-app <input>'
-	].join('\n')
+	]
 });
 /*
 {
@@ -66,9 +66,11 @@ Returns an object with:
 
 ##### help
 
-Type: `string`, `boolean`
+Type: `array`, `string`, `boolean`
 
 The help text you want shown.
+
+If it's an array each item will be a line.
 
 If you don't specify anything, it will still show the package.json `"description"`.
 
