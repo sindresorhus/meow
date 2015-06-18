@@ -7,7 +7,7 @@
   "author": {
     "name": "Sindre Sorhus",
     "email": "sindresorhus@gmail.com",
-    "url": "http://sindresorhus.com"
+    "url": "sindresorhus.com"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -24,7 +24,18 @@
     "util",
     "utility",
     "helper",
-    "argv"
+    "argv",
+    "command",
+    "line",
+    "meow",
+    "cat",
+    "kitten",
+    "parser",
+    "option",
+    "flags",
+    "input",
+    "cmd",
+    "console"
   ],
   "dependencies": {
     "camelcase-keys": "^1.0.0",

@@ -22,7 +22,7 @@ $ npm install --save meow
 
 ## Usage
 
-```sh
+```
 $ ./foo-app.js unicorns --rainbow-cake
 ```
 
