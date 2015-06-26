@@ -9,6 +9,20 @@ var camelcaseKeys = require('camelcase-keys');
 delete require.cache[__filename];
 var parentDir = path.dirname(module.parent.filename);
 
+function handleError(err) {
+	if (!err) {
+		return;
+	}
+
+	console.error(err.message);
+	process.exit(1);
+}
+
+function handleOutput(err, output) {
+	handleError(err);
+	console.log(output);
+}
+
 module.exports = function (opts, minimistOpts) {
 	opts = objectAssign({
 		pkg: './package.json',
@@ -44,6 +58,8 @@ module.exports = function (opts, minimistOpts) {
 		flags: camelcaseKeys(argv),
 		pkg: pkg,
 		help: help,
-		showHelp: showHelp
+		showHelp: showHelp,
+		handleError: handleError,
+		handleOutput: handleOutput
 	};
 };

@@ -46,7 +46,7 @@ var cli = meow({
 }
 */
 
-fooApp(cli.input[0], cli.flags);
+fooApp(cli.input[0], cli.flags, cli.handleOutput);
 ```
 
 
@@ -61,6 +61,8 @@ Returns an object with:
 - `pkg` *(object)* - The `package.json` object
 - `help` *(object)* - The help text used with `--help`
 - `showHelp()` *(function)* - Show the help text and exit
+- `handleError(error)` *(function)* - Pass in error and it will be handled for you
+- `handleOutput(error, output)` *(function)* - Pass in error and output it will be handled for you
 
 #### options
 
@@ -105,6 +107,49 @@ Type: `object`
 Default: `{}`
 
 Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-opts).
+
+
+## Examples
+
+### `handleError()`
+
+Before:
+
+```js
+fooApp(function (err) {
+	if (err) {
+		console.error(err.message);
+		process.exit(1);
+	}
+});
+```
+
+After:
+
+```js
+fooApp(cli.handleError);
+```
+
+### `handleOutput()`
+
+Before:
+
+```js
+fooApp(function (err, result) {
+	if (err) {
+		console.error(err.message);
+		process.exit(1);
+	}
+
+	console.log(result);
+});
+```
+
+After:
+
+```js
+fooApp(cli.handleOutput);
+```
 
 
 ## Tips
