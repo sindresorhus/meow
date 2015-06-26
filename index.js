@@ -5,7 +5,7 @@ var indentString = require('indent-string');
 var objectAssign = require('object-assign');
 var camelcaseKeys = require('camelcase-keys');
 
-// needed to get the uncached parent
+// get the uncached parent
 delete require.cache[__filename];
 var parentDir = path.dirname(module.parent.filename);
 
