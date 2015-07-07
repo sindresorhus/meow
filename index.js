@@ -10,6 +10,10 @@ delete require.cache[__filename];
 var parentDir = path.dirname(module.parent.filename);
 
 module.exports = function (opts, minimistOpts) {
+	if (Array.isArray(opts) || typeof opts === 'string') {
+		opts = {help: opts};
+	}
+
 	opts = objectAssign({
 		pkg: './package.json',
 		argv: process.argv.slice(2)
