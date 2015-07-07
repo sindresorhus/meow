@@ -64,6 +64,26 @@ Returns an object with:
 
 #### options
 
+Type: `object`, `array`, `string`
+
+If `options` is an array or a string it'll work as a help shortcut. E.g:
+
+```js
+var cli = meow([
+	'Usage',
+	'  foo-app <input>'
+]);
+
+console.log(cli.help);
+
+/*
+My example app
+
+Usage
+  foo-app <input>
+*/
+```
+
 ##### help
 
 Type: `array`, `string`, `boolean`
