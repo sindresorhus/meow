@@ -26,9 +26,9 @@ module.exports = function (opts, minimistOpts) {
 	var pkg = typeof opts.pkg === 'string' ? require(path.join(parentDir, opts.pkg)) : opts.pkg;
 	var argv = minimist(opts.argv, minimistOpts);
 	var help = '\n' + indentString(pkg.description + (opts.help ? '\n\n' + opts.help : '\n'), '  ');
-	var showHelp = function () {
+	var showHelp = function (code) {
 		console.log(help);
-		process.exit();
+		process.exit(code || 0);
 	};
 
 	if (argv.version && opts.version !== false) {

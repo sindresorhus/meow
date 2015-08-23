@@ -60,7 +60,7 @@ Returns an object with:
 - `flags` *(object)* - Flags converted to camelCase
 - `pkg` *(object)* - The `package.json` object
 - `help` *(object)* - The help text used with `--help`
-- `showHelp()` *(function)* - Show the help text and exit
+- `showHelp([code=0])` *(function)* - Show the help text and exit with `code`
 
 #### options
 
