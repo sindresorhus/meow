@@ -5,6 +5,7 @@ var objectAssign = require('object-assign');
 var camelcaseKeys = require('camelcase-keys');
 var trimNewlines = require('trim-newlines');
 var redent = require('redent');
+var readPkgUp = require('read-pkg-up');
 
 // get the uncached parent
 delete require.cache[__filename];
@@ -16,7 +17,7 @@ module.exports = function (opts, minimistOpts) {
 	}
 
 	opts = objectAssign({
-		pkg: './package.json',
+		pkg: readPkgUp.sync({cwd: parentDir}).pkg,
 		argv: process.argv.slice(2)
 	}, opts);
 

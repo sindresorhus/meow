@@ -95,7 +95,7 @@ Set it to `false` to disable it all together.
 ##### version
 
 Type: `string`, `boolean`  
-Default: the package.json `"version"` property
+Default: The package.json `"version"` property
 
 Set a custom version output.
 
@@ -104,9 +104,9 @@ Set it to `false` to disable it all together.
 ##### pkg
 
 Type: `string`, `object`  
-Default: `package.json`
+Default: Closest package.json upwards
 
-Relative path to `package.json` or it as an object.
+Relative path to package.json or as an object.
 
 ##### argv
 
