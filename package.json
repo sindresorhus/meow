@@ -39,12 +39,14 @@
   ],
   "dependencies": {
     "camelcase-keys": "^1.0.0",
-    "indent-string": "^2.1.0",
     "minimist": "^1.1.3",
-    "object-assign": "^4.0.1"
+    "object-assign": "^4.0.1",
+    "redent": "^1.0.0",
+    "trim-newlines": "^1.0.0"
   },
   "devDependencies": {
     "ava": "*",
+    "indent-string": "^2.1.0",
     "xo": "*"
   }
 }

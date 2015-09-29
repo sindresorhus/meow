@@ -29,30 +29,39 @@ $ ./foo-app.js unicorns --rainbow-cake
 ```js
 #!/usr/bin/env node
 'use strict';
-var meow = require('meow');
-var fooApp = require('./');
+const meow = require('meow');
+const foo = require('./');
 
-var cli = meow({
-	help: [
-		'Usage',
-		'  foo-app <input>'
-	]
+const cli = meow(`
+	Usage
+	  $ foo <input>
+
+	Options
+	  -r, --rainbow  Include a rainbow
+
+	Examples
+	  $ foo unicorns --rainbow
+	  🌈 unicorns 🌈
+`, {
+	alias: {
+		r: 'rainbow'
+	}
 });
 /*
 {
 	input: ['unicorns'],
-	flags: {rainbowCake: true},
+	flags: {rainbow: true},
 	...
 }
 */
 
-fooApp(cli.input[0], cli.flags);
+foo(cli.input[0], cli.flags);
 ```
 
 
 ## API
 
-### meow(options, minimistOptions)
+### meow(options, [minimistOptions])
 
 Returns an object with:
 
@@ -66,31 +75,18 @@ Returns an object with:
 
 Type: `object`, `array`, `string`
 
-If `options` is an array or a string it'll work as a help shortcut. E.g:
-
-```js
-var cli = meow([
-	'Usage',
-	'  foo-app <input>'
-]);
-
-console.log(cli.help);
-
-/*
-My example app
-
-Usage
-  foo-app <input>
-*/
-```
+Can either be a string/array that is the `help` or an options object.
 
 ##### help
 
-Type: `array`, `string`, `boolean`
+Type: `string`, `boolean`
 
 The help text you want shown.
 
-If it's an array each item will be a line.
+The input is reindented and starting/ending newlines are trimmed which means you can use a [template literal](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/template_strings) without having to care about using the correct amount of indent.
+
+<del>If it's an array each item will be a line.</del>  
+*(Still supported, but you should use a template literal instead.)*
 
 If you don't specify anything, it will still show the package.json `"description"`.
 

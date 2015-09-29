@@ -1,9 +1,10 @@
 'use strict';
 var path = require('path');
 var minimist = require('minimist');
-var indentString = require('indent-string');
 var objectAssign = require('object-assign');
 var camelcaseKeys = require('camelcase-keys');
+var trimNewlines = require('trim-newlines');
+var redent = require('redent');
 
 // get the uncached parent
 delete require.cache[__filename];
@@ -25,7 +26,10 @@ module.exports = function (opts, minimistOpts) {
 
 	var pkg = typeof opts.pkg === 'string' ? require(path.join(parentDir, opts.pkg)) : opts.pkg;
 	var argv = minimist(opts.argv, minimistOpts);
-	var help = '\n' + indentString(pkg.description + (opts.help ? '\n\n' + opts.help : '\n'), '  ');
+	var help = redent(trimNewlines(opts.help), 2);
+
+	help = '\n  ' + pkg.description + (help ? '\n\n' + help : '\n');
+
 	var showHelp = function () {
 		console.log(help);
 		process.exit();
