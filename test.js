@@ -1,11 +1,10 @@
-'use strict';
-var childProcess = require('child_process');
-var test = require('ava');
-var indentString = require('indent-string');
-var meow = require('./');
+import childProcess from 'child_process';
+import test from 'ava';
+import indentString from 'indent-string';
+import fn from './';
 
-test('return object', function (t) {
-	var cli = meow({
+test('return object', t => {
+	const cli = fn({
 		argv: ['foo', '--foo-bar', '-u', 'cat'],
 		help: [
 			'Usage',
@@ -16,44 +15,50 @@ test('return object', function (t) {
 		default: {meow: 'dog'}
 	});
 
-	t.assert(cli.input[0] === 'foo');
-	t.assert(cli.flags.fooBar);
-	t.assert(cli.flags.meow === 'dog');
-	t.assert(cli.flags.unicorn === 'cat');
-	t.assert(cli.pkg.name === 'meow');
-	t.assert(cli.help === indentString('\nCLI app helper\n\nUsage\n  foo <input>', '  '));
+	t.is(cli.input[0], 'foo');
+	t.true(cli.flags.fooBar);
+	t.is(cli.flags.meow, 'dog');
+	t.is(cli.flags.unicorn, 'cat');
+	t.is(cli.pkg.name, 'meow');
+	t.is(cli.help, indentString('\nCLI app helper\n\nUsage\n  foo <input>', '  '));
 	t.end();
 });
 
-test('support help shortcut', function (t) {
-	var cli = meow(['unicorn', 'cat']);
-	t.assert(cli.help === indentString('\nCLI app helper\n\nunicorn\ncat', '  '));
+test('support help shortcut', t => {
+	const cli = fn(['unicorn', 'cat']);
+	t.is(cli.help, indentString('\nCLI app helper\n\nunicorn\ncat', '  '));
 	t.end();
 });
 
-test('spawn cli and show version', function (t) {
+test('spawn cli and show version', t => {
 	t.plan(2);
 
-	childProcess.execFile('./fixture.js', ['--version'], {cwd: __dirname}, function (err, stdout) {
-		t.assert(!err, err);
-		t.assert(stdout.trim() === require('./package.json').version);
+	childProcess.execFile('./fixture.js', ['--version'], {
+		cwd: __dirname
+	}, (err, stdout) => {
+		t.ifError(err);
+		t.is(stdout.trim(), require('./package.json').version);
 	});
 });
 
-test('spawn cli and show help screen', function (t) {
+test('spawn cli and show help screen', t => {
 	t.plan(2);
 
-	childProcess.execFile('./fixture.js', ['--help'], {cwd: __dirname}, function (err, stdout) {
-		t.assert(!err, err);
-		t.assert(stdout === indentString('\nCLI app helper\n\nUsage\n  foo <input>\n', '  '));
+	childProcess.execFile('./fixture.js', ['--help'], {
+		cwd: __dirname
+	}, (err, stdout) => {
+		t.ifError(err);
+		t.is(stdout, indentString('\nCLI app helper\n\nUsage\n  foo <input>\n', '  '));
 	});
 });
 
-test('spawn cli and test input', function (t) {
+test('spawn cli and test input', t => {
 	t.plan(2);
 
-	childProcess.execFile('./fixture.js', ['-u', 'cat'], {cwd: __dirname}, function (err, stdout) {
-		t.assert(!err, err);
-		t.assert(stdout === 'u\nunicorn\nmeow\n');
+	childProcess.execFile('./fixture.js', ['-u', 'cat'], {
+		cwd: __dirname
+	}, (err, stdout) => {
+		t.ifError(err);
+		t.is(stdout, 'u\nunicorn\nmeow\n');
 	});
 });
