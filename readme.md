@@ -11,6 +11,7 @@
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
+- Makes unhandled rejected promises [fail loudly](https://github.com/sindresorhus/loud-rejection) instead of the default silent fail
 
 
 ## Install
@@ -121,6 +122,11 @@ Type: `object`
 Default: `{}`
 
 Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-opts).
+
+
+## Promises
+
+Meow will [loudly fail](https://github.com/sindresorhus/loud-rejection) unhandled rejected promises, meaning you don't have to `.catch()` promises used in your CLI.
 
 
 ## Tips

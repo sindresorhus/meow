@@ -6,12 +6,15 @@ var camelcaseKeys = require('camelcase-keys');
 var trimNewlines = require('trim-newlines');
 var redent = require('redent');
 var readPkgUp = require('read-pkg-up');
+var loudRejection = require('loud-rejection');
 
 // get the uncached parent
 delete require.cache[__filename];
 var parentDir = path.dirname(module.parent.filename);
 
 module.exports = function (opts, minimistOpts) {
+	loudRejection();
+
 	if (Array.isArray(opts) || typeof opts === 'string') {
 		opts = {help: opts};
 	}
