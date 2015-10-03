@@ -36,9 +36,9 @@ module.exports = function (opts, minimistOpts) {
 
 	help = '\n  ' + pkg.description + (help ? '\n\n' + help : '\n');
 
-	var showHelp = function () {
+	var showHelp = function (code) {
 		console.log(help);
-		process.exit();
+		process.exit(code || 0);
 	};
 
 	if (argv.version && opts.version !== false) {
