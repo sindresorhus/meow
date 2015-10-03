@@ -30,7 +30,7 @@ module.exports = function (opts, minimistOpts) {
 
 	var pkg = typeof opts.pkg === 'string' ? require(path.join(parentDir, opts.pkg)) : opts.pkg;
 	var argv = minimist(opts.argv, minimistOpts);
-	var help = redent(trimNewlines(opts.help), 2);
+	var help = redent(trimNewlines(opts.help || ''), 2);
 
 	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
 
