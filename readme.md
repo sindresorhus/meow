@@ -127,10 +127,12 @@ Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-
 
 ## Promises
 
-Meow will [loudly fail](https://github.com/sindresorhus/loud-rejection) unhandled rejected promises, meaning you don't have to `.catch()` promises used in your CLI.
+Meow will make unhandled rejected promises [fail loudly](https://github.com/sindresorhus/loud-rejection) instead of the default silent fail. Meaning you don't have to manually `.catch()` promises used in your CLI.
 
 
 ## Tips
+
+See [`chalk`](https://github.com/chalk/chalk) if you want to colorize the terminal output.
 
 See [`get-stdin`](https://github.com/sindresorhus/get-stdin) if you want to accept input from stdin.
 
