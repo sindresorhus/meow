@@ -12,6 +12,7 @@
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
 - Makes unhandled rejected promises [fail loudly](https://github.com/sindresorhus/loud-rejection) instead of the default silent fail
+- Sets the process title to the binary name defined in package.json
 
 
 ## Install

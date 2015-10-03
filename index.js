@@ -32,6 +32,8 @@ module.exports = function (opts, minimistOpts) {
 	var argv = minimist(opts.argv, minimistOpts);
 	var help = redent(trimNewlines(opts.help), 2);
 
+	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
+
 	help = '\n  ' + pkg.description + (help ? '\n\n' + help : '\n');
 
 	var showHelp = function () {
