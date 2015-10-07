@@ -7,6 +7,7 @@ var trimNewlines = require('trim-newlines');
 var redent = require('redent');
 var readPkgUp = require('read-pkg-up');
 var loudRejection = require('loud-rejection');
+var normalizePackageData = require('normalize-package-data');
 
 // get the uncached parent
 delete require.cache[__filename];
@@ -20,7 +21,10 @@ module.exports = function (opts, minimistOpts) {
 	}
 
 	opts = objectAssign({
-		pkg: readPkgUp.sync({cwd: parentDir}).pkg,
+		pkg: readPkgUp.sync({
+			cwd: parentDir,
+			normalize: false
+		}).pkg,
 		argv: process.argv.slice(2)
 	}, opts);
 
@@ -31,6 +35,8 @@ module.exports = function (opts, minimistOpts) {
 	var pkg = typeof opts.pkg === 'string' ? require(path.join(parentDir, opts.pkg)) : opts.pkg;
 	var argv = minimist(opts.argv, minimistOpts);
 	var help = redent(trimNewlines(opts.help || ''), 2);
+
+	normalizePackageData(pkg);
 
 	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
 

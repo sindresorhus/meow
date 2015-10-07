@@ -62,3 +62,15 @@ test('spawn cli and test input', t => {
 		t.is(stdout, 'u\nunicorn\nmeow\n');
 	});
 });
+
+test.serial('pkg.bin as a string should work', t => {
+	fn({
+		pkg: {
+			name: 'browser-sync',
+			bin: 'bin/browser-sync.js'
+		}
+	});
+
+	t.is(process.title, 'browser-sync');
+	t.end();
+});
