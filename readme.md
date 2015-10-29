@@ -79,6 +79,15 @@ Type: `object`, `array`, `string`
 
 Can either be a string/array that is the `help` or an options object.
 
+##### description
+
+Type: `string`, `boolean`
+Default: The package.json `"description"` property
+
+A description to show above the help text.
+
+Set it to `false` to disable it altogether.
+
 ##### help
 
 Type: `string`, `boolean`
@@ -90,9 +99,9 @@ The input is reindented and starting/ending newlines are trimmed which means you
 <del>If it's an array each item will be a line.</del>  
 *(Still supported, but you should use a template literal instead.)*
 
-If you don't specify anything, it will still show the package.json `"description"`.
+The description will be shown above your help text automatically.
 
-Set it to `false` to disable it all together.
+Set it to `false` to disable it altogether.
 
 ##### version
 
@@ -101,7 +110,7 @@ Default: The package.json `"version"` property
 
 Set a custom version output.
 
-Set it to `false` to disable it all together.
+Set it to `false` to disable it altogether.
 
 ##### pkg
 
