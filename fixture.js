@@ -3,6 +3,7 @@
 var meow = require('./');
 
 var cli = meow({
+	description: 'Custom description',
 	help: [
 		'Usage',
 		'  foo <input>'

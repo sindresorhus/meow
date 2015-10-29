@@ -48,7 +48,7 @@ test('spawn cli and show help screen', t => {
 		cwd: __dirname
 	}, (err, stdout) => {
 		t.ifError(err);
-		t.is(stdout, indentString('\nCLI app helper\n\nUsage\n  foo <input>\n', '  '));
+		t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n', '  '));
 	});
 });
 
