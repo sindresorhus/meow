@@ -40,7 +40,7 @@ module.exports = function (opts, minimistOpts) {
 
 	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
 
-	help = '\n  ' + pkg.description + (help ? '\n\n' + help : '\n');
+	help = (pkg.description ? '\n  ' + pkg.description + '\n' : '') + (help ? '\n' + help : '\n');
 
 	var showHelp = function (code) {
 		console.log(help);
