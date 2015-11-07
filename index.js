@@ -52,6 +52,10 @@ module.exports = function (opts, minimistOpts) {
 		process.exit(code || 0);
 	};
 
+	var cwd = function (filename) {
+		return path.resolve(process.cwd(), filename || '');
+	};
+
 	if (argv.version && opts.version !== false) {
 		console.log(typeof opts.version === 'string' ? opts.version : pkg.version);
 		process.exit();
@@ -68,6 +72,7 @@ module.exports = function (opts, minimistOpts) {
 		input: _,
 		flags: camelcaseKeys(argv),
 		pkg: pkg,
+		cwd: cwd,
 		help: help,
 		showHelp: showHelp
 	};
