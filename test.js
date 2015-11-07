@@ -1,6 +1,7 @@
 import childProcess from 'child_process';
 import test from 'ava';
 import indentString from 'indent-string';
+import path from 'path';
 import fn from './';
 
 test('return object', t => {
@@ -61,6 +62,15 @@ test('spawn cli and test input', t => {
 		t.ifError(err);
 		t.is(stdout, 'u\nunicorn\nmeow\n');
 	});
+});
+
+test('return cwd', t => {
+	const cli = fn();
+	const cwd = cli.cwd('index.js');
+	t.true(path.isAbsolute(cwd));
+	t.is(path.dirname(cwd), process.cwd());
+	t.is(path.basename(cwd), 'index.js');
+	t.end();
 });
 
 test.serial('pkg.bin as a string should work', t => {

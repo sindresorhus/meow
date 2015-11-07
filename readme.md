@@ -11,6 +11,7 @@
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
+- Resolves relative filenames
 - Makes unhandled rejected promises [fail loudly](https://github.com/sindresorhus/loud-rejection) instead of the default silent fail
 - Sets the process title to the binary name defined in package.json
 
@@ -70,6 +71,7 @@ Returns an object with:
 - `input` *(array)* - Non-flag arguments
 - `flags` *(object)* - Flags converted to camelCase
 - `pkg` *(object)* - The `package.json` object
+- `cwd([file=''])` *(function)* - Resolves relative path to an absolute path
 - `help` *(object)* - The help text used with `--help`
 - `showHelp([code=0])` *(function)* - Show the help text and exit with `code`
 
