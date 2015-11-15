@@ -38,7 +38,7 @@
     "console"
   ],
   "dependencies": {
-    "camelcase-keys": "^1.0.0",
+    "camelcase-keys": "^2.0.0",
     "loud-rejection": "^1.0.0",
     "minimist": "^1.1.3",
     "normalize-package-data": "^2.3.4",

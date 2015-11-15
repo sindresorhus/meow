@@ -74,3 +74,8 @@ test.serial('pkg.bin as a string should work', t => {
 	t.is(process.title, 'browser-sync');
 	t.end();
 });
+
+test('single character flag casing should be preserved', t => {
+	t.ok(fn({argv: ['-F']}).flags.F);
+	t.end();
+});
