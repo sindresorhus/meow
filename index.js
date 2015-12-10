@@ -25,8 +25,13 @@ module.exports = function (opts, minimistOpts) {
 			cwd: parentDir,
 			normalize: false
 		}).pkg,
-		argv: process.argv.slice(2)
+		argv: process.argv.slice(2),
+		inferType: false
 	}, opts);
+
+	if (opts.inferType === false) {
+		minimistOpts = objectAssign(minimistOpts || {}, {string: ['_']});
+	}
 
 	if (Array.isArray(opts.help)) {
 		opts.help = opts.help.join('\n');

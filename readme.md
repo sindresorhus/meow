@@ -126,6 +126,13 @@ Default: `process.argv.slice(2)`
 
 Custom arguments object.
 
+##### inferType
+
+Type: `boolean`  
+Default: `false`
+
+Set it to `true` to enable type inference.
+
 #### minimistOptions
 
 Type: `object`  
