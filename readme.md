@@ -131,7 +131,15 @@ Custom arguments object.
 Type: `boolean`  
 Default: `false`
 
-Set it to `true` to enable type inference.
+Set it to `true` to enable argument type inference.
+
+###### example
+
+```
+$ ./foo-app.js 5
+```
+
+By default, the argument with value `5` is a string. When using type inference, the argument will be parsed to a number.
 
 #### minimistOptions
 

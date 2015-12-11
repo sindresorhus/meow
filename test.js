@@ -2,8 +2,10 @@ import childProcess from 'child_process';
 import test from 'ava';
 import indentString from 'indent-string';
 import execa from 'execa';
-import {version as pkgVersion} from './package.json';
+import pkg from './package.json';
 import fn from './';
+
+global.Promise = Promise;
 
 test('return object', t => {
 	const cli = fn({
@@ -31,19 +33,19 @@ test('support help shortcut', t => {
 });
 
 test('spawn cli and show version', async t => {
-	const {stdout} = await execa('./fixture.js', ['--version'], {cwd: __dirname});
+	const {stdout} = await execa('./fixture.js', ['--version']);
 
-	t.is(stdout, pkgVersion);
+	t.is(stdout, pkg.version);
 });
 
 test('spawn cli and show help screen', async t => {
-	const {stdout} = await execa('./fixture.js', ['--help'], {cwd: __dirname});
+	const {stdout} = await execa('./fixture.js', ['--help']);
 
 	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>', '  '));
 });
 
 test('spawn cli and test input', async t => {
-	const {stdout} = await execa('./fixture.js', ['-u', 'cat'], {cwd: __dirname});
+	const {stdout} = await execa('./fixture.js', ['-u', 'cat']);
 
 	t.is(stdout, 'u\nunicorn\nmeow');
 });
@@ -64,7 +66,5 @@ test('single character flag casing should be preserved', t => {
 });
 
 test('should not infer type', t => {
-	console.log(fn({argv: ['5']}).input);
-
 	t.is(fn({argv: ['5']}).input[0], '5');
 });
