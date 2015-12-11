@@ -31,8 +31,12 @@ module.exports = function (opts, minimistOpts) {
 
 	minimistOpts = objectAssign({string: ['_']}, minimistOpts);
 
-	if (opts.inferType === false && minimistOpts.string.indexOf('_') === -1) {
+	var index = minimistOpts.string.indexOf('_');
+
+	if (opts.inferType === false && index === -1) {
 		minimistOpts.string.push('_');
+	} else if (opts.inferType === true && index !== -1) {
+		minimistOpts.string.splice(index, 1);
 	}
 
 	if (Array.isArray(opts.help)) {

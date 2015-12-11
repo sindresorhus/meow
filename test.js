@@ -65,6 +65,10 @@ test('single character flag casing should be preserved', t => {
 	t.ok(fn({argv: ['-F']}).flags.F);
 });
 
-test('should not infer type', t => {
+test('type inference', t => {
 	t.is(fn({argv: ['5']}).input[0], '5');
+	t.is(fn({argv: ['5']}, {string: ['_']}).input[0], '5');
+	t.is(fn({argv: ['5'], inferType: true}).input[0], 5);
+	t.is(fn({argv: ['5'], inferType: true}, {string: ['foo']}).input[0], 5);
+	t.is(fn({argv: ['5'], inferType: true}, {string: ['_', 'foo']}).input[0], 5);
 });
