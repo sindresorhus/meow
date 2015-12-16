@@ -69,6 +69,7 @@ test('type inference', t => {
 	t.is(fn({argv: ['5']}, {string: ['_']}).input[0], '5');
 	t.is(fn({argv: ['5'], inferType: true}).input[0], 5);
 	t.is(fn({argv: ['5'], inferType: true}, {string: ['foo']}).input[0], 5);
+	t.is(fn({argv: ['5'], inferType: true}, {string: ['_', 'foo']}).input[0], 5);
 });
 
 test('stdinOrInput', async t => {
