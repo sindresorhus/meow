@@ -16,3 +16,14 @@ var cli = meow({
 Object.keys(cli.flags).forEach(function (el) {
 	console.log(el);
 });
+
+cli.stdinOrInput()
+	.then(function (input) {
+		input.forEach(function (element) {
+			console.log(element);
+		});
+	})
+	.catch(function (err) {
+		console.error(err.message);
+		process.exit(1);
+	});

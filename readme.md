@@ -126,6 +126,15 @@ Default: `process.argv.slice(2)`
 
 Custom arguments object.
 
+##### inferType
+
+Type: `boolean`  
+Default: `false`
+
+Infer the argument type.
+
+By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would infer it as a number.
+
 #### minimistOptions
 
 Type: `object`  
