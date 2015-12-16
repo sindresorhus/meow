@@ -44,9 +44,9 @@ test('spawn cli and show help screen', async t => {
 });
 
 test('spawn cli and test input', async t => {
-	const {stdout} = await execa('./fixture.js', ['-u', 'cat']);
+	const {stdout} = await execa('./fixture.js', ['foo', '-u', 'cat']);
 
-	t.is(stdout, 'u\nunicorn\nmeow');
+	t.is(stdout, 'u\nunicorn\nmeow\nfoo');
 });
 
 test.serial('pkg.bin as a string should work', t => {
@@ -70,4 +70,12 @@ test('type inference', t => {
 	t.is(fn({argv: ['5'], inferType: true}).input[0], 5);
 	t.is(fn({argv: ['5'], inferType: true}, {string: ['foo']}).input[0], 5);
 	t.is(fn({argv: ['5'], inferType: true}, {string: ['_', 'foo']}).input[0], 5);
+});
+
+test('stdinOrInput', async t => {
+	const stdin = await execa.shell('echo \'foo bar\' | ./fixture.js');
+	const input = await execa('./fixture.js', ['foo', 'bar']);
+
+	t.is(stdin.stdout, 'meow\nfoo bar\n');
+	t.is(input.stdout, 'meow\nfoo\nbar');
 });
