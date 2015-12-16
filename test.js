@@ -1,7 +1,10 @@
-import childProcess from 'child_process';
 import test from 'ava';
 import indentString from 'indent-string';
+import execa from 'execa';
+import pkg from './package.json';
 import fn from './';
+
+global.Promise = Promise;
 
 test('return object', t => {
 	const cli = fn({
@@ -21,46 +24,29 @@ test('return object', t => {
 	t.is(cli.flags.unicorn, 'cat');
 	t.is(cli.pkg.name, 'meow');
 	t.is(cli.help, indentString('\nCLI app helper\n\nUsage\n  foo <input>', '  '));
-	t.end();
 });
 
 test('support help shortcut', t => {
 	const cli = fn(['unicorn', 'cat']);
 	t.is(cli.help, indentString('\nCLI app helper\n\nunicorn\ncat', '  '));
-	t.end();
 });
 
-test('spawn cli and show version', t => {
-	t.plan(2);
+test('spawn cli and show version', async t => {
+	const {stdout} = await execa('./fixture.js', ['--version']);
 
-	childProcess.execFile('./fixture.js', ['--version'], {
-		cwd: __dirname
-	}, (err, stdout) => {
-		t.ifError(err);
-		t.is(stdout.trim(), require('./package.json').version);
-	});
+	t.is(stdout, pkg.version);
 });
 
-test('spawn cli and show help screen', t => {
-	t.plan(2);
+test('spawn cli and show help screen', async t => {
+	const {stdout} = await execa('./fixture.js', ['--help']);
 
-	childProcess.execFile('./fixture.js', ['--help'], {
-		cwd: __dirname
-	}, (err, stdout) => {
-		t.ifError(err);
-		t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n', '  '));
-	});
+	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>', '  '));
 });
 
-test('spawn cli and test input', t => {
-	t.plan(2);
+test('spawn cli and test input', async t => {
+	const {stdout} = await execa('./fixture.js', ['-u', 'cat']);
 
-	childProcess.execFile('./fixture.js', ['-u', 'cat'], {
-		cwd: __dirname
-	}, (err, stdout) => {
-		t.ifError(err);
-		t.is(stdout, 'u\nunicorn\nmeow\n');
-	});
+	t.is(stdout, 'u\nunicorn\nmeow');
 });
 
 test.serial('pkg.bin as a string should work', t => {
@@ -72,10 +58,16 @@ test.serial('pkg.bin as a string should work', t => {
 	});
 
 	t.is(process.title, 'browser-sync');
-	t.end();
 });
 
 test('single character flag casing should be preserved', t => {
 	t.ok(fn({argv: ['-F']}).flags.F);
-	t.end();
+});
+
+test('type inference', t => {
+	t.is(fn({argv: ['5']}).input[0], '5');
+	t.is(fn({argv: ['5']}, {string: ['_']}).input[0], '5');
+	t.is(fn({argv: ['5'], inferType: true}).input[0], 5);
+	t.is(fn({argv: ['5'], inferType: true}, {string: ['foo']}).input[0], 5);
+	t.is(fn({argv: ['5'], inferType: true}, {string: ['_', 'foo']}).input[0], 5);
 });
