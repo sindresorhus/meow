@@ -25,8 +25,19 @@ module.exports = function (opts, minimistOpts) {
 			cwd: parentDir,
 			normalize: false
 		}).pkg,
-		argv: process.argv.slice(2)
+		argv: process.argv.slice(2),
+		inferType: false
 	}, opts);
+
+	minimistOpts = objectAssign({string: ['_']}, minimistOpts);
+
+	var index = minimistOpts.string.indexOf('_');
+
+	if (opts.inferType === false && index === -1) {
+		minimistOpts.string.push('_');
+	} else if (opts.inferType === true && index !== -1) {
+		minimistOpts.string.splice(index, 1);
+	}
 
 	if (Array.isArray(opts.help)) {
 		opts.help = opts.help.join('\n');

@@ -126,6 +126,21 @@ Default: `process.argv.slice(2)`
 
 Custom arguments object.
 
+##### inferType
+
+Type: `boolean`  
+Default: `false`
+
+Set it to `true` to enable argument type inference.
+
+###### example
+
+```
+$ ./foo-app.js 5
+```
+
+By default, the argument with value `5` is a string. When using type inference, the argument will be parsed to a number.
+
 #### minimistOptions
 
 Type: `object`  
