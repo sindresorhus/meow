@@ -133,6 +133,8 @@ Default: `{}`
 
 Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-opts).
 
+Keys passed to the minimist `default` option are [decamelized](https://github.com/sindresorhus/decamelize), so you can for example pass in `fooBar: 'baz'` and have it be the default for the `--foo-bar` flag.
+
 
 ## Promises
 
