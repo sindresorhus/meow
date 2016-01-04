@@ -46,7 +46,13 @@ test('spawn cli and show help screen', async t => {
 test('spawn cli and test input', async t => {
 	const {stdout} = await execa('./fixture.js', ['-u', 'cat']);
 
-	t.is(stdout, 'u\nunicorn\nmeow');
+	t.is(stdout, 'u\nunicorn\nmeow\ncamelCaseOption');
+});
+
+test('spawn cli and test input', async t => {
+	const {stdout} = await execa('./fixture.js', ['--camel-case-option', 'bar']);
+
+	t.is(stdout, 'bar');
 });
 
 test.serial('pkg.bin as a string should work', t => {

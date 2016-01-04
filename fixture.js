@@ -10,9 +10,14 @@ var cli = meow({
 	]
 }, {
 	alias: {u: 'unicorn'},
-	default: {meow: 'dog'}
+	default: {meow: 'dog', camelCaseOption: 'foo'}
 });
 
-Object.keys(cli.flags).forEach(function (el) {
-	console.log(el);
-});
+if (cli.flags.camelCaseOption !== 'foo') {
+	console.log(cli.flags.camelCaseOption)
+} else {
+	Object.keys(cli.flags).forEach(function (el) {
+		console.log(el);
+	});
+}
+
