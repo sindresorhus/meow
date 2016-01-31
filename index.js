@@ -14,9 +14,13 @@ var normalizePackageData = require('normalize-package-data');
 // get the uncached parent
 delete require.cache[__filename];
 var parentDir = path.dirname(module.parent.filename);
+var loudRejectionEnabled;
 
 module.exports = function (opts, minimistOpts) {
-	loudRejection();
+	if (!loudRejectionEnabled) {
+		loudRejection();
+		loudRejectionEnabled = true;
+	}
 
 	if (Array.isArray(opts) || typeof opts === 'string') {
 		opts = {help: opts};
