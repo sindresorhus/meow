@@ -62,7 +62,7 @@ module.exports = function (opts, minimistOpts) {
 		description = pkg.description;
 	}
 
-	help = (description ? '\n  ' + description + '\n' : '') + (help ? '\n' + help : '\n');
+	help = (description ? '\n  ' + description + '\n' : '') + (help ? '\n' + help + '\n' : '\n');
 
 	var showHelp = function (code) {
 		console.log(help);
