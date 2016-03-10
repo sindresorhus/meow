@@ -25,7 +25,7 @@ $ npm install --save meow
 ## Usage
 
 ```
-$ ./foo-app.js unicorns --rainbow-cake
+$ ./foo-app.js unicorns --rainbow
 ```
 
 ```js
