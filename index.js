@@ -83,7 +83,7 @@ module.exports = function (opts, minimistOpts) {
 
 	return {
 		input: _,
-		flags: camelcaseKeys(argv),
+		flags: camelcaseKeys(argv, {exclude: ['--']}),
 		pkg: pkg,
 		help: help,
 		showHelp: showHelp
