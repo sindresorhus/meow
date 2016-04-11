@@ -51,7 +51,7 @@ test('spawn cli and test input', async t => {
 	t.is(stdout, 'u\nunicorn\nmeow\ncamelCaseOption');
 });
 
-test('spawn cli and test input', async t => {
+test('spawn cli and test input flag', async t => {
 	const {stdout} = await execa('./fixture.js', ['--camel-case-option', 'bar']);
 
 	t.is(stdout, 'bar');
