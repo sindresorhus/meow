@@ -8,20 +8,22 @@ global.Promise = Promise;
 
 test('return object', t => {
 	const cli = fn({
-		argv: ['foo', '--foo-bar', '-u', 'cat'],
+		argv: ['foo', '--foo-bar', '-u', 'cat', '--', 'unicorn', 'cake'],
 		help: [
 			'Usage',
 			'  foo <input>'
 		]
 	}, {
-		alias: {u: 'unicorn'},
-		default: {meow: 'dog'}
+		'alias': {u: 'unicorn'},
+		'default': {meow: 'dog'},
+		'--': true
 	});
 
 	t.is(cli.input[0], 'foo');
 	t.true(cli.flags.fooBar);
 	t.is(cli.flags.meow, 'dog');
 	t.is(cli.flags.unicorn, 'cat');
+	t.deepEqual(cli.flags['--'], ['unicorn', 'cake']);
 	t.is(cli.pkg.name, 'meow');
 	t.is(cli.help, indentString('\nCLI app helper\n\nUsage\n  foo <input>\n', '  '));
 });
@@ -49,7 +51,7 @@ test('spawn cli and test input', async t => {
 	t.is(stdout, 'u\nunicorn\nmeow\ncamelCaseOption');
 });
 
-test('spawn cli and test input', async t => {
+test('spawn cli and test input flag', async t => {
 	const {stdout} = await execa('./fixture.js', ['--camel-case-option', 'bar']);
 
 	t.is(stdout, 'bar');
