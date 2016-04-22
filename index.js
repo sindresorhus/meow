@@ -3,8 +3,7 @@ var path = require('path');
 var minimist = require('minimist');
 var objectAssign = require('object-assign');
 var camelcaseKeys = require('camelcase-keys');
-var decamelize = require('decamelize');
-var mapObj = require('map-obj');
+var decamelizeKeys = require('decamelize-keys');
 var trimNewlines = require('trim-newlines');
 var redent = require('redent');
 var readPkgUp = require('read-pkg-up');
@@ -33,9 +32,7 @@ module.exports = function (opts, minimistOpts) {
 
 	minimistOpts = objectAssign({string: ['_']}, minimistOpts);
 
-	minimistOpts.default = mapObj(minimistOpts.default || {}, function (key, value) {
-		return [decamelize(key, '-'), value];
-	});
+	minimistOpts.default = decamelizeKeys(minimistOpts.default || {}, '-');
 
 	var index = minimistOpts.string.indexOf('_');
 
