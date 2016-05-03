@@ -53,5 +53,10 @@
     "execa": "^0.1.1",
     "indent-string": "^2.1.0",
     "xo": "*"
+  },
+  "xo": {
+    "rules": {
+      "xo/no-process-exit": "off"
+    }
   }
 }
