@@ -69,7 +69,7 @@ test.serial('pkg.bin as a string should work', t => {
 });
 
 test('single character flag casing should be preserved', t => {
-	t.truthy(fn({argv: ['-F']}).flags.F);
+	t.deepEqual(fn({argv: ['-F']}).flags, {F: true});
 });
 
 test('type inference', t => {
