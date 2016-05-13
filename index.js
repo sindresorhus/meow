@@ -13,6 +13,8 @@ var normalizePackageData = require('normalize-package-data');
 // get the uncached parent
 delete require.cache[__filename];
 var parentDir = path.dirname(module.parent.filename);
+var exitCode = 0;
+var exitProcess = false;
 
 module.exports = function (opts, minimistOpts) {
 	loudRejection();
@@ -63,12 +65,11 @@ module.exports = function (opts, minimistOpts) {
 
 	var showHelp = function (code) {
 		console.log(help);
-		process.exit(code || 0);
+		exitCode = code || 0;
 	};
 
 	if (argv.version && opts.version !== false) {
 		console.log(typeof opts.version === 'string' ? opts.version : pkg.version);
-		process.exit();
 	}
 
 	if (argv.help && opts.help !== false) {
@@ -77,6 +78,14 @@ module.exports = function (opts, minimistOpts) {
 
 	var _ = argv._;
 	delete argv._;
+
+	if ('exitCode' in process) {
+		process.exitCode = exitCode;
+	} else {
+		process.on('exit', function () {
+			process.exit(exitCode);
+		});
+	}
 
 	return {
 		input: _,
