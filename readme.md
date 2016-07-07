@@ -70,7 +70,7 @@ Returns an object with:
 - `input` *(array)* - Non-flag arguments
 - `flags` *(object)* - Flags converted to camelCase
 - `pkg` *(object)* - The `package.json` object
-- `help` *(object)* - The help text used with `--help`
+- `help` *(string)* - The help text used with `--help`
 - `showHelp([code=0])` *(function)* - Show the help text and exit with `code`
 
 #### options
