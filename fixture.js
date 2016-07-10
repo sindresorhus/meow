@@ -1,21 +1,26 @@
 #!/usr/bin/env node
 'use strict';
-var meow = require('./');
+const meow = require('.');
 
-var cli = meow({
+const cli = meow({
 	description: 'Custom description',
-	help: [
-		'Usage',
-		'  foo <input>'
-	]
+	help: `
+		Usage
+		  foo <input>
+	`
 }, {
-	alias: {u: 'unicorn'},
-	default: {meow: 'dog', camelCaseOption: 'foo'}
+	alias: {
+		u: 'unicorn'
+	},
+	default: {
+		meow: 'dog',
+		camelCaseOption: 'foo'
+	}
 });
 
 if (cli.flags.camelCaseOption === 'foo') {
-	Object.keys(cli.flags).forEach(function (el) {
-		console.log(el);
+	Object.keys(cli.flags).forEach(x => {
+		console.log(x);
 	});
 } else {
 	console.log(cli.flags.camelCaseOption);

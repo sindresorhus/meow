@@ -32,14 +32,14 @@ $ ./foo-app.js unicorns --rainbow
 #!/usr/bin/env node
 'use strict';
 const meow = require('meow');
-const foo = require('./');
+const foo = require('.');
 
 const cli = meow(`
 	Usage
 	  $ foo <input>
 
 	Options
-	  -r, --rainbow  Include a rainbow
+	  --rainbow, -r  Include a rainbow
 
 	Examples
 	  $ foo unicorns --rainbow
@@ -65,38 +65,38 @@ foo(cli.input[0], cli.flags);
 
 ### meow(options, [minimistOptions])
 
-Returns an object with:
+Returns an `Object` with:
 
-- `input` *(array)* - Non-flag arguments
-- `flags` *(object)* - Flags converted to camelCase
-- `pkg` *(object)* - The `package.json` object
+- `input` *(Array)* - Non-flag arguments
+- `flags` *(Object)* - Flags converted to camelCase
+- `pkg` *(Object)* - The `package.json` object
 - `help` *(string)* - The help text used with `--help`
-- `showHelp([code=0])` *(function)* - Show the help text and exit with `code`
+- `showHelp([code=0])` *(Function)* - Show the help text and exit with `code`
 
 #### options
 
-Type: `object`, `array`, `string`
+Type: `Object` `Array` `string`
 
 Can either be a string/array that is the `help` or an options object.
 
 ##### description
 
-Type: `string`, `boolean`
+Type: `string` `boolean`<br>
 Default: The package.json `"description"` property
 
-A description to show above the help text.
+Description to show above the help text.
 
 Set it to `false` to disable it altogether.
 
 ##### help
 
-Type: `string`, `boolean`
+Type: `string` `boolean`
 
 The help text you want shown.
 
 The input is reindented and starting/ending newlines are trimmed which means you can use a [template literal](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/template_strings) without having to care about using the correct amount of indent.
 
-<del>If it's an array each item will be a line.</del>  
+<del>If it's an array each item will be a line.</del><br>
 *(Still supported, but you should use a template literal instead.)*
 
 The description will be shown above your help text automatically.
@@ -105,7 +105,7 @@ Set it to `false` to disable it altogether.
 
 ##### version
 
-Type: `string`, `boolean`  
+Type: `string` `boolean`<br>
 Default: The package.json `"version"` property
 
 Set a custom version output.
@@ -114,21 +114,21 @@ Set it to `false` to disable it altogether.
 
 ##### pkg
 
-Type: `string`, `object`  
+Type: `string` `Object`<br>
 Default: Closest package.json upwards
 
-Relative path to package.json or as an object.
+Relative path to package.json or as an `Object`.
 
 ##### argv
 
-Type: `array`  
+Type: `Array`<br>
 Default: `process.argv.slice(2)`
 
 Custom arguments object.
 
 ##### inferType
 
-Type: `boolean`  
+Type: `boolean`<br>
 Default: `false`
 
 Infer the argument type.
@@ -137,7 +137,7 @@ By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would 
 
 #### minimistOptions
 
-Type: `object`  
+Type: `Object`<br>
 Default: `{}`
 
 Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-opts).
@@ -156,13 +156,13 @@ See [`chalk`](https://github.com/chalk/chalk) if you want to colorize the termin
 
 See [`get-stdin`](https://github.com/sindresorhus/get-stdin) if you want to accept input from stdin.
 
-See [`update-notifier`](https://github.com/yeoman/update-notifier) if you want update notifications.
+See [`conf`](https://github.com/sindresorhus/conf) if you need to persist some data.
 
-See [`configstore`](https://github.com/yeoman/configstore) if you need to persist some data.
+See [`update-notifier`](https://github.com/yeoman/update-notifier) if you want update notifications.
 
 [More useful CLI utilities.](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
 
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)

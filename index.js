@@ -1,27 +1,26 @@
 'use strict';
-var path = require('path');
-var minimist = require('minimist');
-var objectAssign = require('object-assign');
-var camelcaseKeys = require('camelcase-keys');
-var decamelizeKeys = require('decamelize-keys');
-var trimNewlines = require('trim-newlines');
-var redent = require('redent');
-var readPkgUp = require('read-pkg-up');
-var loudRejection = require('loud-rejection');
-var normalizePackageData = require('normalize-package-data');
+const path = require('path');
+const minimist = require('minimist');
+const camelcaseKeys = require('camelcase-keys');
+const decamelizeKeys = require('decamelize-keys');
+const trimNewlines = require('trim-newlines');
+const redent = require('redent');
+const readPkgUp = require('read-pkg-up');
+const loudRejection = require('loud-rejection');
+const normalizePackageData = require('normalize-package-data');
 
-// get the uncached parent
+// prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
-var parentDir = path.dirname(module.parent.filename);
+const parentDir = path.dirname(module.parent.filename);
 
-module.exports = function (opts, minimistOpts) {
+module.exports = (opts, minimistOpts) => {
 	loudRejection();
 
 	if (Array.isArray(opts) || typeof opts === 'string') {
 		opts = {help: opts};
 	}
 
-	opts = objectAssign({
+	opts = Object.assign({
 		pkg: readPkgUp.sync({
 			cwd: parentDir,
 			normalize: false
@@ -30,11 +29,11 @@ module.exports = function (opts, minimistOpts) {
 		inferType: false
 	}, opts);
 
-	minimistOpts = objectAssign({string: ['_']}, minimistOpts);
+	minimistOpts = Object.assign({string: ['_']}, minimistOpts);
 
 	minimistOpts.default = decamelizeKeys(minimistOpts.default || {}, '-');
 
-	var index = minimistOpts.string.indexOf('_');
+	const index = minimistOpts.string.indexOf('_');
 
 	if (opts.inferType === false && index === -1) {
 		minimistOpts.string.push('_');
@@ -46,22 +45,22 @@ module.exports = function (opts, minimistOpts) {
 		opts.help = opts.help.join('\n');
 	}
 
-	var pkg = typeof opts.pkg === 'string' ? require(path.join(parentDir, opts.pkg)) : opts.pkg;
-	var argv = minimist(opts.argv, minimistOpts);
-	var help = redent(trimNewlines(opts.help || ''), 2);
+	const pkg = typeof opts.pkg === 'string' ? require(path.join(parentDir, opts.pkg)) : opts.pkg;
+	const argv = minimist(opts.argv, minimistOpts);
+	let help = redent(trimNewlines((opts.help || '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(pkg);
 
 	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
 
-	var description = opts.description;
+	let description = opts.description;
 	if (!description && description !== false) {
 		description = pkg.description;
 	}
 
-	help = (description ? '\n  ' + description + '\n' : '') + (help ? '\n' + help + '\n' : '\n');
+	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
 
-	var showHelp = function (code) {
+	const showHelp = code => {
 		console.log(help);
 		process.exit(code || 0);
 	};
@@ -75,14 +74,16 @@ module.exports = function (opts, minimistOpts) {
 		showHelp();
 	}
 
-	var _ = argv._;
+	const input = argv._;
 	delete argv._;
 
+	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
+
 	return {
-		input: _,
-		flags: camelcaseKeys(argv, {exclude: ['--', /^\w$/]}),
-		pkg: pkg,
-		help: help,
-		showHelp: showHelp
+		input,
+		flags,
+		pkg,
+		help,
+		showHelp
 	};
 };
