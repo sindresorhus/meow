@@ -41,7 +41,7 @@ module.exports = (opts, minimistOpts) => {
 		minimistOpts.string.splice(index, 1);
 	}
 
-	const pkg = typeof opts.pkg === 'string' ? require(path.join(parentDir, opts.pkg)) : opts.pkg;
+	const pkg = opts.pkg;
 	const argv = minimist(opts.argv, minimistOpts);
 	let help = redent(trimNewlines((opts.help || '').replace(/\t+\n*$/, '')), 2);
 

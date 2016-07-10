@@ -111,10 +111,12 @@ Set it to `false` to disable it altogether.
 
 ##### pkg
 
-Type: `string` `Object`<br>
+Type: `Object`<br>
 Default: Closest package.json upwards
 
-Relative path to package.json or as an `Object`.
+package.json as an `Object`.
+
+*You most likely don't need this option.*
 
 ##### argv
 
