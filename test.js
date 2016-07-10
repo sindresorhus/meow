@@ -9,10 +9,10 @@ global.Promise = Promise;
 test('return object', t => {
 	const cli = m({
 		argv: ['foo', '--foo-bar', '-u', 'cat', '--', 'unicorn', 'cake'],
-		help: [
-			'Usage',
-			'  foo <input>'
-		]
+		help: `
+			Usage
+			  foo <input>
+		`
 	}, {
 		'alias': {u: 'unicorn'},
 		'default': {meow: 'dog'},
@@ -29,7 +29,10 @@ test('return object', t => {
 });
 
 test('support help shortcut', t => {
-	const cli = m(['unicorn', 'cat']);
+	const cli = m(`
+		unicorn
+		cat
+	`);
 	t.is(cli.help, indentString('\nCLI app helper\n\nunicorn\ncat\n', 2));
 });
 

@@ -96,9 +96,6 @@ The help text you want shown.
 
 The input is reindented and starting/ending newlines are trimmed which means you can use a [template literal](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/template_strings) without having to care about using the correct amount of indent.
 
-<del>If it's an array each item will be a line.</del><br>
-*(Still supported, but you should use a template literal instead.)*
-
 The description will be shown above your help text automatically.
 
 Set it to `false` to disable it altogether.
