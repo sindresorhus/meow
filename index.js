@@ -58,7 +58,7 @@ module.exports = (opts, minimistOpts) => {
 
 	const showHelp = code => {
 		console.log(help);
-		process.exit(code || 0);
+		process.exit(code || 2);
 	};
 
 	if (argv.version && opts.version !== false) {
