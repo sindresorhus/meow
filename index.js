@@ -58,7 +58,7 @@ module.exports = (opts, minimistOpts) => {
 
 	const showHelp = code => {
 		console.log(help);
-		process.exit(code || 0);
+		process.exit(typeof code === 'number' ? code : 2);
 	};
 
 	if (argv.version && opts.version !== false) {
@@ -67,7 +67,7 @@ module.exports = (opts, minimistOpts) => {
 	}
 
 	if (argv.help && opts.help !== false) {
-		showHelp();
+		showHelp(0);
 	}
 
 	const input = argv._;

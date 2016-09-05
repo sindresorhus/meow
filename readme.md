@@ -71,7 +71,7 @@ Returns an `Object` with:
 - `flags` *(Object)* - Flags converted to camelCase
 - `pkg` *(Object)* - The `package.json` object
 - `help` *(string)* - The help text used with `--help`
-- `showHelp([code=0])` *(Function)* - Show the help text and exit with `code`
+- `showHelp([code=2])` *(Function)* - Show the help text and exit with `code`
 
 #### options
 
