@@ -14,8 +14,8 @@ test('return object', t => {
 			  foo <input>
 		`
 	}, {
-		'alias': {u: 'unicorn'},
-		'default': {meow: 'dog'},
+		alias: {u: 'unicorn'},
+		default: {meow: 'dog'},
 		'--': true
 	});
 
