@@ -45,7 +45,8 @@
     "normalize-package-data": "^2.3.4",
     "read-pkg-up": "^2.0.0",
     "redent": "^2.0.0",
-    "trim-newlines": "^1.0.0"
+    "trim-newlines": "^1.0.0",
+    "aliases": "^0.1.0"
   },
   "devDependencies": {
     "ava": "*",
