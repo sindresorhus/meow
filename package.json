@@ -48,6 +48,7 @@
     "trim-newlines": "^1.0.0"
   },
   "devDependencies": {
+    "@types/minimist": "^1.1.29",
     "ava": "*",
     "execa": "^0.5.0",
     "indent-string": "^3.0.0",
