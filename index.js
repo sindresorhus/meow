@@ -8,6 +8,7 @@ const redent = require('redent');
 const readPkgUp = require('read-pkg-up');
 const loudRejection = require('loud-rejection');
 const normalizePackageData = require('normalize-package-data');
+const aliases = require('aliases');
 
 // prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
@@ -26,7 +27,8 @@ module.exports = (opts, minimistOpts) => {
 			normalize: false
 		}).pkg,
 		argv: process.argv.slice(2),
-		inferType: false
+		inferType: false,
+		parseAliases: false
 	}, opts);
 
 	minimistOpts = Object.assign({string: ['_']}, minimistOpts);
@@ -39,6 +41,10 @@ module.exports = (opts, minimistOpts) => {
 		minimistOpts.string.push('_');
 	} else if (opts.inferType === true && index !== -1) {
 		minimistOpts.string.splice(index, 1);
+	}
+
+	if (opts.parseAliases) {
+		minimistOpts.alias = aliases(opts.help, {h: 'help'});
 	}
 
 	const pkg = opts.pkg;

@@ -134,6 +134,27 @@ Infer the argument type.
 
 By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would infer it as a number.
 
+##### parseAliases
+
+Type: `boolean`<br>
+Default: `false`
+
+Parse aliases in `help`.
+
+```js
+const cli = meow({
+	help: `
+		Usage
+		  $ foo <input>
+
+		Options
+		  -a --b Aliased command
+	`,
+	// -a will be an alias for --b
+	parseAliases: true
+});
+```
+
 #### minimistOptions
 
 Type: `Object`<br>

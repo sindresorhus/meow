@@ -38,6 +38,7 @@
     "console"
   ],
   "dependencies": {
+    "aliases": "^0.1.0",
     "camelcase-keys": "^4.0.0",
     "decamelize-keys": "^1.0.0",
     "loud-rejection": "^1.0.0",
