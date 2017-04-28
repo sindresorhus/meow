@@ -45,11 +45,11 @@
     "normalize-package-data": "^2.3.4",
     "read-pkg-up": "^2.0.0",
     "redent": "^2.0.0",
-    "trim-newlines": "^1.0.0"
+    "trim-newlines": "^2.0.0"
   },
   "devDependencies": {
     "ava": "*",
-    "execa": "^0.5.0",
+    "execa": "^0.6.0",
     "indent-string": "^3.0.0",
     "xo": "*"
   },
