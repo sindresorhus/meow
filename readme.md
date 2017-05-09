@@ -7,7 +7,7 @@
 
 ## Features
 
-- Parses arguments using [minimist](https://github.com/substack/minimist)
+- Parses arguments using [funwithflags](https://github.com/fluents/funwithflags)
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
@@ -63,7 +63,7 @@ foo(cli.input[0], cli.flags);
 
 ## API
 
-### meow(options, [minimistOptions])
+### meow(options, [funwithflagsOptions])
 
 Returns an `Object` with:
 
@@ -134,14 +134,14 @@ Infer the argument type.
 
 By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would infer it as a number.
 
-#### minimistOptions
+#### funwithflagsOptions
 
 Type: `Object`<br>
 Default: `{}`
 
-Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-opts).
+funwithflags [options](https://github.com/fluents/funwithflags#-options).
 
-Keys passed to the minimist `default` option are [decamelized](https://github.com/sindresorhus/decamelize), so you can for example pass in `fooBar: 'baz'` and have it be the default for the `--foo-bar` flag.
+Keys passed to the funwithflags `default` option are [decamelized](https://github.com/sindresorhus/decamelize), so you can for example pass in `fooBar: 'baz'` and have it be the default for the `--foo-bar` flag.
 
 
 ## Promises
