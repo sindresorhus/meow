@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const minimist = require('minimist');
+const fwf = require('funwithflags');
 const camelcaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
@@ -9,11 +9,11 @@ const readPkgUp = require('read-pkg-up');
 const loudRejection = require('loud-rejection');
 const normalizePackageData = require('normalize-package-data');
 
-// prevent caching of this module so module.parent is always accurate
+// Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
-module.exports = (opts, minimistOpts) => {
+module.exports = (opts, fwfOpts) => {
 	loudRejection();
 
 	if (Array.isArray(opts) || typeof opts === 'string') {
@@ -29,20 +29,20 @@ module.exports = (opts, minimistOpts) => {
 		inferType: false
 	}, opts);
 
-	minimistOpts = Object.assign({string: ['_']}, minimistOpts);
+	fwfOpts = Object.assign({string: ['_']}, fwfOpts);
 
-	minimistOpts.default = decamelizeKeys(minimistOpts.default || {}, '-');
+	fwfOpts.default = decamelizeKeys(fwfOpts.default || {}, '-');
 
-	const index = minimistOpts.string.indexOf('_');
+	const index = fwfOpts.string.indexOf('_');
 
 	if (opts.inferType === false && index === -1) {
-		minimistOpts.string.push('_');
+		fwfOpts.string.push('_');
 	} else if (opts.inferType === true && index !== -1) {
-		minimistOpts.string.splice(index, 1);
+		fwfOpts.string.splice(index, 1);
 	}
 
 	const pkg = opts.pkg;
-	const argv = minimist(opts.argv, minimistOpts);
+	const argv = fwf(opts.argv, fwfOpts);
 	let help = redent(trimNewlines((opts.help || '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(pkg);
