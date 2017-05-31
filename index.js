@@ -1,5 +1,6 @@
 'use strict';
 const path = require('path');
+const buildMinimistOptions = require('minimist-options');
 const minimist = require('minimist');
 const camelcaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
@@ -13,7 +14,7 @@ const normalizePackageData = require('normalize-package-data');
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
-module.exports = (opts, minimistOpts) => {
+module.exports = opts => {
 	loudRejection();
 
 	if (Array.isArray(opts) || typeof opts === 'string') {
@@ -31,19 +32,18 @@ module.exports = (opts, minimistOpts) => {
 		inferType: false
 	}, opts);
 
-	minimistOpts = Object.assign({
-		string: ['_']
-	}, minimistOpts);
+	let minimistOpts = decamelizeKeys(opts.flags || {}, '-', {exclude: ['stopEarly', '--']});
+	minimistOpts = Object.assign({arguments: 'string'}, minimistOpts);
 
-	minimistOpts.default = decamelizeKeys(minimistOpts.default || {}, '-');
+	const hasArguments = minimistOpts._ || minimistOpts.arguments;
 
-	const index = minimistOpts.string.indexOf('_');
-
-	if (opts.inferType === false && index === -1) {
-		minimistOpts.string.push('_');
-	} else if (opts.inferType === true && index !== -1) {
-		minimistOpts.string.splice(index, 1);
+	if (opts.inferType && !hasArguments) {
+		minimistOpts.arguments = 'string';
+	} else if (opts.inferType && hasArguments) {
+		delete minimistOpts.arguments;
 	}
+
+	minimistOpts = buildMinimistOptions(minimistOpts);
 
 	const pkg = opts.pkg;
 	const argv = minimist(opts.argv, minimistOpts);

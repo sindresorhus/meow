@@ -10,11 +10,12 @@ test('return object', t => {
 		help: `
 			Usage
 			  foo <input>
-		`
-	}, {
-		alias: {u: 'unicorn'},
-		default: {meow: 'dog'},
-		'--': true
+		`,
+		flags: {
+			unicorn: {alias: 'u'},
+			meow: {default: 'dog'},
+			'--': true
+		}
 	});
 
 	t.is(cli.input[0], 'foo');
@@ -72,17 +73,22 @@ test('single character flag casing should be preserved', t => {
 
 test('type inference', t => {
 	t.is(m({argv: ['5']}).input[0], '5');
-	t.is(m({argv: ['5']}, {string: ['_']}).input[0], '5');
+	t.is(m({argv: ['5']}, {arguments: 'string'}).input[0], '5');
 	t.is(m({
 		argv: ['5'],
 		inferType: true
 	}).input[0], 5);
 	t.is(m({
 		argv: ['5'],
-		inferType: true
-	}, {string: ['foo']}).input[0], 5);
+		inferType: true,
+		flags: {foo: 'string'}
+	}).input[0], 5);
 	t.is(m({
 		argv: ['5'],
-		inferType: true
-	}, {string: ['_', 'foo']}).input[0], 5);
+		inferType: true,
+		flags: {
+			foo: 'string',
+			arguments: 'string'
+		}
+	}).input[0], 5);
 });
