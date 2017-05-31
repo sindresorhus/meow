@@ -17,7 +17,9 @@ module.exports = (opts, minimistOpts) => {
 	loudRejection();
 
 	if (Array.isArray(opts) || typeof opts === 'string') {
-		opts = {help: opts};
+		opts = {
+			help: opts
+		};
 	}
 
 	opts = Object.assign({
@@ -29,7 +31,9 @@ module.exports = (opts, minimistOpts) => {
 		inferType: false
 	}, opts);
 
-	minimistOpts = Object.assign({string: ['_']}, minimistOpts);
+	minimistOpts = Object.assign({
+		string: ['_']
+	}, minimistOpts);
 
 	minimistOpts.default = decamelizeKeys(minimistOpts.default || {}, '-');
 
