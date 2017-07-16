@@ -73,7 +73,7 @@ test('single character flag casing should be preserved', t => {
 
 test('type inference', t => {
 	t.is(m({argv: ['5']}).input[0], '5');
-	t.is(m({argv: ['5']}, {arguments: 'string'}).input[0], '5');
+	t.is(m({argv: ['5']}, {input: 'string'}).input[0], '5');
 	t.is(m({
 		argv: ['5'],
 		inferType: true
@@ -87,8 +87,11 @@ test('type inference', t => {
 		argv: ['5'],
 		inferType: true,
 		flags: {
-			foo: 'string',
-			arguments: 'string'
+			foo: 'string'
 		}
+	}).input[0], 5);
+	t.is(m({
+		argv: ['5'],
+		input: 'number'
 	}).input[0], 5);
 });

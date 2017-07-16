@@ -33,7 +33,7 @@ module.exports = opts => {
 	}, opts);
 
 	let minimistOpts = decamelizeKeys(opts.flags || {}, '-', {exclude: ['stopEarly', '--']});
-	minimistOpts = Object.assign({arguments: 'string'}, minimistOpts);
+	minimistOpts = Object.assign({arguments: opts.input || 'string'}, minimistOpts);
 
 	const hasArguments = minimistOpts._ || minimistOpts.arguments;
 
