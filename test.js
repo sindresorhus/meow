@@ -95,3 +95,18 @@ test('type inference', t => {
 		input: 'number'
 	}).input[0], 5);
 });
+
+test('alias', t => {
+	t.deepEqual(m({
+		argv: ['-f'],
+		flags: {
+			foo: {
+				type: 'boolean',
+				alias: 'f'
+			}
+		}
+	}).flags, {
+		foo: true,
+		f: true
+	});
+});
