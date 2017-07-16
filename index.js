@@ -14,13 +14,12 @@ const normalizePackageData = require('normalize-package-data');
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
-module.exports = opts => {
+module.exports = (helpMessage, opts) => {
 	loudRejection();
 
-	if (Array.isArray(opts) || typeof opts === 'string') {
-		opts = {
-			help: opts
-		};
+	if (typeof helpMessage === 'object' && !Array.isArray(helpMessage)) {
+		opts = helpMessage;
+		helpMessage = '';
 	}
 
 	opts = Object.assign({
@@ -29,17 +28,18 @@ module.exports = opts => {
 			normalize: false
 		}).pkg,
 		argv: process.argv.slice(2),
-		inferType: false
+		inferType: false,
+		input: 'string',
+		help: helpMessage
 	}, opts);
 
-	let minimistOpts = decamelizeKeys(opts.flags || {}, '-', {exclude: ['stopEarly', '--']});
-	minimistOpts = Object.assign({arguments: opts.input || 'string'}, minimistOpts);
+	let minimistOpts = Object.assign({
+		arguments: opts.input
+	}, opts.flags);
 
-	const hasArguments = minimistOpts._ || minimistOpts.arguments;
+	minimistOpts = decamelizeKeys(minimistOpts, '-', {exclude: ['stopEarly', '--']});
 
-	if (opts.inferType && !hasArguments) {
-		minimistOpts.arguments = 'string';
-	} else if (opts.inferType && hasArguments) {
+	if (opts.inferType) {
 		delete minimistOpts.arguments;
 	}
 

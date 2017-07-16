@@ -96,8 +96,8 @@ test('type inference', t => {
 	}).input[0], 5);
 });
 
-test('alias', t => {
-	t.deepEqual(m({
+test('accept help and options', t => {
+	t.deepEqual(m('help', {
 		argv: ['-f'],
 		flags: {
 			foo: {
