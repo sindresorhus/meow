@@ -8,8 +8,8 @@ const cli = meow({
 		Usage
 		  foo <input>
   `,
-  autoVersion: !process.argv.includes('--no-auto-version'),
-  autoHelp: !process.argv.includes('--no-auto-help')
+  autoVersion: process.argv.indexOf('--no-auto-version') === -1,
+  autoHelp: process.argv.indexOf('--no-auto-help') === -1
 }, {
 	alias: {
 		u: 'unicorn'
