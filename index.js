@@ -66,13 +66,13 @@ module.exports = (opts, minimistOpts) => {
 		process.exit(typeof code === 'number' ? code : 2);
 	};
 
-	if (argv.version && opts.version !== false) {
+	if (argv.version && opts.version !== false && opts.autoVersion !== false) {
 		console.log(typeof opts.version === 'string' ? opts.version : pkg.version);
 		// eslint-disable-next-line unicorn/no-process-exit
 		process.exit();
 	}
 
-	if (argv.help && opts.help !== false) {
+	if (argv.help && opts.help !== false && opts.autoHelp !== false) {
 		showHelp(0);
 	}
 
