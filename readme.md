@@ -137,6 +137,34 @@ Infer the argument type.
 
 By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would infer it as a number.
 
+##### parseAliases
+
+Type: `boolean`<br>
+Default: `false`
+
+Parse aliases in `help`.
+
+```js
+const cli = meow(`
+        Usage
+		      $ foo <input>
+
+    		Options
+		      -a --b Aliased command
+	`, {
+        	// -a will be an alias for --b
+        	parseAliases: true
+});
+```
+
+#### minimistOptions
+
+Type: `Object`<br>
+Default: `{}`
+
+Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-opts).
+
+Keys passed to the minimist `default` option are [decamelized](https://github.com/sindresorhus/decamelize), so you can for example pass in `fooBar: 'baz'` and have it be the default for the `--foo-bar` flag.
 
 ## Promises
 

@@ -110,3 +110,18 @@ test('accept help and options', t => {
 		f: true
 	});
 });
+
+test('parseAliases', t => {
+	const cli = m({
+		argv: ['foo', 'bar', '-a', 'test'],
+		parseAliases: true,
+		help: `
+			Usage
+			  foo <input>
+			Options
+				-a, --b Aliased command
+		`
+	});
+	t.is(cli.flags.a, 'test');
+	t.is(cli.flags.b, 'test');
+});

@@ -9,6 +9,7 @@ const redent = require('redent');
 const readPkgUp = require('read-pkg-up');
 const loudRejection = require('loud-rejection');
 const normalizePackageData = require('normalize-package-data');
+const aliases = require('aliases');
 
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
@@ -43,7 +44,9 @@ module.exports = (helpMessage, opts) => {
 		delete minimistOpts.arguments;
 	}
 
-	minimistOpts = buildMinimistOptions(minimistOpts);
+	if (opts.parseAliases) {
+		minimistOpts.alias = aliases(opts.help, {h: 'help'});
+	}
 
 	const pkg = opts.pkg;
 	const argv = minimist(opts.argv, minimistOpts);
