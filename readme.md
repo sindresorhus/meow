@@ -45,8 +45,11 @@ const cli = meow(`
 	  $ foo unicorns --rainbow
 	  🌈 unicorns 🌈
 `, {
-	alias: {
-		r: 'rainbow'
+	flags: {
+		rainbow: {
+			type: 'boolean',
+			alias: 'r'
+		}
 	}
 });
 /*
@@ -142,16 +145,15 @@ Default: `false`
 Parse aliases in `help`.
 
 ```js
-const cli = meow({
-	help: `
-		Usage
-		  $ foo <input>
+const cli = meow(`
+        Usage
+		      $ foo <input>
 
-		Options
-		  -a --b Aliased command
-	`,
-	// -a will be an alias for --b
-	parseAliases: true
+    		Options
+		      -a --b Aliased command
+	`, {
+        	// -a will be an alias for --b
+        	parseAliases: true
 });
 ```
 
@@ -163,7 +165,6 @@ Default: `{}`
 Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-opts).
 
 Keys passed to the minimist `default` option are [decamelized](https://github.com/sindresorhus/decamelize), so you can for example pass in `fooBar: 'baz'` and have it be the default for the `--foo-bar` flag.
-
 
 ## Promises
 

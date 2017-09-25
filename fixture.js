@@ -7,14 +7,11 @@ const cli = meow({
 	help: `
 		Usage
 		  foo <input>
-	`
-}, {
-	alias: {
-		u: 'unicorn'
-	},
-	default: {
-		meow: 'dog',
-		camelCaseOption: 'foo'
+	`,
+	flags: {
+		unicorn: {alias: 'u'},
+		meow: {default: 'dog'},
+		camelCaseOption: {default: 'foo'}
 	}
 });
 
