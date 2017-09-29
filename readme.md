@@ -82,6 +82,31 @@ Type: `Object` `Array` `string`
 
 Can either be a string/array that is the `help` or an options object.
 
+##### flags
+
+Type: `Object`
+
+Define argument flags.
+
+The key is the flag name and the value is an object with any of:
+
+- `type`: Type of value. (Possible values: `string` `boolean`)
+- `alias`: Usually used to define a short flag alias.
+- `default`: Default value when the flag is not specified.
+
+Example:
+
+```js
+flags: {
+	unicorn: {
+		type: 'string',
+		alias: 'u',
+		default: 'rainbow'
+	}
+}
+```
+
+
 ##### description
 
 Type: `string` `boolean`<br>
