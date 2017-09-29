@@ -7,7 +7,7 @@
 
 ## Features
 
-- Parses arguments using [minimist](https://github.com/substack/minimist)
+- Parses arguments
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
@@ -18,7 +18,7 @@
 ## Install
 
 ```
-$ npm install --save meow
+$ npm install meow
 ```
 
 
@@ -153,7 +153,7 @@ See [`conf`](https://github.com/sindresorhus/conf) if you need to persist some d
 
 See [`update-notifier`](https://github.com/yeoman/update-notifier) if you want update notifications.
 
-[More useful CLI utilities.](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
+[More useful CLI utilities…](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
 
 
 ## License

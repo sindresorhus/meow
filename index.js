@@ -62,13 +62,11 @@ module.exports = (helpMessage, opts) => {
 
 	const showHelp = code => {
 		console.log(help);
-		// eslint-disable-next-line unicorn/no-process-exit
 		process.exit(typeof code === 'number' ? code : 2);
 	};
 
 	if (argv.version && opts.version !== false) {
 		console.log(typeof opts.version === 'string' ? opts.version : pkg.version);
-		// eslint-disable-next-line unicorn/no-process-exit
 		process.exit();
 	}
 

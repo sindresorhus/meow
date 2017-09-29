@@ -2,7 +2,7 @@ import test from 'ava';
 import indentString from 'indent-string';
 import execa from 'execa';
 import pkg from './package';
-import m from './';
+import m from '.';
 
 test('return object', t => {
 	const cli = m({
