@@ -65,12 +65,16 @@ module.exports = (helpMessage, opts) => {
 		process.exit(typeof code === 'number' ? code : 2);
 	};
 
-	if (argv.version && opts.version !== false && opts.autoVersion !== false) {
+	const showVersion = () => {
 		console.log(typeof opts.version === 'string' ? opts.version : pkg.version);
 		process.exit();
+	};
+
+	if (argv.version && opts.autoVersion !== false) {
+		showVersion();
 	}
 
-	if (argv.help && opts.help !== false && opts.autoHelp !== false) {
+	if (argv.help && opts.autoHelp !== false) {
 		showHelp(0);
 	}
 
@@ -84,6 +88,7 @@ module.exports = (helpMessage, opts) => {
 		flags,
 		pkg,
 		help,
-		showHelp
+		showHelp,
+		showVersion
 	};
 };
