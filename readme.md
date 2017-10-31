@@ -127,16 +127,12 @@ The input is reindented and starting/ending newlines are trimmed which means you
 
 The description will be shown above your help text automatically.
 
-Set it to `false` to disable it altogether.
-
 ##### version
 
 Type: `string` `boolean`<br>
 Default: The package.json `"version"` property
 
 Set a custom version output.
-
-Set it to `false` to disable it altogether.
 
 ##### autoHelp
 
