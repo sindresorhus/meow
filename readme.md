@@ -7,7 +7,7 @@
 
 ## Features
 
-- Parses arguments using [minimist](https://github.com/substack/minimist)
+- Parses arguments
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
@@ -18,7 +18,7 @@
 ## Install
 
 ```
-$ npm install --save meow
+$ npm install meow
 ```
 
 
@@ -45,8 +45,11 @@ const cli = meow(`
 	  $ foo unicorns --rainbow
 	  🌈 unicorns 🌈
 `, {
-	alias: {
-		r: 'rainbow'
+	flags: {
+		rainbow: {
+			type: 'boolean',
+			alias: 'r'
+		}
 	}
 });
 /*
@@ -78,6 +81,31 @@ Returns an `Object` with:
 Type: `Object` `Array` `string`
 
 Can either be a string/array that is the `help` or an options object.
+
+##### flags
+
+Type: `Object`
+
+Define argument flags.
+
+The key is the flag name and the value is an object with any of:
+
+- `type`: Type of value. (Possible values: `string` `boolean`)
+- `alias`: Usually used to define a short flag alias.
+- `default`: Default value when the flag is not specified.
+
+Example:
+
+```js
+flags: {
+	unicorn: {
+		type: 'string',
+		alias: 'u',
+		default: 'rainbow'
+	}
+}
+```
+
 
 ##### description
 
@@ -134,15 +162,6 @@ Infer the argument type.
 
 By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would infer it as a number.
 
-#### minimistOptions
-
-Type: `Object`<br>
-Default: `{}`
-
-Minimist [options](https://github.com/substack/minimist#var-argv--parseargsargs-opts).
-
-Keys passed to the minimist `default` option are [decamelized](https://github.com/sindresorhus/decamelize), so you can for example pass in `fooBar: 'baz'` and have it be the default for the `--foo-bar` flag.
-
 
 ## Promises
 
@@ -159,7 +178,7 @@ See [`conf`](https://github.com/sindresorhus/conf) if you need to persist some d
 
 See [`update-notifier`](https://github.com/yeoman/update-notifier) if you want update notifications.
 
-[More useful CLI utilities.](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
+[More useful CLI utilities…](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
 
 
 ## License

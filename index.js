@@ -1,5 +1,6 @@
 'use strict';
 const path = require('path');
+const buildMinimistOptions = require('minimist-options');
 const minimist = require('minimist');
 const camelcaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
@@ -13,13 +14,12 @@ const normalizePackageData = require('normalize-package-data');
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
-module.exports = (opts, minimistOpts) => {
+module.exports = (helpMessage, opts) => {
 	loudRejection();
 
-	if (Array.isArray(opts) || typeof opts === 'string') {
-		opts = {
-			help: opts
-		};
+	if (typeof helpMessage === 'object' && !Array.isArray(helpMessage)) {
+		opts = helpMessage;
+		helpMessage = '';
 	}
 
 	opts = Object.assign({
@@ -28,22 +28,22 @@ module.exports = (opts, minimistOpts) => {
 			normalize: false
 		}).pkg,
 		argv: process.argv.slice(2),
-		inferType: false
+		inferType: false,
+		input: 'string',
+		help: helpMessage
 	}, opts);
 
-	minimistOpts = Object.assign({
-		string: ['_']
-	}, minimistOpts);
+	let minimistOpts = Object.assign({
+		arguments: opts.input
+	}, opts.flags);
 
-	minimistOpts.default = decamelizeKeys(minimistOpts.default || {}, '-');
+	minimistOpts = decamelizeKeys(minimistOpts, '-', {exclude: ['stopEarly', '--']});
 
-	const index = minimistOpts.string.indexOf('_');
-
-	if (opts.inferType === false && index === -1) {
-		minimistOpts.string.push('_');
-	} else if (opts.inferType === true && index !== -1) {
-		minimistOpts.string.splice(index, 1);
+	if (opts.inferType) {
+		delete minimistOpts.arguments;
 	}
+
+	minimistOpts = buildMinimistOptions(minimistOpts);
 
 	const pkg = opts.pkg;
 	const argv = minimist(opts.argv, minimistOpts);
@@ -62,13 +62,11 @@ module.exports = (opts, minimistOpts) => {
 
 	const showHelp = code => {
 		console.log(help);
-		// eslint-disable-next-line unicorn/no-process-exit
 		process.exit(typeof code === 'number' ? code : 2);
 	};
 
 	if (argv.version && opts.version !== false && opts.autoVersion !== false) {
 		console.log(typeof opts.version === 'string' ? opts.version : pkg.version);
-		// eslint-disable-next-line unicorn/no-process-exit
 		process.exit();
 	}
 

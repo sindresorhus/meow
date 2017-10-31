@@ -9,14 +9,11 @@ const cli = meow({
 		  foo <input>
   `,
   autoVersion: process.argv.indexOf('--no-auto-version') === -1,
-  autoHelp: process.argv.indexOf('--no-auto-help') === -1
-}, {
-	alias: {
-		u: 'unicorn'
-	},
-	default: {
-		meow: 'dog',
-		camelCaseOption: 'foo'
+  autoHelp: process.argv.indexOf('--no-auto-help') === -1,
+	flags: {
+		unicorn: {alias: 'u'},
+		meow: {default: 'dog'},
+		camelCaseOption: {default: 'foo'}
 	}
 });
 
