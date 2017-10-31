@@ -30,7 +30,9 @@ module.exports = (helpMessage, opts) => {
 		argv: process.argv.slice(2),
 		inferType: false,
 		input: 'string',
-		help: helpMessage
+		help: helpMessage,
+		autoHelp: true,
+		autoVersion: true
 	}, opts);
 
 	let minimistOpts = Object.assign({
@@ -70,11 +72,11 @@ module.exports = (helpMessage, opts) => {
 		process.exit();
 	};
 
-	if (argv.version && opts.autoVersion !== false) {
+	if (argv.version && opts.autoVersion) {
 		showVersion();
 	}
 
-	if (argv.help && opts.autoHelp !== false) {
+	if (argv.help && opts.autoHelp) {
 		showHelp(0);
 	}
 
