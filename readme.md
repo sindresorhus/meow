@@ -75,6 +75,7 @@ Returns an `Object` with:
 - `pkg` *(Object)* - The `package.json` object
 - `help` *(string)* - The help text used with `--help`
 - `showHelp([code=2])` *(Function)* - Show the help text and exit with `code`
+- `showVersion()` *(Function)* - Show the version text and exit
 
 #### options
 
@@ -136,6 +137,20 @@ Default: The package.json `"version"` property
 Set a custom version output.
 
 Set it to `false` to disable it altogether.
+
+##### autoHelp
+
+Type: `boolean`<br>
+Default: `true`
+
+Automatically show the help text when the `--help` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own help text.
+
+##### autoVersion
+
+Type: `boolean`<br>
+Default: `true`
+
+Automatically show the version text when the `--version` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own version text.
 
 ##### pkg
 
