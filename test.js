@@ -55,6 +55,23 @@ test('spawn cli and test input flag', async t => {
 	t.is(stdout, 'bar');
 });
 
+test.serial('psTitle as a process.title should work', t => {
+	m({
+		psTitle: false
+	});
+	t.not(process.title, 'meow', 'if psTitle option value evaluate \'false\', it will prevents process.title replaces.');
+
+	m({
+		psTitle: true
+	});
+	t.is(process.title, 'meow', 'Default');
+
+	m({
+		psTitle: 'myApp'
+	});
+	t.is(process.title, 'myApp', 'Custom process.title');
+});
+
 // TODO: This fails in Node.js 7.10.0, but not 6 or 4
 test.serial.skip('pkg.bin as a string should work', t => { // eslint-disable-line ava/no-skip-test
 	m({
