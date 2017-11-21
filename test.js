@@ -57,16 +57,25 @@ test('spawn cli and test input flag', async t => {
 
 test.serial('psTitle as a process.title should work', t => {
 	m({
+		pkg: {
+			name: 'meow'
+		},
 		psTitle: false
 	});
-	t.not(process.title, pkg.name, 'if psTitle option value evaluate \'false\', it will prevents process.title replaces.');
+	t.not(process.title, 'meow', 'if psTitle option value evaluate \'false\', it will prevents process.title replaces.');
 
 	m({
+		pkg: {
+			name: 'meow'
+		},
 		psTitle: true
 	});
-	t.is(process.title, pkg.name, 'Default');
+	t.is(process.title, 'meow', 'Default');
 
 	m({
+		pkg: {
+			name: 'meow'
+		},
 		psTitle: 'myApp'
 	});
 	t.is(process.title, 'myApp', 'Custom process.title');
