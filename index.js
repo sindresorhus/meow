@@ -30,7 +30,8 @@ module.exports = (helpMessage, opts) => {
 		argv: process.argv.slice(2),
 		inferType: false,
 		input: 'string',
-		help: helpMessage
+		help: helpMessage,
+		psTitle: true
 	}, opts);
 
 	let minimistOpts = Object.assign({
@@ -51,7 +52,15 @@ module.exports = (helpMessage, opts) => {
 
 	normalizePackageData(pkg);
 
-	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
+	let processTitle = opts.psTitle;
+
+	if (processTitle) {
+		if (processTitle === true) {
+			processTitle = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
+		}
+
+		process.title = processTitle;
+	}
 
 	let description = opts.description;
 	if (!description && description !== false) {
