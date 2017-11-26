@@ -30,7 +30,9 @@ module.exports = (helpMessage, opts) => {
 		argv: process.argv.slice(2),
 		inferType: false,
 		input: 'string',
-		help: helpMessage
+		help: helpMessage,
+		autoHelp: true,
+		autoVersion: true
 	}, opts);
 
 	let minimistOpts = Object.assign({
@@ -65,12 +67,16 @@ module.exports = (helpMessage, opts) => {
 		process.exit(typeof code === 'number' ? code : 2);
 	};
 
-	if (argv.version && opts.version !== false) {
+	const showVersion = () => {
 		console.log(typeof opts.version === 'string' ? opts.version : pkg.version);
 		process.exit();
+	};
+
+	if (argv.version && opts.autoVersion) {
+		showVersion();
 	}
 
-	if (argv.help && opts.help !== false) {
+	if (argv.help && opts.autoHelp) {
 		showHelp(0);
 	}
 
@@ -84,6 +90,7 @@ module.exports = (helpMessage, opts) => {
 		flags,
 		pkg,
 		help,
-		showHelp
+		showHelp,
+		showVersion
 	};
 };
