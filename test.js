@@ -106,6 +106,27 @@ test('type inference', t => {
 	}).input[0], 5);
 });
 
+test('filter out unset boolean args', t => {
+	t.deepEqual(m('help', {
+		argv: ['--foo'],
+		flags: {
+			foo: {
+				type: 'boolean'
+			},
+			bar: {
+				type: 'boolean'
+			},
+			baz: {
+				type: 'boolean',
+				default: false
+			}
+		}
+	}).flags, {
+		foo: true,
+		baz: false
+	});
+});
+
 test('accept help and options', t => {
 	t.deepEqual(m('help', {
 		argv: ['-f'],
