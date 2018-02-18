@@ -32,13 +32,14 @@ module.exports = (helpMessage, opts) => {
 		input: 'string',
 		help: helpMessage,
 		autoHelp: true,
-		autoVersion: true
+		autoVersion: true,
+		booleanDefault: false
 	}, opts);
 
 	const minimistFlags = opts.flags ? Object.keys(opts.flags).reduce(
 		(flags, flag) => {
-			if (flags[flag].type === 'boolean' && typeof flags[flag].default === 'undefined') {
-				flags[flag].default = undefined;
+			if (flags[flag].type === 'boolean' && !Object.prototype.hasOwnProperty.call(flags[flag], 'default')) {
+				flags[flag].default = opts.booleanDefault;
 			}
 
 			return flags;
