@@ -32,6 +32,7 @@ module.exports = (helpMessage, opts) => {
 		input: 'string',
 		help: helpMessage,
 		autoHelp: true,
+		autoHelpFlags: true,
 		autoVersion: true
 	}, opts);
 
@@ -61,6 +62,64 @@ module.exports = (helpMessage, opts) => {
 	}
 
 	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
+
+	if (opts.autoHelpFlags && opts.flags) {
+		const options = Object.keys(opts.flags).reduce((accum, flag) => {
+			const o = opts.flags[flag];
+			if (Object.prototype.hasOwnProperty.call(o, 'default')) {
+				o.default = o.default.toString();
+			}
+
+			const option = {
+				flag: '',
+				value: '',
+				desc: ''
+			};
+
+			if (flag.length === 1) {
+				o.alias = o.alias || flag;
+			}
+
+			option.flag += o.alias ? `-${o.alias}, ` : ' '.repeat(4);
+			option.flag += `--${flag === '--' ? '' : flag}`;
+			accum.flagMaxLen = Math.max(accum.flagMaxLen, option.flag.length);
+
+			if (flag === '--') {
+				option.value = 'arg(s)';
+			} else if (o.type === 'boolean') {
+				option.value = '[true|false]';
+			} else {
+				option.value = `${o.default ? '[' : ''}<value>${o.default ? ']' : ''}`;
+			}
+			accum.valMaxLen = Math.max(accum.valMaxLen, option.value.length);
+
+			if (flag === '--') {
+				option.desc = 'option/arg separator';
+			} else {
+				if (o.description) {
+					option.desc += o.description;
+				}
+				if (o.default) {
+					option.desc += `${o.description ? '; ' : ''}default ${o.default}`;
+				}
+			}
+
+			accum.entries.push(option);
+			return accum;
+		}, {
+			flagMaxLen: 0,
+			valMaxLen: 0,
+			entries: []
+		});
+
+		if (options.entries.length > 0) {
+			help += redent(options.entries.map(it =>
+				`${it.flag}${' '.repeat(options.flagMaxLen - it.flag.length + 2)}` +
+				`${it.value}${' '.repeat(options.valMaxLen - it.value.length + 2)}` +
+				it.desc
+			).join('\n'), 2);
+		}
+	}
 
 	const showHelp = code => {
 		console.log(help);

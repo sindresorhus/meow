@@ -11,6 +11,7 @@ test('return object', t => {
 			Usage
 			  foo <input>
 		`,
+		autoHelpFlags: false,
 		flags: {
 			unicorn: {alias: 'u'},
 			meow: {default: 'dog'},
@@ -25,6 +26,25 @@ test('return object', t => {
 	t.deepEqual(cli.flags['--'], ['unicorn', 'cake']);
 	t.is(cli.pkg.name, 'meow');
 	t.is(cli.help, indentString('\nCLI app helper\n\nUsage\n  foo <input>\n', 2));
+});
+
+test('return object with arg help', t => {
+	const cli = m({
+		argv: ['foo', '--foo-bar', '-u', 'cat', '--', 'unicorn', 'cake'],
+		flags: {
+			unicorn: {alias: 'u', description: 'Unicorn name'},
+			meow: {default: 'dog', description: 'What to meow'},
+			'--': true
+		}
+	});
+
+	t.is(cli.input[0], 'foo');
+	t.true(cli.flags.fooBar);
+	t.is(cli.flags.meow, 'dog');
+	t.is(cli.flags.unicorn, 'cat');
+	t.deepEqual(cli.flags['--'], ['unicorn', 'cake']);
+	t.is(cli.pkg.name, 'meow');
+	t.is(cli.help, indentString('\nCLI app helper\n\n-u, --unicorn  <value>    Unicorn name\n    --meow     [<value>]  What to meow; default dog\n    --         arg(s)     option/arg separator', 2));
 });
 
 test('support help shortcut', t => {
@@ -47,7 +67,7 @@ test('spawn cli and not show version', async t => {
 
 test('spawn cli and show help screen', async t => {
 	const {stdout} = await execa('./fixture.js', ['--help']);
-	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2));
+	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n\n-u, --unicorn          <value>    \n    --meow             [<value>]  default dog\n    --camelCaseOption  [<value>]  default foo', 2));
 });
 
 test('spawn cli and not show help screen', async t => {

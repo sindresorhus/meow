@@ -94,6 +94,7 @@ The key is the flag name and the value is an object with any of:
 - `type`: Type of value. (Possible values: `string` `boolean`)
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
+- `description`: Description to render when autogenerating flag help.
 
 Example:
 
@@ -102,7 +103,8 @@ flags: {
 	unicorn: {
 		type: 'string',
 		alias: 'u',
-		default: 'rainbow'
+		default: 'rainbow',
+		description: 'Unicorn name'
 	}
 }
 ```
@@ -147,6 +149,13 @@ Type: `boolean`<br>
 Default: `true`
 
 Automatically show the version text when the `--version` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own version text.
+
+##### autoHelpFlags
+
+Type: `boolean`<br>
+Default: `true`
+
+Automatically show help on flags/switches.
 
 ##### pkg
 
