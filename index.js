@@ -36,7 +36,7 @@ module.exports = (helpMessage, opts) => {
 		booleanDefault: false
 	}, opts);
 
-	const minimistFlags = opts.flags ? Object.keys(opts.flags).reduce(
+	const minimistFlags = opts.flags && typeof opts.booleanDefault !== 'undefined' ? Object.keys(opts.flags).reduce(
 		(flags, flag) => {
 			if (flags[flag].type === 'boolean' && !Object.prototype.hasOwnProperty.call(flags[flag], 'default')) {
 				flags[flag].default = opts.booleanDefault;
@@ -99,15 +99,7 @@ module.exports = (helpMessage, opts) => {
 	const input = argv._;
 	delete argv._;
 
-	let flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
-
-	flags = Object.keys(flags).reduce((result, flag) => {
-		if (flags[flag] !== undefined) {
-			result[flag] = flags[flag];
-		}
-
-		return result;
-	}, {});
+	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
 
 	return {
 		input,

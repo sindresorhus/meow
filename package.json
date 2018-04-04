@@ -46,7 +46,7 @@
 		"read-pkg-up": "^3.0.0",
 		"redent": "^2.0.0",
 		"trim-newlines": "^2.0.0",
-		"yargs-parser": "^9.0.2"
+		"yargs-parser": "^10.0.0"
 	},
 	"devDependencies": {
 		"ava": "*",
