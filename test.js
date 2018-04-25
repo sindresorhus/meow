@@ -106,8 +106,52 @@ test('type inference', t => {
 	}).input[0], 5);
 });
 
+test('booleanDefault: undefined, filter out unset boolean args', t => {
+	t.deepEqual(m('help', {
+		argv: ['--foo'],
+		booleanDefault: undefined,
+		flags: {
+			foo: {
+				type: 'boolean'
+			},
+			bar: {
+				type: 'boolean'
+			},
+			baz: {
+				type: 'boolean',
+				default: false
+			}
+		}
+	}).flags, {
+		foo: true,
+		baz: false
+	});
+});
+
+test('boolean args are false by default', t => {
+	t.deepEqual(m('help', {
+		argv: ['--foo'],
+		flags: {
+			foo: {
+				type: 'boolean'
+			},
+			bar: {
+				type: 'boolean',
+				default: true
+			},
+			baz: {
+				type: 'boolean'
+			}
+		}
+	}).flags, {
+		foo: true,
+		bar: true,
+		baz: false
+	});
+});
+
 test('enforces boolean flag type', t => {
-	const cli = m(``, {
+	const cli = m('', {
 		argv: ['--cursor=false'],
 		flags: {
 			cursor: {type: 'boolean'}

@@ -1,7 +1,7 @@
 'use strict';
 const path = require('path');
 const buildMinimistOptions = require('minimist-options');
-const minimist = require('minimist');
+const yargs = require('yargs-parser');
 const camelcaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
@@ -32,12 +32,24 @@ module.exports = (helpMessage, opts) => {
 		input: 'string',
 		help: helpMessage,
 		autoHelp: true,
-		autoVersion: true
+		autoVersion: true,
+		booleanDefault: false
 	}, opts);
+
+	const minimistFlags = opts.flags && typeof opts.booleanDefault !== 'undefined' ? Object.keys(opts.flags).reduce(
+		(flags, flag) => {
+			if (flags[flag].type === 'boolean' && !Object.prototype.hasOwnProperty.call(flags[flag], 'default')) {
+				flags[flag].default = opts.booleanDefault;
+			}
+
+			return flags;
+		},
+		opts.flags
+	) : opts.flags;
 
 	let minimistOpts = Object.assign({
 		arguments: opts.input
-	}, opts.flags);
+	}, minimistFlags);
 
 	minimistOpts = decamelizeKeys(minimistOpts, '-', {exclude: ['stopEarly', '--']});
 
@@ -47,8 +59,12 @@ module.exports = (helpMessage, opts) => {
 
 	minimistOpts = buildMinimistOptions(minimistOpts);
 
+	if (minimistOpts['--']) {
+		minimistOpts.configuration = Object.assign({}, minimistOpts.configuration, {'populate--': true});
+	}
+
 	const pkg = opts.pkg;
-	const argv = minimist(opts.argv, minimistOpts);
+	const argv = yargs(opts.argv, minimistOpts);
 	let help = redent(trimNewlines((opts.help || '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(pkg);

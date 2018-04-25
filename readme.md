@@ -173,6 +173,55 @@ Infer the argument type.
 
 By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would infer it as a number.
 
+##### booleanDefault
+
+Type: `boolean` `null` `undefined`<br>
+Default: `false`
+
+Value of `boolean` flags not defined in `argv`.
+If set to `undefined` the flags not defined in `argv` will be excluded from the result.
+The `default` value set in `boolean` flags take precedence over `booleanDefault`.
+
+Example:
+
+```js
+const cli = meow(`
+	Usage
+	  $ foo
+
+	Options
+	  --rainbow, -r  Include a rainbow
+	  --unicorn, -r  Include a unicorn
+
+	Examples
+	  $ foo
+	  🌈 unicorns 🌈
+`, {
+	booleanDefault: undefined,
+	flags: {
+		rainbow: {
+			type: 'boolean',
+			default: true
+			alias: 'r'
+		},
+		unicorn: {
+			type: 'boolean',
+			default: false
+			alias: 'u'
+		},
+		cake: {
+			type: 'boolean',
+			alias: 'c'
+		}
+	}
+});
+/*
+{
+	flags: {rainbow: true, unicorn: false},
+	…
+}
+*/
+```
 
 ## Promises
 
