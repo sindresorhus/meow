@@ -191,7 +191,7 @@ const cli = meow(`
 
 	Options
 	  --rainbow, -r  Include a rainbow
-		--unicorn, -r  Include a unicorn
+	  --unicorn, -r  Include a unicorn
 
 	Examples
 	  $ foo
@@ -218,7 +218,7 @@ const cli = meow(`
 /*
 {
 	flags: {rainbow: true, unicorn: false},
-	...
+	…
 }
 */
 ```
