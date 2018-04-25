@@ -106,6 +106,16 @@ test('type inference', t => {
 	}).input[0], 5);
 });
 
+test('enforces boolean flag type', t => {
+	const cli = m(``, {
+		argv: ['--cursor=false'],
+		flags: {
+			cursor: {type: 'boolean'}
+		}
+	});
+	t.deepEqual(cli.flags, {cursor: false});
+});
+
 test('accept help and options', t => {
 	t.deepEqual(m('help', {
 		argv: ['-f'],
