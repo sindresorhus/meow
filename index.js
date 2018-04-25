@@ -26,7 +26,7 @@ module.exports = (helpMessage, opts) => {
 		pkg: readPkgUp.sync({
 			cwd: parentDir,
 			normalize: false
-		}).pkg,
+		}).pkg || {},
 		argv: process.argv.slice(2),
 		inferType: false,
 		input: 'string',
@@ -47,7 +47,7 @@ module.exports = (helpMessage, opts) => {
 
 	minimistOpts = buildMinimistOptions(minimistOpts);
 
-	const pkg = opts.pkg || {};
+	const pkg = opts.pkg;
 	const argv = minimist(opts.argv, minimistOpts);
 	let help = redent(trimNewlines((opts.help || '').replace(/\t+\n*$/, '')), 2);
 
