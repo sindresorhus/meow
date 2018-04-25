@@ -14,15 +14,15 @@ const normalizePackageData = require('normalize-package-data');
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
-module.exports = (helpMessage, opts) => {
+module.exports = (helpMessage, options) => {
 	loudRejection();
 
 	if (typeof helpMessage === 'object' && !Array.isArray(helpMessage)) {
-		opts = helpMessage;
+		options = helpMessage;
 		helpMessage = '';
 	}
 
-	opts = Object.assign({
+	options = Object.assign({
 		pkg: readPkgUp.sync({
 			cwd: parentDir,
 			normalize: false
@@ -34,46 +34,46 @@ module.exports = (helpMessage, opts) => {
 		autoHelp: true,
 		autoVersion: true,
 		booleanDefault: false
-	}, opts);
+	}, options);
 
-	const minimistFlags = opts.flags && typeof opts.booleanDefault !== 'undefined' ? Object.keys(opts.flags).reduce(
+	const minimistFlags = options.flags && typeof options.booleanDefault !== 'undefined' ? Object.keys(options.flags).reduce(
 		(flags, flag) => {
 			if (flags[flag].type === 'boolean' && !Object.prototype.hasOwnProperty.call(flags[flag], 'default')) {
-				flags[flag].default = opts.booleanDefault;
+				flags[flag].default = options.booleanDefault;
 			}
 
 			return flags;
 		},
-		opts.flags
-	) : opts.flags;
+		options.flags
+	) : options.flags;
 
-	let minimistOpts = Object.assign({
-		arguments: opts.input
+	let minimistoptions = Object.assign({
+		arguments: options.input
 	}, minimistFlags);
 
-	minimistOpts = decamelizeKeys(minimistOpts, '-', {exclude: ['stopEarly', '--']});
+	minimistoptions = decamelizeKeys(minimistoptions, '-', {exclude: ['stopEarly', '--']});
 
-	if (opts.inferType) {
-		delete minimistOpts.arguments;
+	if (options.inferType) {
+		delete minimistoptions.arguments;
 	}
 
-	minimistOpts = buildMinimistOptions(minimistOpts);
+	minimistoptions = buildMinimistOptions(minimistoptions);
 
-	if (minimistOpts['--']) {
-		minimistOpts.configuration = Object.assign({}, minimistOpts.configuration, {'populate--': true});
+	if (minimistoptions['--']) {
+		minimistoptions.configuration = Object.assign({}, minimistoptions.configuration, {'populate--': true});
 	}
 
-	const pkg = opts.pkg;
-	const argv = yargs(opts.argv, minimistOpts);
-	let help = redent(trimNewlines((opts.help || '').replace(/\t+\n*$/, '')), 2);
+	const {pkg} = options;
+	const argv = yargs(options.argv, minimistoptions);
+	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(pkg);
 
 	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
 
-	let description = opts.description;
+	let {description} = options;
 	if (!description && description !== false) {
-		description = pkg.description;
+		({description} = pkg);
 	}
 
 	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
@@ -84,15 +84,15 @@ module.exports = (helpMessage, opts) => {
 	};
 
 	const showVersion = () => {
-		console.log(typeof opts.version === 'string' ? opts.version : pkg.version);
+		console.log(typeof options.version === 'string' ? options.version : pkg.version);
 		process.exit();
 	};
 
-	if (argv.version && opts.autoVersion) {
+	if (argv.version && options.autoVersion) {
 		showVersion();
 	}
 
-	if (argv.help && opts.autoHelp) {
+	if (argv.help && options.autoHelp) {
 		showHelp(0);
 	}
 
