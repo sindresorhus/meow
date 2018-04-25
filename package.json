@@ -1,6 +1,6 @@
 {
 	"name": "meow",
-	"version": "4.0.0",
+	"version": "4.0.1",
 	"description": "CLI app helper",
 	"license": "MIT",
 	"repository": "sindresorhus/meow",
