@@ -9,6 +9,7 @@
 
 - Parses arguments
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
+- Nagates flags when `--no-` prefix
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
 - Makes unhandled rejected promises [fail loudly](https://github.com/sindresorhus/loud-rejection) instead of the default silent fail
@@ -191,27 +192,32 @@ const cli = meow(`
 
 	Options
 	  --rainbow, -r  Include a rainbow
-	  --unicorn, -r  Include a unicorn
+	  --unicorn, -u  Include a unicorn
+	  --no-sparkles, Exclude sparkles
 
 	Examples
 	  $ foo
-	  🌈 unicorns 🌈
+	  🌈 unicorns✨🌈
 `, {
 	booleanDefault: undefined,
 	flags: {
 		rainbow: {
 			type: 'boolean',
-			default: true
+			default: true,
 			alias: 'r'
 		},
 		unicorn: {
 			type: 'boolean',
-			default: false
+			default: false,
 			alias: 'u'
 		},
 		cake: {
 			type: 'boolean',
 			alias: 'c'
+		},
+		sparkles: {
+			type: 'boolean',
+			default: true
 		}
 	}
 });
