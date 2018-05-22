@@ -9,7 +9,7 @@
 
 - Parses arguments
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
-- Nagates flags when `--no-` prefix
+- Negates flags when using the `--no-` prefix
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
 - Makes unhandled rejected promises [fail loudly](https://github.com/sindresorhus/loud-rejection) instead of the default silent fail
@@ -193,7 +193,7 @@ const cli = meow(`
 	Options
 	  --rainbow, -r  Include a rainbow
 	  --unicorn, -u  Include a unicorn
-	  --no-sparkles, Exclude sparkles
+	  --no-sparkles  Exclude sparkles
 
 	Examples
 	  $ foo
