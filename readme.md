@@ -1,4 +1,4 @@
-# meow [![Build Status](https://travis-ci.org/sindresorhus/meow.svg?branch=master)](https://travis-ci.org/sindresorhus/meow)
+# meow [![Build Status](https://travis-ci.org/sindresorhus/meow.svg?branch=master)](https://travis-ci.org/sindresorhus/meow) [![Install Size](https://packagephobia.now.sh/badge?p=meow)](https://packagephobia.now.sh/result?p=meow)
 
 > CLI app helper
 
