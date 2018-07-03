@@ -46,10 +46,12 @@ const cli = meow(`
 	  $ foo unicorns --rainbow
 	  🌈 unicorns 🌈
 `, {
+	alias: {
+		r: 'rainbow'
+	},
 	flags: {
 		rainbow: {
-			type: 'boolean',
-			alias: 'r'
+			type: 'boolean'
 		}
 	}
 });
@@ -93,7 +95,6 @@ Define argument flags.
 The key is the flag name and the value is an object with any of:
 
 - `type`: Type of value. (Possible values: `string` `boolean`)
-- `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
 
 Example:
@@ -102,12 +103,32 @@ Example:
 flags: {
 	unicorn: {
 		type: 'string',
-		alias: 'u',
 		default: 'rainbow'
 	}
 }
 ```
 
+##### alias
+
+Type: `Object`
+
+Define argument aliases.
+
+The key is the alias and the value is the argument's name.
+
+Example:
+
+```js
+flags: {
+	unicorn: {
+		type: 'string',
+		default: 'rainbow'
+	}
+},
+alias: {
+	u: 'unicorn'
+}
+```
 
 ##### description
 
