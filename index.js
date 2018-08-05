@@ -76,7 +76,7 @@ module.exports = (helpMessage, options) => {
 		({description} = pkg);
 	}
 
-	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
+	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}` : '\n');
 
 	const showHelp = code => {
 		console.log(help);

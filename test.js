@@ -24,7 +24,7 @@ test('return object', t => {
 	t.is(cli.flags.unicorn, 'cat');
 	t.deepEqual(cli.flags['--'], ['unicorn', 'cake']);
 	t.is(cli.pkg.name, 'meow');
-	t.is(cli.help, indentString('\nCLI app helper\n\nUsage\n  foo <input>\n', 2));
+	t.is(cli.help, indentString('\nCLI app helper\n\nUsage\n  foo <input>', 2));
 });
 
 test('support help shortcut', t => {
@@ -32,7 +32,7 @@ test('support help shortcut', t => {
 		unicorn
 		cat
 	`);
-	t.is(cli.help, indentString('\nCLI app helper\n\nunicorn\ncat\n', 2));
+	t.is(cli.help, indentString('\nCLI app helper\n\nunicorn\ncat', 2));
 });
 
 test('spawn cli and show version', async t => {
@@ -47,7 +47,7 @@ test('spawn cli and not show version', async t => {
 
 test('spawn cli and show help screen', async t => {
 	const {stdout} = await execa('./fixture.js', ['--help']);
-	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2));
+	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n', 2));
 });
 
 test('spawn cli and not show help screen', async t => {
