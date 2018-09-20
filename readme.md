@@ -223,7 +223,13 @@ const cli = meow(`
 });
 /*
 {
-	flags: {rainbow: true, unicorn: false},
+	flags: {
+		rainbow: true,
+		r: true,
+		unicorn: false,
+		u: false,
+		sparkles: true
+	},
 	…
 }
 */
