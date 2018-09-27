@@ -47,7 +47,7 @@
 		"@babel/core": "^7.1.0",
 		"@babel/preset-env": "^7.1.0",
 		"@babel/register": "^7.0.0",
-		"ava": "^1.0.0",
+		"ava": "^1.0.0-beta.8",
 		"babel-core": "^7.0.0-bridge.0",
 		"camelcase-keys": "^4.0.0",
 		"decamelize-keys": "^1.0.0",
