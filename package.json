@@ -16,7 +16,7 @@
 	"scripts": {
 		"build": "rollup -c build/rollup.config.js",
 		"lint": "xo lib test",
-		"test": "yarn lint && yarn test:lib && yarn build && yarn test:dist",
+		"test": "yarn build && yarn lint && yarn test:lib && yarn test:dist",
 		"test:lib": "ava test/lib.test.js",
 		"test:dist": "ava test/dist.test.js"
 	},
