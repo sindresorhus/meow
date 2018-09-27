@@ -2,6 +2,7 @@
 	"name": "meow",
 	"version": "5.0.0",
 	"description": "CLI app helper",
+	"main": "dist/meow.js",
 	"license": "MIT",
 	"repository": "sindresorhus/meow",
 	"author": {
@@ -13,10 +14,14 @@
 		"node": ">=6"
 	},
 	"scripts": {
-		"test": "xo && ava"
+		"build": "rollup -c build/rollup.config.js",
+		"lint": "xo lib test",
+		"test": "yarn lint && yarn test:lib && yarn build && yarn test:dist",
+		"test:lib": "ava test/lib.test.js",
+		"test:dist": "ava test/dist.test.js"
 	},
 	"files": [
-		"index.js"
+		"dist"
 	],
 	"keywords": [
 		"cli",
@@ -37,24 +42,35 @@
 		"cmd",
 		"console"
 	],
-	"dependencies": {
+	"dependencies": {},
+	"devDependencies": {
+		"@babel/core": "^7.1.0",
+		"@babel/preset-env": "^7.1.0",
+		"@babel/register": "^7.0.0",
+		"ava": "^1.0.0",
+		"babel-core": "^7.0.0-bridge.0",
 		"camelcase-keys": "^4.0.0",
 		"decamelize-keys": "^1.0.0",
+		"esm": "^3.0.84",
+		"execa": "^0.10.0",
+		"indent-string": "^3.0.0",
 		"loud-rejection": "^1.0.0",
 		"minimist-options": "^3.0.1",
 		"normalize-package-data": "^2.3.4",
 		"read-pkg-up": "^3.0.0",
 		"redent": "^2.0.0",
+		"rollup": "^0.66.2",
+		"rollup-config": "^1.0.1",
+		"rollup-plugin-commonjs": "^9.1.8",
+		"rollup-plugin-json": "^3.1.0",
+		"rollup-plugin-license": "^0.7.0",
+		"rollup-plugin-node-resolve": "^3.4.0",
 		"trim-newlines": "^2.0.0",
+		"xo": "*",
 		"yargs-parser": "^10.0.0"
 	},
-	"devDependencies": {
-		"ava": "*",
-		"execa": "^0.10.0",
-		"indent-string": "^3.0.0",
-		"xo": "*"
-	},
 	"xo": {
+		"semicolon": false,
 		"rules": {
 			"unicorn/no-process-exit": "off"
 		}
