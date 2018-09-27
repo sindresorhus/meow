@@ -1,12 +1,12 @@
-# meow [![Build Status](https://travis-ci.org/sindresorhus/meow.svg?branch=master)](https://travis-ci.org/sindresorhus/meow)
+# meow [![Build Status](https://travis-ci.org/sindresorhus/meow.svg?branch=master)](https://travis-ci.org/sindresorhus/meow) [![npm](https://badgen.net/npm/dt/meow)](https://www.npmjs.com/package/meow) [![npm](https://badgen.net/npm/dm/meow)](https://www.npmjs.com/package/meow) [![npm](https://badgen.net/npm/v/meow)](https://www.npmjs.com/package/meow)
 
 > CLI app helper
 
-![](meow.gif)
-
+<p align="center"><img src="meow.gif"/></p>
 
 ## Features
 
+- No dependencies (all built-in)
 - Parses arguments
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
 - Negates flags when using the `--no-` prefix
