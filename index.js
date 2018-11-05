@@ -7,7 +7,7 @@ const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
 const redent = require('redent');
 const readPkgUp = require('read-pkg-up');
-const loudRejection = require('loud-rejection');
+const hardRejection = require('hard-rejection');
 const normalizePackageData = require('normalize-package-data');
 
 // Prevent caching of this module so module.parent is always accurate
@@ -15,7 +15,7 @@ delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
 module.exports = (helpMessage, options) => {
-	loudRejection();
+	hardRejection();
 
 	if (typeof helpMessage === 'object' && !Array.isArray(helpMessage)) {
 		options = helpMessage;

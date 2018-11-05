@@ -12,7 +12,7 @@
 - Negates flags when using the `--no-` prefix
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
-- Makes unhandled rejected promises [fail loudly](https://github.com/sindresorhus/loud-rejection) instead of the default silent fail
+- Makes unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail
 - Sets the process title to the binary name defined in package.json
 
 
@@ -237,7 +237,7 @@ const cli = meow(`
 
 ## Promises
 
-Meow will make unhandled rejected promises [fail loudly](https://github.com/sindresorhus/loud-rejection) instead of the default silent fail. Meaning you don't have to manually `.catch()` promises used in your CLI.
+Meow will make unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail. Meaning you don't have to manually `.catch()` promises used in your CLI.
 
 
 ## Tips
