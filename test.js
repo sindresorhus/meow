@@ -107,7 +107,7 @@ test('type inference', t => {
 });
 
 test('booleanDefault: undefined, filter out unset boolean args', t => {
-	t.deepEqual(meow('help', {
+	t.deepEqual(meow({
 		argv: ['--foo'],
 		booleanDefault: undefined,
 		flags: {
@@ -129,7 +129,7 @@ test('booleanDefault: undefined, filter out unset boolean args', t => {
 });
 
 test('boolean args are false by default', t => {
-	t.deepEqual(meow('help', {
+	t.deepEqual(meow({
 		argv: ['--foo'],
 		flags: {
 			foo: {
@@ -151,17 +151,19 @@ test('boolean args are false by default', t => {
 });
 
 test('enforces boolean flag type', t => {
-	const cli = meow('', {
+	const cli = meow({
 		argv: ['--cursor=false'],
 		flags: {
-			cursor: {type: 'boolean'}
+			cursor: {
+				type: 'boolean'
+			}
 		}
 	});
 	t.deepEqual(cli.flags, {cursor: false});
 });
 
 test('accept help and options', t => {
-	t.deepEqual(meow('help', {
+	t.deepEqual(meow({
 		argv: ['-f'],
 		flags: {
 			foo: {

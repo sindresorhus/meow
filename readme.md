@@ -67,7 +67,8 @@ foo(cli.input[0], cli.flags);
 
 ## API
 
-### meow(options, [minimistOptions])
+### meow(helpText, [options])
+### meow(options)
 
 Returns an `Object` with:
 
@@ -78,11 +79,15 @@ Returns an `Object` with:
 - `showHelp([code=2])` *(Function)* - Show the help text and exit with `code`
 - `showVersion()` *(Function)* - Show the version text and exit
 
+#### helpText
+
+Type: `string`
+
+Shortcut for the `help` option.
+
 #### options
 
-Type: `Object` `Array` `string`
-
-Can either be a string/array that is the `help` or an options object.
+Type: `Object`
 
 ##### flags
 

@@ -14,10 +14,10 @@ const normalizePackageData = require('normalize-package-data');
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
-module.exports = (helpMessage, options) => {
-	if (typeof helpMessage === 'object' && !Array.isArray(helpMessage)) {
-		options = helpMessage;
-		helpMessage = '';
+module.exports = (helpText, options) => {
+	if (typeof helpText !== 'string') {
+		options = helpText;
+		helpText = '';
 	}
 
 	options = {
@@ -28,7 +28,7 @@ module.exports = (helpMessage, options) => {
 		argv: process.argv.slice(2),
 		inferType: false,
 		input: 'string',
-		help: helpMessage,
+		help: helpText,
 		autoHelp: true,
 		autoVersion: true,
 		booleanDefault: false,
