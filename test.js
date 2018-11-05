@@ -174,3 +174,25 @@ test('accept help and options', t => {
 		f: true
 	});
 });
+
+test('grouped short-flags work', t => {
+	const cli = m({
+		argv: ['-cl'],
+		flags: {
+			coco: {
+				type: 'boolean',
+				alias: 'c'
+			},
+			loco: {
+				type: 'boolean',
+				alias: 'l'
+			}
+		}
+	});
+
+	const {flags} = cli;
+	t.true(flags.coco);
+	t.true(flags.loco);
+	t.true(flags.c);
+	t.true(flags.l);
+});
