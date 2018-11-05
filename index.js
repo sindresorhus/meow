@@ -15,8 +15,6 @@ delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
 module.exports = (helpMessage, options) => {
-	hardRejection();
-
 	if (typeof helpMessage === 'object' && !Array.isArray(helpMessage)) {
 		options = helpMessage;
 		helpMessage = '';
@@ -33,8 +31,13 @@ module.exports = (helpMessage, options) => {
 		help: helpMessage,
 		autoHelp: true,
 		autoVersion: true,
-		booleanDefault: false
+		booleanDefault: false,
+		hardRejection: true
 	}, options);
+
+	if (options.hardRejection) {
+		hardRejection();
+	}
 
 	const minimistFlags = options.flags && typeof options.booleanDefault !== 'undefined' ? Object.keys(options.flags).reduce(
 		(flags, flag) => {

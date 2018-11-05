@@ -235,6 +235,13 @@ const cli = meow(`
 */
 ```
 
+##### hardRejection
+
+Type: `boolean`<br>
+Default: `true`
+
+Whether to use [`hard-rejection`](https://github.com/sindresorhus/hard-rejection) or not. Disabling this can be useful if you need to handle `process.on('unhandledRejection')` yourself.
+
 ## Promises
 
 Meow will make unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail. Meaning you don't have to manually `.catch()` promises used in your CLI.
