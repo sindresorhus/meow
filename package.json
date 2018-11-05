@@ -10,7 +10,7 @@
 		"url": "sindresorhus.com"
 	},
 	"engines": {
-		"node": ">=6"
+		"node": ">=8"
 	},
 	"scripts": {
 		"test": "xo && ava"
@@ -38,19 +38,19 @@
 		"console"
 	],
 	"dependencies": {
-		"camelcase-keys": "^4.0.0",
+		"camelcase-keys": "^5.0.0",
 		"decamelize-keys": "^1.0.0",
 		"hard-rejection": "^1.0.0",
 		"minimist-options": "^3.0.1",
 		"normalize-package-data": "^2.3.4",
-		"read-pkg-up": "^3.0.0",
+		"read-pkg-up": "^4.0.0",
 		"redent": "^2.0.0",
 		"trim-newlines": "^2.0.0",
-		"yargs-parser": "^10.0.0"
+		"yargs-parser": "^11.0.0"
 	},
 	"devDependencies": {
 		"ava": "^0.25.0",
-		"execa": "^0.10.0",
+		"execa": "^1.0.0",
 		"indent-string": "^3.0.0",
 		"xo": "^0.23.0"
 	},

@@ -20,7 +20,7 @@ module.exports = (helpMessage, options) => {
 		helpMessage = '';
 	}
 
-	options = Object.assign({
+	options = {
 		pkg: readPkgUp.sync({
 			cwd: parentDir,
 			normalize: false
@@ -32,8 +32,9 @@ module.exports = (helpMessage, options) => {
 		autoHelp: true,
 		autoVersion: true,
 		booleanDefault: false,
-		hardRejection: true
-	}, options);
+		hardRejection: true,
+		...options
+	};
 
 	if (options.hardRejection) {
 		hardRejection();
@@ -50,9 +51,10 @@ module.exports = (helpMessage, options) => {
 		options.flags
 	) : options.flags;
 
-	let minimistoptions = Object.assign({
-		arguments: options.input
-	}, minimistFlags);
+	let minimistoptions = {
+		arguments: options.input,
+		...minimistFlags
+	};
 
 	minimistoptions = decamelizeKeys(minimistoptions, '-', {exclude: ['stopEarly', '--']});
 
@@ -63,7 +65,10 @@ module.exports = (helpMessage, options) => {
 	minimistoptions = buildMinimistOptions(minimistoptions);
 
 	if (minimistoptions['--']) {
-		minimistoptions.configuration = Object.assign({}, minimistoptions.configuration, {'populate--': true});
+		minimistoptions.configuration = {
+			...minimistoptions.configuration,
+			'populate--': true
+		};
 	}
 
 	const {pkg} = options;
