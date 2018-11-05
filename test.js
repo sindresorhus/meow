@@ -240,3 +240,71 @@ test('disable autoVersion/autoHelp if `cli.input.length > 0`', t => {
 	t.is(meow({argv: ['bar', '--help']}).input[0], 'bar');
 	t.is(meow({argv: ['bar', '--version', '--help']}).input[0], 'bar');
 });
+
+test('supports `number` flag type', t => {
+	const cli = meow({
+		argv: ['--foo=1.3'],
+		flags: {
+			foo: {
+				type: 'number'
+			}
+		}
+	}).flags.foo;
+
+	t.is(cli, 1.3);
+});
+
+test('supports `number` flag type - flag but no value', t => {
+	const cli = meow({
+		argv: ['--foo'],
+		flags: {
+			foo: {
+				type: 'number'
+			}
+		}
+	}).flags.foo;
+
+	t.is(cli, undefined);
+});
+
+test('supports `number` flag type - flag but no value but default', t => {
+	const cli = meow({
+		argv: ['--foo'],
+		flags: {
+			foo: {
+				type: 'number',
+				default: 2
+			}
+		}
+	}).flags.foo;
+
+	t.is(cli, 2);
+});
+
+test('supports `number` flag type - no flag but default', t => {
+	const cli = meow({
+		argv: [],
+		flags: {
+			foo: {
+				type: 'number',
+				default: 2
+			}
+		}
+	}).flags.foo;
+
+	t.is(cli, 2);
+});
+
+test('supports `number` flag type - throws on incorrect default value', t => {
+	t.throws(() => {
+		meow({
+			argv: [],
+			flags: {
+				foo: {
+					type: 'number',
+					default: 'x'
+				}
+			}
+		});
+	});
+});

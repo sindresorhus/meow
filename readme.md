@@ -98,7 +98,7 @@ Define argument flags.
 
 The key is the flag name and the value is an object with any of:
 
-- `type`: Type of value. (Possible values: `string` `boolean`)
+- `type`: Type of value. (Possible values: `string` `boolean` `number`)
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
 
