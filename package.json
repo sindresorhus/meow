@@ -49,10 +49,10 @@
 		"yargs-parser": "^10.0.0"
 	},
 	"devDependencies": {
-		"ava": "*",
+		"ava": "^0.25.0",
 		"execa": "^0.10.0",
 		"indent-string": "^3.0.0",
-		"xo": "*"
+		"xo": "^0.23.0"
 	},
 	"xo": {
 		"rules": {
