@@ -2,7 +2,7 @@
 	"name": "meow",
 	"version": "5.0.0",
 	"description": "CLI app helper",
-	"main": "dist/meow.js",
+	"main": "dist/index.js",
 	"license": "MIT",
 	"repository": "sindresorhus/meow",
 	"author": {
@@ -14,9 +14,10 @@
 		"node": ">=6"
 	},
 	"scripts": {
-		"build": "rollup -c build/rollup.config.js",
+		"build": "rollup --config=build/rollup.config.js",
 		"lint": "xo lib test",
-		"test": "yarn build && yarn lint && yarn test:lib && yarn test:dist",
+		"prepublish": "npm run test && npm run build && npm run test:dist",
+		"test": "npm run lint && npm run test:lib",
 		"test:lib": "ava test/lib.test.js",
 		"test:dist": "ava test/dist.test.js"
 	},
@@ -63,14 +64,12 @@
 		"rollup-config": "^1.0.1",
 		"rollup-plugin-commonjs": "^9.1.8",
 		"rollup-plugin-json": "^3.1.0",
-		"rollup-plugin-license": "^0.7.0",
 		"rollup-plugin-node-resolve": "^3.4.0",
 		"trim-newlines": "^2.0.0",
 		"xo": "*",
 		"yargs-parser": "^10.0.0"
 	},
 	"xo": {
-		"semicolon": false,
 		"rules": {
 			"unicorn/no-process-exit": "off"
 		}

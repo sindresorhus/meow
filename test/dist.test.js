@@ -3,7 +3,7 @@ import test from 'ava'
 import indentString from 'indent-string'
 import execa from 'execa'
 import pkg from '../package'
-import m from '../dist/meow'
+import m from '../dist'
 
 const fixturePath = resolve(__dirname, 'fixtures', 'dist.js')
 
