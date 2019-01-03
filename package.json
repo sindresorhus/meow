@@ -72,6 +72,12 @@
 		"rules": {
 			"unicorn/no-process-exit": "off",
 			"ava/no-ignored-test-files": "warn"
-		}
+		},
+		"overrides": [{
+			"files": "test/*dist*",
+			"rules": {
+				"import/no-unresolved": "warn"
+			}
+		}]
 	}
 }
