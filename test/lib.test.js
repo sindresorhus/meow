@@ -3,12 +3,12 @@ import test from 'ava'
 import indentString from 'indent-string'
 import execa from 'execa'
 import pkg from '../package'
-import m from '../lib'
+import meow from '../lib'
 
 const fixturePath = resolve(__dirname, 'fixtures', 'lib.js')
 
 test('return object', t => {
-	const cli = m({
+	const cli = meow({
 		argv: ['foo', '--foo-bar', '-u', 'cat', '--', 'unicorn', 'cake'],
 		help: `
 			Usage
@@ -31,7 +31,7 @@ test('return object', t => {
 })
 
 test('support help shortcut', t => {
-	const cli = m(`
+	const cli = meow(`
 		unicorn
 		cat
 	`)
@@ -70,7 +70,7 @@ test('spawn cli and test input flag', async t => {
 
 // TODO: This fails in Node.js 7.10.0, but not 6 or 4
 test.serial.skip('pkg.bin as a string should work', t => { // eslint-disable-line ava/no-skip-test
-	m({
+	meow({
 		pkg: {
 			name: 'browser-sync',
 			bin: 'bin/browser-sync.js'
@@ -81,36 +81,36 @@ test.serial.skip('pkg.bin as a string should work', t => { // eslint-disable-lin
 })
 
 test('single character flag casing should be preserved', t => {
-	t.deepEqual(m({argv: ['-F']}).flags, {F: true})
-})
+	t.deepEqual(meow({argv: ['-F']}).flags, {F: true});
+});
 
 test('type inference', t => {
-	t.is(m({argv: ['5']}).input[0], '5')
-	t.is(m({argv: ['5']}, {input: 'string'}).input[0], '5')
-	t.is(m({
+	t.is(meow({argv: ['5']}).input[0], '5');
+	t.is(meow({argv: ['5']}, {input: 'string'}).input[0], '5');
+	t.is(meow({
 		argv: ['5'],
 		inferType: true
-	}).input[0], 5)
-	t.is(m({
+	}).input[0], 5);
+	t.is(meow({
 		argv: ['5'],
 		inferType: true,
 		flags: {foo: 'string'}
-	}).input[0], 5)
-	t.is(m({
+	}).input[0], 5);
+	t.is(meow({
 		argv: ['5'],
 		inferType: true,
 		flags: {
 			foo: 'string'
 		}
-	}).input[0], 5)
-	t.is(m({
+	}).input[0], 5);
+	t.is(meow({
 		argv: ['5'],
 		input: 'number'
-	}).input[0], 5)
-})
+	}).input[0], 5);
+});
 
 test('booleanDefault: undefined, filter out unset boolean args', t => {
-	t.deepEqual(m('help', {
+	t.deepEqual(meow({
 		argv: ['--foo'],
 		booleanDefault: undefined,
 		flags: {
@@ -132,7 +132,7 @@ test('booleanDefault: undefined, filter out unset boolean args', t => {
 })
 
 test('boolean args are false by default', t => {
-	t.deepEqual(m('help', {
+	t.deepEqual(meow({
 		argv: ['--foo'],
 		flags: {
 			foo: {
@@ -154,17 +154,19 @@ test('boolean args are false by default', t => {
 })
 
 test('enforces boolean flag type', t => {
-	const cli = m('', {
+	const cli = meow({
 		argv: ['--cursor=false'],
 		flags: {
-			cursor: {type: 'boolean'}
+			cursor: {
+				type: 'boolean'
+			}
 		}
 	})
 	t.deepEqual(cli.flags, {cursor: false})
 })
 
 test('accept help and options', t => {
-	t.deepEqual(m('help', {
+	t.deepEqual(meow({
 		argv: ['-f'],
 		flags: {
 			foo: {
@@ -175,5 +177,27 @@ test('accept help and options', t => {
 	}).flags, {
 		foo: true,
 		f: true
-	})
-})
+	});
+});
+
+test('grouped short-flags work', t => {
+	const cli = meow({
+		argv: ['-cl'],
+		flags: {
+			coco: {
+				type: 'boolean',
+				alias: 'c'
+			},
+			loco: {
+				type: 'boolean',
+				alias: 'l'
+			}
+		}
+	});
+
+	const {flags} = cli;
+	t.true(flags.coco);
+	t.true(flags.loco);
+	t.true(flags.c);
+	t.true(flags.l);
+});

@@ -12,7 +12,7 @@
 - Negates flags when using the `--no-` prefix
 - Outputs version when `--version`
 - Outputs description and supplied help text when `--help`
-- Makes unhandled rejected promises [fail loudly](https://github.com/sindresorhus/loud-rejection) instead of the default silent fail
+- Makes unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail
 - Sets the process title to the binary name defined in package.json
 
 
@@ -67,7 +67,8 @@ foo(cli.input[0], cli.flags);
 
 ## API
 
-### meow(options, [minimistOptions])
+### meow(helpText, [options])
+### meow(options)
 
 Returns an `Object` with:
 
@@ -78,11 +79,15 @@ Returns an `Object` with:
 - `showHelp([code=2])` *(Function)* - Show the help text and exit with `code`
 - `showVersion()` *(Function)* - Show the version text and exit
 
+#### helpText
+
+Type: `string`
+
+Shortcut for the `help` option.
+
 #### options
 
-Type: `Object` `Array` `string`
-
-Can either be a string/array that is the `help` or an options object.
+Type: `Object`
 
 ##### flags
 
@@ -235,9 +240,16 @@ const cli = meow(`
 */
 ```
 
+##### hardRejection
+
+Type: `boolean`<br>
+Default: `true`
+
+Whether to use [`hard-rejection`](https://github.com/sindresorhus/hard-rejection) or not. Disabling this can be useful if you need to handle `process.on('unhandledRejection')` yourself.
+
 ## Promises
 
-Meow will make unhandled rejected promises [fail loudly](https://github.com/sindresorhus/loud-rejection) instead of the default silent fail. Meaning you don't have to manually `.catch()` promises used in your CLI.
+Meow will make unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail. Meaning you don't have to manually `.catch()` promises used in your CLI.
 
 
 ## Tips
