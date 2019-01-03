@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-'use strict'
+'use strict';
 
-const esm = require('esm')(module)
+const esm = require('esm')(module);
 
-const meow = esm('../../lib').default
+const meow = esm('../../lib').default;
 
 const cli = meow({
 	description: 'Custom description',
@@ -18,12 +18,12 @@ const cli = meow({
 		meow: {default: 'dog'},
 		camelCaseOption: {default: 'foo'}
 	}
-})
+});
 
 if (cli.flags.camelCaseOption === 'foo') {
 	Object.keys(cli.flags).forEach(x => {
-		console.log(x)
-	})
+		console.log(x);
+	});
 } else {
-	console.log(cli.flags.camelCaseOption)
+	console.log(cli.flags.camelCaseOption);
 }

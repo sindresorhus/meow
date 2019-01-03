@@ -1,7 +1,7 @@
 import {resolve} from 'path';
-import commonJS from 'rollup-plugin-commonjs';
-import nodeResolve from 'rollup-plugin-node-resolve';
 import json from 'rollup-plugin-json';
+import nodeResolve from 'rollup-plugin-node-resolve';
+import commonJs from 'rollup-plugin-commonjs';
 
 import packageJson from '../package.json';
 
@@ -39,6 +39,6 @@ export default {
 	plugins: [
 		json(),
 		nodeResolve(),
-		commonJS()
+		commonJs(),
 	].concat(plugins)
 };
