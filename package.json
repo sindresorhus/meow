@@ -74,7 +74,7 @@
 			"ava/no-ignored-test-files": "warn"
 		},
 		"overrides": [{
-			"files": "{test/,test/fixtures/}*dist*",
+			"files": "test/**/dist*",
 			"rules": {
 				"import/no-unresolved": "warn"
 			}
