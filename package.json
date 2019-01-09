@@ -13,10 +13,13 @@
 		"node": ">=8"
 	},
 	"scripts": {
-		"test": "xo && ava"
+		"pretest": "dist",
+		"test": "xo && ava",
+		"prepublishOnly": "dist"
 	},
+	"main": "dist/meow.js",
 	"files": [
-		"index.js"
+		"dist"
 	],
 	"keywords": [
 		"cli",
@@ -49,6 +52,7 @@
 		"yargs-parser": "^11.0.0"
 	},
 	"devDependencies": {
+		"@ianwalter/dist": "^1.0.0",
 		"ava": "^0.25.0",
 		"execa": "^1.0.0",
 		"indent-string": "^3.0.0",
