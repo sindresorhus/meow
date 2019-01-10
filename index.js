@@ -21,10 +21,11 @@ module.exports = (helpText, options) => {
 	}
 
 	options = {
-		pkg: readPkgUp.sync({
-			cwd: parentDir,
-			normalize: false
-		}).pkg || {},
+		pkg:
+			readPkgUp.sync({
+				cwd: parentDir,
+				normalize: false,
+			}).pkg || {},
 		argv: process.argv.slice(2),
 		inferType: false,
 		input: 'string',
@@ -33,30 +34,35 @@ module.exports = (helpText, options) => {
 		autoVersion: true,
 		booleanDefault: false,
 		hardRejection: true,
-		...options
+		...options,
 	};
 
 	if (options.hardRejection) {
 		hardRejection();
 	}
 
-	const minimistFlags = options.flags && typeof options.booleanDefault !== 'undefined' ? Object.keys(options.flags).reduce(
-		(flags, flag) => {
-			if (flags[flag].type === 'boolean' && !Object.prototype.hasOwnProperty.call(flags[flag], 'default')) {
-				flags[flag].default = options.booleanDefault;
-			}
+	const minimistFlags =
+		options.flags && typeof options.booleanDefault !== 'undefined'
+			? Object.keys(options.flags).reduce((flags, flag) => {
+					if (
+						flags[flag].type === 'boolean' &&
+						!Object.prototype.hasOwnProperty.call(flags[flag], 'default')
+					) {
+						flags[flag].default = options.booleanDefault;
+					}
 
-			return flags;
-		},
-		options.flags
-	) : options.flags;
+					return flags;
+			  }, options.flags)
+			: options.flags;
 
 	let minimistoptions = {
 		arguments: options.input,
-		...minimistFlags
+		...minimistFlags,
 	};
 
-	minimistoptions = decamelizeKeys(minimistoptions, '-', {exclude: ['stopEarly', '--']});
+	minimistoptions = decamelizeKeys(minimistoptions, '-', {
+		exclude: ['stopEarly', '--'],
+	});
 
 	if (options.inferType) {
 		delete minimistoptions.arguments;
