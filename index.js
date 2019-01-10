@@ -113,7 +113,7 @@ module.exports = (helpText, options) => {
 	const input = argv._;
 	delete argv._;
 
-	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
+	const flags = camelcaseKeys(argv, { exclude: ['--', /^\w$/] });
 
 	return {
 		input,
@@ -121,6 +121,6 @@ module.exports = (helpText, options) => {
 		pkg,
 		help,
 		showHelp,
-		showVersion
+		showVersion,
 	};
 };
