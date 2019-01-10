@@ -198,3 +198,25 @@ test('grouped short-flags work', t => {
 	t.true(flags.c);
 	t.true(flags.l);
 });
+
+test('grouped flags work', t => {
+	const cli = meow({
+		argv: ['-cl'],
+		flags: {
+			coco: {
+				type: 'boolean',
+				alias: 'c'
+			},
+			loco: {
+				type: 'boolean',
+				alias: 'l'
+			}
+		}
+	});
+
+	const {simpleFlags} = cli;
+	t.true(simpleFlags.coco);
+	t.true(simpleFlags.loco);
+	t.is(simpleFlags.c, undefined);
+	t.is(simpleFlags.l, undefined);
+});
