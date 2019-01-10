@@ -11,14 +11,21 @@ const cli = meow({
 	autoVersion: process.argv.indexOf('--no-auto-version') === -1,
 	autoHelp: process.argv.indexOf('--no-auto-help') === -1,
 	flags: {
-		unicorn: {alias: 'u'},
-		meow: {default: 'dog'},
-		camelCaseOption: {default: 'foo'}
-	}
+		unicorn: {
+			alias: 'u',
+			required: (args) => {
+				if (args.meow) return true;
+				return false;
+			},
+		},
+		meow: { required: true },
+		camelCaseOption: { default: 'foo' },
+		fire: { alias: 'f', default: 'fire' },
+	},
 });
 
 if (cli.flags.camelCaseOption === 'foo') {
-	Object.keys(cli.flags).forEach(x => {
+	Object.keys(cli.flags).forEach((x) => {
 		console.log(x);
 	});
 } else {
