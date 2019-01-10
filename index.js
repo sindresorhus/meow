@@ -73,32 +73,82 @@ module.exports = (helpText, options) => {
 	if (minimistoptions['--']) {
 		minimistoptions.configuration = {
 			...minimistoptions.configuration,
-			'populate--': true
+			'populate--': true,
 		};
 	}
 
-	const {pkg} = options;
+	const getRequiredFlags = (flags) => {
+		return Object.keys(flags).filter((key) => {
+			const flag = flags[key];
+			if (typeof flag.required === 'boolean') {
+				return flag.required && !flags[key].default;
+			} else if (typeof flag.required === 'function') {
+				return flag.required(argv) && !flags[key].default;
+			}
+			return false;
+		});
+	};
+
+	const checkForRequiredFlags = (args) => {
+		const requiredFlags = getRequiredFlags(options.flags);
+		const missingFlags = requiredFlags.filter((key) => {
+			const flag = options.flags[key];
+			return !argv.hasOwnProperty(key) && !argv.hasOwnProperty(flag.alias);
+		});
+
+		return missingFlags;
+	};
+
+	const logMissingFlags = (missingFlags) => {
+		let message = `
+		Missing required option${missingFlags.length > 1 ? 's' : ''}:
+		  ${missingFlags
+				.map((key) => {
+					const flag = options.flags[key];
+					return `--${key}${flag.alias ? `, -${flag.alias}` : ''}`;
+				})
+				.join('\n    ')}
+
+		Run with --help to view help information.		
+		`;
+		message = redent(trimNewlines(message));
+		console.log(message);
+		process.exit();
+	};
+
+	const { pkg } = options;
 	const argv = yargs(options.argv, minimistoptions);
-	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
+
+	const missingFlags = checkForRequiredFlags(argv);
+	if (missingFlags.length && !argv.help && !argv.version) {
+		logMissingFlags(missingFlags);
+	}
+	let help = redent(
+		trimNewlines((options.help || '').replace(/\t+\n*$/, '')),
+		2
+	);
 
 	normalizePackageData(pkg);
 
 	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
 
-	let {description} = options;
+	let { description } = options;
 	if (!description && description !== false) {
-		({description} = pkg);
+		({ description } = pkg);
 	}
 
-	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
+	help =
+		(description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
 
-	const showHelp = code => {
+	const showHelp = (code) => {
 		console.log(help);
 		process.exit(typeof code === 'number' ? code : 2);
 	};
 
 	const showVersion = () => {
-		console.log(typeof options.version === 'string' ? options.version : pkg.version);
+		console.log(
+			typeof options.version === 'string' ? options.version : pkg.version
+		);
 		process.exit();
 	};
 
