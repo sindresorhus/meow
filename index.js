@@ -118,7 +118,6 @@ module.exports = (helpText, options) => {
 		});
 	}
 
-
 	return {
 		input,
 		flags,
