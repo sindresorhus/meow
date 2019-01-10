@@ -108,16 +108,21 @@ module.exports = (helpText, options) => {
 	delete argv._;
 
 	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
+	const simpleFlags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
 
-	Object.keys(options.flags).forEach(flag => {
-		if (options.flags[flag].alias !== undefined) {
-			delete flags[options.flags[flag].alias];
-		}
-	});
+	if (options.flags !== undefined) {
+		Object.keys(options.flags).forEach(flag => {
+			if (options.flags[flag].alias !== undefined) {
+				delete simpleFlags[options.flags[flag].alias];
+			}
+		});
+	}
+
 
 	return {
 		input,
 		flags,
+		simpleFlags,
 		pkg,
 		help,
 		showHelp,
