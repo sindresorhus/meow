@@ -34,7 +34,7 @@ module.exports = (helpText, options) => {
 		autoVersion: true,
 		booleanDefault: false,
 		hardRejection: true,
-		...options,
+		...options
 	};
 
 	if (options.hardRejection) {
@@ -42,26 +42,25 @@ module.exports = (helpText, options) => {
 	}
 
 	const minimistFlags =
-		options.flags && typeof options.booleanDefault !== 'undefined'
-			? Object.keys(options.flags).reduce((flags, flag) => {
-					if (
-						flags[flag].type === 'boolean' &&
+		options.flags && typeof options.booleanDefault !== 'undefined' ?
+			Object.keys(options.flags).reduce((flags, flag) => {
+				if (
+					flags[flag].type === 'boolean' &&
 						!Object.prototype.hasOwnProperty.call(flags[flag], 'default')
-					) {
-						flags[flag].default = options.booleanDefault;
-					}
-
-					return flags;
-			  }, options.flags)
-			: options.flags;
+				) {
+					flags[flag].default = options.booleanDefault;
+				}
+				return flags;
+			}, options.flags) :
+			options.flags;
 
 	let minimistoptions = {
 		arguments: options.input,
-		...minimistFlags,
+		...minimistFlags
 	};
 
 	minimistoptions = decamelizeKeys(minimistoptions, '-', {
-		exclude: ['stopEarly', '--'],
+		exclude: ['stopEarly', '--']
 	});
 
 	if (options.inferType) {
@@ -73,56 +72,73 @@ module.exports = (helpText, options) => {
 	if (minimistoptions['--']) {
 		minimistoptions.configuration = {
 			...minimistoptions.configuration,
-			'populate--': true,
+			'populate--': true
 		};
 	}
 
-	const getRequiredFlags = (flags) => {
-		return Object.keys(flags).filter((key) => {
+	const getRequiredFlags = flags => {
+		return Object.keys(flags).filter(key => {
 			const flag = flags[key];
 			if (typeof flag.required === 'boolean') {
 				return flag.required && !flags[key].default;
-			} else if (typeof flag.required === 'function') {
+			}
+			if (typeof flag.required === 'function') {
 				return flag.required(argv) && !flags[key].default;
 			}
 			return false;
 		});
 	};
 
-	const checkForRequiredFlags = (args) => {
+	const hasFlags = () => {
+		const argvWithoutDefaults = yargs(options.argv);
+		const flags = Object.keys(options.flags);
+		const hasFlags = flags.reduce((arr, key) => {
+			arr = key in argvWithoutDefaults ? [...arr, key] : [...arr];
+			return arr;
+		}, []);
+		return hasFlags;
+	};
+
+	const checkForRequiredFlags = args => {
+		if (!options.flags) {
+			return [];
+		}
 		const requiredFlags = getRequiredFlags(options.flags);
-		const missingFlags = requiredFlags.filter((key) => {
+		const missingFlags = requiredFlags.filter(key => {
 			const flag = options.flags[key];
-			return !argv.hasOwnProperty(key) && !argv.hasOwnProperty(flag.alias);
+			return (
+				!Object.prototype.hasOwnProperty.call(args, key) &&
+				!Object.prototype.hasOwnProperty.call(args, flag.alias)
+			);
 		});
 
 		return missingFlags;
 	};
 
-	const logMissingFlags = (missingFlags) => {
+	const logMissingFlags = missingFlags => {
 		let message = `
 		Missing required option${missingFlags.length > 1 ? 's' : ''}:
 		  ${missingFlags
-				.map((key) => {
-					const flag = options.flags[key];
-					return `--${key}${flag.alias ? `, -${flag.alias}` : ''}`;
-				})
-				.join('\n    ')}
+		.map(key => {
+			const flag = options.flags[key];
+			return `--${key}${flag.alias ? `, -${flag.alias}` : ''}`;
+		})
+		.join('\n    ')}
 
-		Run with --help to view help information.		
-		`;
+		Run with --help to view help information.`;
 		message = redent(trimNewlines(message));
 		console.log(message);
 		process.exit();
 	};
 
-	const { pkg } = options;
+	const {pkg} = options;
 	const argv = yargs(options.argv, minimistoptions);
-
 	const missingFlags = checkForRequiredFlags(argv);
-	if (missingFlags.length && !argv.help && !argv.version) {
+
+	if (missingFlags.length > 0 && hasFlags().length > 0) {
 		logMissingFlags(missingFlags);
 	}
+
 	let help = redent(
 		trimNewlines((options.help || '').replace(/\t+\n*$/, '')),
 		2
@@ -132,15 +148,15 @@ module.exports = (helpText, options) => {
 
 	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
 
-	let { description } = options;
+	let {description} = options;
 	if (!description && description !== false) {
-		({ description } = pkg);
+		({description} = pkg);
 	}
 
 	help =
 		(description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
 
-	const showHelp = (code) => {
+	const showHelp = code => {
 		console.log(help);
 		process.exit(typeof code === 'number' ? code : 2);
 	};
@@ -163,7 +179,7 @@ module.exports = (helpText, options) => {
 	const input = argv._;
 	delete argv._;
 
-	const flags = camelcaseKeys(argv, { exclude: ['--', /^\w$/] });
+	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
 
 	return {
 		input,
@@ -171,6 +187,6 @@ module.exports = (helpText, options) => {
 		pkg,
 		help,
 		showHelp,
-		showVersion,
+		showVersion
 	};
 };
