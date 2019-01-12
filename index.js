@@ -24,7 +24,7 @@ module.exports = (helpText, options) => {
 		pkg:
 			readPkgUp.sync({
 				cwd: parentDir,
-				normalize: false,
+				normalize: false
 			}).pkg || {},
 		argv: process.argv.slice(2),
 		inferType: false,
