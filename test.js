@@ -41,13 +41,19 @@ test('spawn cli and show version', async t => {
 });
 
 test('spawn cli and not show version', async t => {
-	const {stdout} = await execa('./fixture.js', ['--version', '--no-auto-version']);
+	const {stdout} = await execa('./fixture.js', [
+		'--version',
+		'--no-auto-version'
+	]);
 	t.is(stdout, 'version\nautoVersion\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and show help screen', async t => {
 	const {stdout} = await execa('./fixture.js', ['--help']);
-	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2));
+	t.is(
+		stdout,
+		indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2)
+	);
 });
 
 test('spawn cli and not show help screen', async t => {
@@ -61,12 +67,18 @@ test('spawn cli and test input', async t => {
 });
 
 test('spawn cli and test input flag', async t => {
-	const {stdout} = await execa('./fixture.js', ['--camel-case-option', 'bar']);
+	const {stdout} = await execa('./fixture.js', [
+		'--camel-case-option',
+		'bar',
+		'--foo',
+		'can'
+	]);
 	t.is(stdout, 'bar');
 });
 
 // TODO: This fails in Node.js 7.10.0, but not 6 or 4
-test.serial.skip('pkg.bin as a string should work', t => { // eslint-disable-line ava/no-skip-test
+test.serial('pkg.bin as a string should work', t => {
+	// eslint-disable-line ava/no-skip-test
 	meow({
 		pkg: {
 			name: 'browser-sync',
@@ -84,70 +96,88 @@ test('single character flag casing should be preserved', t => {
 test('type inference', t => {
 	t.is(meow({argv: ['5']}).input[0], '5');
 	t.is(meow({argv: ['5']}, {input: 'string'}).input[0], '5');
-	t.is(meow({
-		argv: ['5'],
-		inferType: true
-	}).input[0], 5);
-	t.is(meow({
-		argv: ['5'],
-		inferType: true,
-		flags: {foo: 'string'}
-	}).input[0], 5);
-	t.is(meow({
-		argv: ['5'],
-		inferType: true,
-		flags: {
-			foo: 'string'
-		}
-	}).input[0], 5);
-	t.is(meow({
-		argv: ['5'],
-		input: 'number'
-	}).input[0], 5);
+	t.is(
+		meow({
+			argv: ['5'],
+			inferType: true
+		}).input[0],
+		5
+	);
+	t.is(
+		meow({
+			argv: ['5'],
+			inferType: true,
+			flags: {foo: 'string'}
+		}).input[0],
+		5
+	);
+	t.is(
+		meow({
+			argv: ['5'],
+			inferType: true,
+			flags: {
+				foo: 'string'
+			}
+		}).input[0],
+		5
+	);
+	t.is(
+		meow({
+			argv: ['5'],
+			input: 'number'
+		}).input[0],
+		5
+	);
 });
 
 test('booleanDefault: undefined, filter out unset boolean args', t => {
-	t.deepEqual(meow({
-		argv: ['--foo'],
-		booleanDefault: undefined,
-		flags: {
-			foo: {
-				type: 'boolean'
-			},
-			bar: {
-				type: 'boolean'
-			},
-			baz: {
-				type: 'boolean',
-				default: false
+	t.deepEqual(
+		meow({
+			argv: ['--foo'],
+			booleanDefault: undefined,
+			flags: {
+				foo: {
+					type: 'boolean'
+				},
+				bar: {
+					type: 'boolean'
+				},
+				baz: {
+					type: 'boolean',
+					default: false
+				}
 			}
+		}).flags,
+		{
+			foo: true,
+			baz: false
 		}
-	}).flags, {
-		foo: true,
-		baz: false
-	});
+	);
 });
 
 test('boolean args are false by default', t => {
-	t.deepEqual(meow({
-		argv: ['--foo'],
-		flags: {
-			foo: {
-				type: 'boolean'
-			},
-			bar: {
-				type: 'boolean',
-				default: true
-			},
-			baz: {
-				type: 'boolean'
+	t.deepEqual(
+		meow({
+			argv: ['--foo'],
+			flags: {
+				foo: {
+					type: 'boolean'
+				},
+				bar: {
+					type: 'boolean',
+					default: true
+				},
+				baz: {
+					type: 'boolean'
+				}
 			}
+		}).flags,
+		{
+			foo: true,
+			bar: true,
+			baz: false
 		}
-	}).flags, {
-		foo: true,
-		bar: true,
-		baz: false
-	});
+	);
 });
 
 test('enforces boolean flag type', t => {
@@ -163,18 +193,21 @@ test('enforces boolean flag type', t => {
 });
 
 test('accept help and options', t => {
-	t.deepEqual(meow({
-		argv: ['-f'],
-		flags: {
-			foo: {
-				type: 'boolean',
-				alias: 'f'
+	t.deepEqual(
+		meow({
+			argv: ['-f'],
+			flags: {
+				foo: {
+					type: 'boolean',
+					alias: 'f'
+				}
 			}
+		}).flags,
+		{
+			foo: true,
+			f: true
 		}
-	}).flags, {
-		foo: true,
-		f: true
-	});
+	);
 });
 
 test('grouped short-flags work', t => {
@@ -197,4 +230,42 @@ test('grouped short-flags work', t => {
 	t.true(flags.loco);
 	t.true(flags.c);
 	t.true(flags.l);
+});
+
+test('required flag', async t => {
+	const {stdout} = await execa('./fixture.js', [
+		'--meow',
+		'cat'
+	]);
+	t.is(stdout, 'Missing required option:\n  --foo, -o\n\nRun with --help to view help information.');
+});
+
+test('provisional require', async t => {
+	const {stdout: i} = await execa('./fixture.js', [
+		'--unicorn',
+		'cat',
+		'--foo',
+		'jump'
+	]);
+
+	const {stdout: f} = await execa('./fixture.js', [
+		'--meow',
+		'cat'
+	]);
+
+	t.is(i, 'Missing required option:\n  --fence, -f\n\nRun with --help to view help information.');
+	t.is(f, 'Missing required option:\n  --foo, -o\n\nRun with --help to view help information.');
+});
+
+test('require doesn\'t block help and version requests', async t => {
+	const {stdout: help} = await execa('./fixture.js', [
+		'--help'
+	]);
+	const {stdout: version} = await execa('./fixture.js', [
+		'--version'
+	]);
+	t.is(
+		help,
+		indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2));
+	t.is(version, pkg.version);
 });
