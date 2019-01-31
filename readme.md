@@ -73,7 +73,8 @@ foo(cli.input[0], cli.flags);
 Returns an `Object` with:
 
 - `input` *(Array)* - Non-flag arguments
-- `flags` *(Object)* - Flags converted to camelCase
+- `flags` *(Object)* - Flags converted to camelCase excluding aliases
+- `unnormalizedFlags` *(Object)* - Flags converted camelCase including aliases
 - `pkg` *(Object)* - The `package.json` object
 - `help` *(string)* - The help text used with `--help`
 - `showHelp([code=2])` *(Function)* - Show the help text and exit with `code`
@@ -229,6 +230,11 @@ const cli = meow(`
 /*
 {
 	flags: {
+		rainbow: true,
+		unicorn: false,
+		sparkles: true
+	},
+	unnormalizedFlags: {
 		rainbow: true,
 		r: true,
 		unicorn: false,
