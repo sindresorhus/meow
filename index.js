@@ -111,8 +111,8 @@ module.exports = (helpText, options) => {
 	const unnormalizedFlags = {...flags};
 
 	if (options.flags !== undefined) {
-		for (const flagValue of Object.entries(options.flags)) {
-			delete flags[flagValue[1].alias];
+		for (const flagValue of Object.values(options.flags)) {
+			delete flags[flagValue.alias];
 		}
 	}
 
