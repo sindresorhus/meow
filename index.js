@@ -108,10 +108,18 @@ module.exports = (helpText, options) => {
 	delete argv._;
 
 	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
+	const unnormalizedFlags = {...flags};
+
+	if (options.flags !== undefined) {
+		for (const flagValue of Object.values(options.flags)) {
+			delete flags[flagValue.alias];
+		}
+	}
 
 	return {
 		input,
 		flags,
+		unnormalizedFlags,
 		pkg,
 		help,
 		showHelp,
