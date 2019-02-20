@@ -58,6 +58,12 @@ module.exports = (helpText, options) => {
 
 	minimistoptions = decamelizeKeys(minimistoptions, '-', {exclude: ['stopEarly', '--']});
 
+	Object.keys(minimistoptions).forEach(key => {
+		if (minimistoptions[key].multiple) {
+			minimistoptions[key].type = 'array';
+		}
+	});
+
 	if (options.inferType) {
 		delete minimistoptions.arguments;
 	}

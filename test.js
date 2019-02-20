@@ -81,6 +81,28 @@ test('single character flag casing should be preserved', t => {
 	t.deepEqual(meow({argv: ['-F']}).flags, {F: true});
 });
 
+test('string flags with multiple options are always arrays', t => {
+	const flags = {
+		foo: {
+			type: 'string',
+			multiple: true
+		}
+	};
+
+	t.deepEqual(meow({
+		flags,
+		argv: ['--foo=a']
+	}).flags, {foo: ['a']});
+
+	t.deepEqual(meow({
+		flags,
+		argv: [
+			'--foo=a',
+			'--foo=b'
+		]
+	}).flags, {foo: ['a', 'b']});
+});
+
 test('type inference', t => {
 	t.is(meow({argv: ['5']}).input[0], '5');
 	t.is(meow({argv: ['5']}, {input: 'string'}).input[0], '5');

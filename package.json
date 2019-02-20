@@ -41,7 +41,7 @@
 		"camelcase-keys": "^5.0.0",
 		"decamelize-keys": "^1.0.0",
 		"hard-rejection": "^1.0.0",
-		"minimist-options": "^3.0.1",
+		"minimist-options": "^4.0.0",
 		"normalize-package-data": "^2.3.4",
 		"read-pkg-up": "^4.0.0",
 		"redent": "^2.0.0",
