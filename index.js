@@ -69,6 +69,11 @@ module.exports = (helpText, options) => {
 	}
 
 	minimistoptions = buildMinimistOptions(minimistoptions);
+	minimistoptions.configuration = {
+		...(minimistoptions.configuration || {}),
+		// @see: https://github.com/sindresorhus/meow/issues/111
+		'duplicate-arguments-array': false
+	};
 
 	if (minimistoptions['--']) {
 		minimistoptions.configuration = {
