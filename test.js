@@ -57,7 +57,7 @@ test('spawn cli and not show help screen', async t => {
 
 test('spawn cli and test input', async t => {
 	const {stdout} = await execa('./fixture.js', ['-u', 'cat']);
-	t.is(stdout, 'u\nunicorn\nmeow\ncamelCaseOption');
+	t.is(stdout, 'unicorn\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and test input flag', async t => {
@@ -172,8 +172,7 @@ test('accept help and options', t => {
 			}
 		}
 	}).flags, {
-		foo: true,
-		f: true
+		foo: true
 	});
 });
 
@@ -192,9 +191,31 @@ test('grouped short-flags work', t => {
 		}
 	});
 
+	const {unnormalizedFlags} = cli;
+	t.true(unnormalizedFlags.coco);
+	t.true(unnormalizedFlags.loco);
+	t.true(unnormalizedFlags.c);
+	t.true(unnormalizedFlags.l);
+});
+
+test('grouped flags work', t => {
+	const cli = meow({
+		argv: ['-cl'],
+		flags: {
+			coco: {
+				type: 'boolean',
+				alias: 'c'
+			},
+			loco: {
+				type: 'boolean',
+				alias: 'l'
+			}
+		}
+	});
+
 	const {flags} = cli;
 	t.true(flags.coco);
 	t.true(flags.loco);
-	t.true(flags.c);
-	t.true(flags.l);
+	t.is(flags.c, undefined);
+	t.is(flags.l, undefined);
 });
