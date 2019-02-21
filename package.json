@@ -52,7 +52,7 @@
 		"yargs-parser": "^11.0.0"
 	},
 	"devDependencies": {
-		"@ianwalter/dist": "^1.0.0",
+		"@ianwalter/dist": "^2.0.2",
 		"ava": "^0.25.0",
 		"execa": "^1.0.0",
 		"indent-string": "^3.0.0",
