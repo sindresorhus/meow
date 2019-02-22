@@ -45,6 +45,16 @@ test('spawn cli and not show version', async t => {
 	t.is(stdout, 'version\nautoVersion\nmeow\ncamelCaseOption');
 });
 
+test('spwan cli test input without version output', async t => {
+	const {stdout} = await execa('./fixture.js', ['bar', '--version']);
+	t.is(stdout, 'version\nmeow\ncamelCaseOption');
+});
+
+test('spwan cli test input without help output', async t => {
+	const {stdout} = await execa('./fixture.js', ['bar', '--help']);
+	t.is(stdout, 'help\nmeow\ncamelCaseOption');
+});
+
 test('spawn cli and show help screen', async t => {
 	const {stdout} = await execa('./fixture.js', ['--help']);
 	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2));

@@ -96,11 +96,11 @@ module.exports = (helpText, options) => {
 		process.exit();
 	};
 
-	if (argv.version && options.autoVersion) {
+	if (argv.version && argv._.length === 0 && options.autoVersion) {
 		showVersion();
 	}
 
-	if (argv.help && options.autoHelp) {
+	if (argv.help && argv._.length === 0 && options.autoHelp) {
 		showHelp(0);
 	}
 
