@@ -10,8 +10,8 @@
 - Parses arguments
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
 - Negates flags when using the `--no-` prefix
-- Outputs version when `--version`
-- Outputs description and supplied help text when `--help`
+- Outputs version when only the `--version`
+- Outputs description and supplied help text when only the `--help`
 - Makes unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail
 - Sets the process title to the binary name defined in package.json
 
