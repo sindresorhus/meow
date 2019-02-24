@@ -10,10 +10,6 @@ const readPkgUp = require('read-pkg-up');
 const hardRejection = require('hard-rejection');
 const normalizePackageData = require('normalize-package-data');
 
-// Prevent caching of this module so module.parent is always accurate
-delete require.cache[__filename];
-const parentDir = path.dirname(module.parent.filename);
-
 module.exports = (helpText, options) => {
 	if (typeof helpText !== 'string') {
 		options = helpText;
@@ -22,7 +18,7 @@ module.exports = (helpText, options) => {
 
 	options = {
 		pkg: readPkgUp.sync({
-			cwd: parentDir,
+			cwd: path.dirname(process.mainModule.filename),
 			normalize: false
 		}).pkg || {},
 		argv: process.argv.slice(2),
