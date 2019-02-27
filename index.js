@@ -96,12 +96,14 @@ module.exports = (helpText, options) => {
 		process.exit();
 	};
 
-	if (argv.version && argv._.length === 0 && options.autoVersion) {
-		showVersion();
-	}
+	if (argv._.length === 0 && options.argv.length === 1) {
+		if (argv.version === true && options.autoVersion) {
+			showVersion();
+		}
 
-	if (argv.help && argv._.length === 0 && options.autoHelp) {
-		showHelp(0);
+		if (argv.help === true && options.autoHelp) {
+			showHelp(0);
+		}
 	}
 
 	const input = argv._;

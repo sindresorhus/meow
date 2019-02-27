@@ -10,8 +10,8 @@
 - Parses arguments
 - Converts flags to [camelCase](https://github.com/sindresorhus/camelcase)
 - Negates flags when using the `--no-` prefix
-- Outputs version when only the `--version`
-- Outputs description and supplied help text when only the `--help`
+- Outputs version when `--version`
+- Outputs description and supplied help text when `--help`
 - Makes unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail
 - Sets the process title to the binary name defined in package.json
 
@@ -260,6 +260,12 @@ Meow will make unhandled rejected promises [fail hard](https://github.com/sindre
 
 ## Tips
 
+### `autoVersion` and `autoHelp`
+
+The `autoVersion` and `autoHelp` option will only enabled when there is only one argument in argv.
+
+## Related
+
 See [`chalk`](https://github.com/chalk/chalk) if you want to colorize the terminal output.
 
 See [`get-stdin`](https://github.com/sindresorhus/get-stdin) if you want to accept input from stdin.
@@ -269,7 +275,6 @@ See [`conf`](https://github.com/sindresorhus/conf) if you need to persist some d
 See [`update-notifier`](https://github.com/yeoman/update-notifier) if you want update notifications.
 
 [More useful CLI utilities…](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
-
 
 ## License
 

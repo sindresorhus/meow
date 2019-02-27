@@ -40,9 +40,19 @@ test('spawn cli and show version', async t => {
 	t.is(stdout, pkg.version);
 });
 
-test('spawn cli and not show version', async t => {
+test('spawn cli and disabled autoVersion and autoHelp', async t => {
+	const {stdout} = await execa('./fixture.js', ['--version', '--help']);
+	t.is(stdout, 'version\nhelp\nmeow\ncamelCaseOption');
+});
+
+test('spawn cli and disabled autoVersion', async t => {
 	const {stdout} = await execa('./fixture.js', ['--version', '--no-auto-version']);
 	t.is(stdout, 'version\nautoVersion\nmeow\ncamelCaseOption');
+});
+
+test('spawn cli and not show version', async t => {
+	const {stdout} = await execa('./fixture.js', ['--version=beta']);
+	t.is(stdout, 'version\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and show help screen', async t => {
@@ -50,9 +60,14 @@ test('spawn cli and show help screen', async t => {
 	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2));
 });
 
-test('spawn cli and not show help screen', async t => {
+test('spawn cli and disabled autoHelp', async t => {
 	const {stdout} = await execa('./fixture.js', ['--help', '--no-auto-help']);
 	t.is(stdout, 'help\nautoHelp\nmeow\ncamelCaseOption');
+});
+
+test('spawn cli and not show help', async t => {
+	const {stdout} = await execa('./fixture.js', ['--help=all']);
+	t.is(stdout, 'help\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and test input', async t => {
@@ -220,7 +235,7 @@ test('grouped flags work', t => {
 	t.is(flags.l, undefined);
 });
 
-test('only show verson/help if `cli.input.length === 0`', t => {
+test('disable autoVersion/autoHelp if `cli.input.length > 0`', t => {
 	t.is(meow({argv: ['bar', '--version']}).input[0], 'bar');
 	t.is(meow({argv: ['bar', '--help']}).input[0], 'bar');
 	t.is(meow({argv: ['bar', '--version', '--help']}).input[0], 'bar');
