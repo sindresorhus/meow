@@ -107,6 +107,11 @@ test('string flags with multiple options are always arrays', t => {
 
 	t.deepEqual(meow({
 		flags,
+		argv: ['--foo', 'a', 'b']
+	}).flags, {foo: ['a', 'b']});
+
+	t.deepEqual(meow({
+		flags,
 		argv: [
 			'--foo=a',
 			'--foo=b'
