@@ -101,6 +101,7 @@ The key is the flag name and the value is an object with any of:
 - `type`: Type of value. (Possible values: `string` `boolean`)
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
+- `multiple`: If `true` parse the flag as an array (Only available on strings)
 
 Example:
 
@@ -109,7 +110,8 @@ flags: {
 	unicorn: {
 		type: 'string',
 		alias: 'u',
-		default: 'rainbow'
+		default: 'rainbow',
+		multiple: false
 	}
 }
 ```
