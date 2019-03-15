@@ -1,4 +1,5 @@
 import {expectType} from 'tsd-check';
+import {PackageJson} from 'type-fest';
 import meow, {Result} from '.';
 
 expectType<Result>(meow('Help text'));
@@ -38,7 +39,7 @@ const result = meow('Help text');
 expectType<string[]>(result.input);
 expectType<{[name: string]: unknown}>(result.flags);
 expectType<{[name: string]: unknown}>(result.unnormalizedFlags);
-expectType<{[name: string]: unknown}>(result.pkg);
+expectType<PackageJson>(result.pkg);
 expectType<string>(result.help);
 
 result.showHelp();

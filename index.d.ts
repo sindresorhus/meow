@@ -1,3 +1,4 @@
+import {PackageJson} from 'type-fest';
 import {Options as MinimistOptions} from 'minimist-options';
 
 export interface Options {
@@ -12,22 +13,22 @@ export interface Options {
 
 	@example
 	```
-flags: {
-	unicorn: {
-		type: 'string',
-		alias: 'u',
-		default: 'rainbow'
+	flags: {
+		unicorn: {
+			type: 'string',
+			alias: 'u',
+			default: 'rainbow'
+		}
 	}
-}
 	```
-	 */
+	*/
 	readonly flags?: MinimistOptions;
 
 	/**
 	Description to show above the help text. Default: The package.json `"description"` property.
 
 	Set it to `false` to disable it altogether.
-	 */
+	*/
 	readonly description?: string | false;
 
 	/**
@@ -38,38 +39,38 @@ flags: {
 	The description will be shown above your help text automatically.
 
 	Set it to `false` to disable it altogether.
-	 */
+	*/
 	readonly help?: string | false;
 
 	/**
 	Set a custom version output. Default: The package.json `"version"` property.
 
 	Set it to `false` to disable it altogether.
-	 */
+	*/
 	readonly version?: string | false;
 
 	/**
 	Automatically show the help text when the `--help` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own help text.
-	 */
+	*/
 	readonly autoHelp?: boolean;
 
 	/**
 	Automatically show the version text when the `--version` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own version text.
-	 */
+	*/
 	readonly autoVersion?: boolean;
 
 	/**
 	package.json as an `Object`. Default: Closest package.json upwards.
 
 	_You most likely don't need this option._
-	 */
+	*/
 	readonly pkg?: {[key: string]: unknown};
 
 	/**
 	Custom arguments object.
 
 	@default process.argv.slice(2)
-	 */
+	*/
 	readonly argv?: ReadonlyArray<string>;
 
 	/**
@@ -78,7 +79,7 @@ flags: {
 	By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would infer it as a number.
 
 	@default false
-	 */
+	*/
 	readonly inferType?: boolean;
 
 	/**
@@ -88,110 +89,110 @@ flags: {
 
 	@example
 	```
-const cli = meow(`
-	Usage
-		$ foo
+	const cli = meow(`
+		Usage
+			$ foo
 
-	Options
-		--rainbow, -r  Include a rainbow
-		--unicorn, -u  Include a unicorn
-		--no-sparkles  Exclude sparkles
+		Options
+			--rainbow, -r  Include a rainbow
+			--unicorn, -u  Include a unicorn
+			--no-sparkles  Exclude sparkles
 
-	Examples
-		$ foo
-		🌈 unicorns✨🌈
-`, {
-	booleanDefault: undefined,
-	flags: {
-		rainbow: {
-			type: 'boolean',
-			default: true,
-			alias: 'r'
-		},
-			unicorn: {
-			type: 'boolean',
-			default: false,
-			alias: 'u'
-		},
-		cake: {
-			type: 'boolean',
-			alias: 'c'
-		},
-		sparkles: {
-			type: 'boolean',
-			default: true
+		Examples
+			$ foo
+			🌈 unicorns✨🌈
+	`, {
+		booleanDefault: undefined,
+		flags: {
+			rainbow: {
+				type: 'boolean',
+				default: true,
+				alias: 'r'
+			},
+				unicorn: {
+				type: 'boolean',
+				default: false,
+				alias: 'u'
+			},
+			cake: {
+				type: 'boolean',
+				alias: 'c'
+			},
+			sparkles: {
+				type: 'boolean',
+				default: true
+			}
 		}
-	}
-});
+	});
 
-//{
-//	flags: {
-//		rainbow: true,
-//		unicorn: false,
-//		sparkles: true
-//	},
-//	unnormalizedFlags: {
-//		rainbow: true,
-//		r: true,
-//		unicorn: false,
-//		u: false,
-//		sparkles: true
-//	},
-//	…
-//}
+	//{
+	//	flags: {
+	//		rainbow: true,
+	//		unicorn: false,
+	//		sparkles: true
+	//	},
+	//	unnormalizedFlags: {
+	//		rainbow: true,
+	//		r: true,
+	//		unicorn: false,
+	//		u: false,
+	//		sparkles: true
+	//	},
+	//	…
+	//}
 	 ```
-	 */
-	readonly booleanDefault?: boolean | null;
+	*/
+	readonly booleanDefault?: boolean | null | undefined;
 
 	/**
 	Whether to use [hard-rejection](https://github.com/sindresorhus/hard-rejection) or not. Disabling this can be useful if you need to handle `process.on('unhandledRejection')` yourself.
 
 	@default true
-	 */
+	*/
 	readonly hardRejection?: boolean;
 }
 
 export interface Result {
 	/**
 	Non-flag arguments.
-	 */
+	*/
 	input: string[];
 
 	/**
 	Flags converted to camelCase excluding aliases.
-	 */
+	*/
 	flags: {[name: string]: unknown};
 
 	/**
 	Flags converted camelCase including aliases.
-	 */
+	*/
 	unnormalizedFlags: {[name: string]: unknown};
 
 	/**
 	The `package.json` object.
-	 */
-	pkg: {[key: string]: unknown};
+	*/
+	pkg: PackageJson;
 
 	/**
 	The help text used with `--help`.
-	 */
+	*/
 	help: string;
 
 	/**
 	Show the help text and exit with code.
 
-	@param code The exit code to use. Default: `2`.
-	 */
-	showHelp(code?: number): void;
+	@param exitCode - The exit code to use. Default: `2`.
+	*/
+	showHelp(exitCode?: number): void;
 
 	/**
 	Show the version text and exit.
-	 */
+	*/
 	showVersion(): void;
 }
 
 /**
 @param helpMessage - Shortcut for the `help` option.
- */
+*/
 export default function meow(helpMessage: string, options?: Options): Result;
 export default function meow(options?: Options): Result;

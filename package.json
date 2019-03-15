@@ -48,6 +48,7 @@
 		"read-pkg-up": "^4.0.0",
 		"redent": "^2.0.0",
 		"trim-newlines": "^2.0.0",
+		"type-fest": "^0.2.0",
 		"yargs-parser": "^11.0.0"
 	},
 	"devDependencies": {
