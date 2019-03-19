@@ -140,7 +140,7 @@ export interface Options {
 	//	},
 	//	…
 	//}
-	 ```
+	```
 	*/
 	readonly booleanDefault?: boolean | null | undefined;
 
