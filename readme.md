@@ -192,6 +192,8 @@ The `default` value set in `boolean` flags take precedence over `booleanDefault`
 Example:
 
 ```js
+const meow = require('meow');
+
 const cli = meow(`
 	Usage
 	  $ foo

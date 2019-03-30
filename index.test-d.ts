@@ -1,6 +1,7 @@
-import {expectType} from 'tsd-check';
+import {expectType} from 'tsd';
 import {PackageJson} from 'type-fest';
-import meow, {Result} from '.';
+import meow = require('.');
+import {Result} from '.';
 
 expectType<Result>(meow('Help text'));
 expectType<Result>(meow('Help text', {hardRejection: false}));

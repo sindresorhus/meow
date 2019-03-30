@@ -128,4 +128,3 @@ const meow = (helpText, options) => {
 };
 
 module.exports = meow;
-module.exports.default = meow;
