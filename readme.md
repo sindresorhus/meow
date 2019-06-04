@@ -262,7 +262,7 @@ Meow will make unhandled rejected promises [fail hard](https://github.com/sindre
 
 ### `autoVersion` and `autoHelp`
 
-The `autoVersion` and `autoHelp` option will only enabled when there is only one argument in argv.
+The `autoVersion` and `autoHelp` option will only enabled when there is only one argument in `process.argv`.
 
 ## Related
 
