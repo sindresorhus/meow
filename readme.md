@@ -148,12 +148,16 @@ Default: `true`
 
 Automatically show the help text when the `--help` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own help text.
 
+This option will only enabled when there is only one argument in `process.argv`.
+
 ##### autoVersion
 
 Type: `boolean`<br>
 Default: `true`
 
 Automatically show the version text when the `--version` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own version text.
+
+ This option will only enabled when there is only one argument in `process.argv`.
 
 ##### pkg
 
@@ -261,12 +265,6 @@ Meow will make unhandled rejected promises [fail hard](https://github.com/sindre
 
 
 ## Tips
-
-### `autoVersion` and `autoHelp`
-
-The `autoVersion` and `autoHelp` option will only enabled when there is only one argument in `process.argv`.
-
-## Related
 
 See [`chalk`](https://github.com/chalk/chalk) if you want to colorize the terminal output.
 
