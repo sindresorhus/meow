@@ -14,7 +14,7 @@ const normalizePackageData = require('normalize-package-data');
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
-module.exports = (helpText, options) => {
+const meow = (helpText, options) => {
 	if (typeof helpText !== 'string') {
 		options = helpText;
 		helpText = '';
@@ -128,3 +128,5 @@ module.exports = (helpText, options) => {
 		showVersion
 	};
 };
+
+module.exports = meow;

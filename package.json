@@ -13,10 +13,11 @@
 		"node": ">=8"
 	},
 	"scripts": {
-		"test": "xo && ava"
+		"test": "xo && ava && tsd"
 	},
 	"files": [
-		"index.js"
+		"index.js",
+		"index.d.ts"
 	],
 	"keywords": [
 		"cli",
@@ -38,21 +39,24 @@
 		"console"
 	],
 	"dependencies": {
+		"@types/minimist": "^1.2.0",
 		"camelcase-keys": "^5.0.0",
-		"decamelize-keys": "^1.0.0",
-		"hard-rejection": "^1.0.0",
-		"minimist-options": "^3.0.1",
-		"normalize-package-data": "^2.3.4",
-		"read-pkg-up": "^4.0.0",
+		"decamelize-keys": "^1.1.0",
+		"hard-rejection": "^2.0.0",
+		"minimist-options": "^4.0.1",
+		"normalize-package-data": "^2.5.0",
+		"read-pkg-up": "^5.0.0",
 		"redent": "^2.0.0",
 		"trim-newlines": "^2.0.0",
-		"yargs-parser": "^11.0.0"
+		"type-fest": "^0.3.0",
+		"yargs-parser": "^13.0.0"
 	},
 	"devDependencies": {
-		"ava": "^0.25.0",
+		"ava": "^1.4.1",
 		"execa": "^1.0.0",
-		"indent-string": "^3.0.0",
-		"xo": "^0.23.0"
+		"indent-string": "^3.2.0",
+		"tsd": "^0.7.1",
+		"xo": "^0.24.0"
 	},
 	"xo": {
 		"rules": {

@@ -67,17 +67,17 @@ foo(cli.input[0], cli.flags);
 
 ## API
 
-### meow(helpText, [options])
+### meow(helpText, options?)
 ### meow(options)
 
-Returns an `Object` with:
+Returns an `object` with:
 
 - `input` *(Array)* - Non-flag arguments
 - `flags` *(Object)* - Flags converted to camelCase excluding aliases
 - `unnormalizedFlags` *(Object)* - Flags converted camelCase including aliases
 - `pkg` *(Object)* - The `package.json` object
 - `help` *(string)* - The help text used with `--help`
-- `showHelp([code=2])` *(Function)* - Show the help text and exit with `code`
+- `showHelp([exitCode=2])` *(Function)* - Show the help text and exit with `exitCode`
 - `showVersion()` *(Function)* - Show the version text and exit
 
 #### helpText
@@ -88,11 +88,11 @@ Shortcut for the `help` option.
 
 #### options
 
-Type: `Object`
+Type: `object`
 
 ##### flags
 
-Type: `Object`
+Type: `object`
 
 Define argument flags.
 
@@ -117,7 +117,7 @@ flags: {
 
 ##### description
 
-Type: `string` `boolean`<br>
+Type: `string | boolean`<br>
 Default: The package.json `"description"` property
 
 Description to show above the help text.
@@ -126,7 +126,7 @@ Set it to `false` to disable it altogether.
 
 ##### help
 
-Type: `string` `boolean`
+Type: `string | boolean`
 
 The help text you want shown.
 
@@ -136,7 +136,7 @@ The description will be shown above your help text automatically.
 
 ##### version
 
-Type: `string` `boolean`<br>
+Type: `string | boolean`<br>
 Default: The package.json `"version"` property
 
 Set a custom version output.
@@ -157,16 +157,16 @@ Automatically show the version text when the `--version` flag is present. Useful
 
 ##### pkg
 
-Type: `Object`<br>
+Type: `object`<br>
 Default: Closest package.json upwards
 
-package.json as an `Object`.
+package.json as an `object`.
 
 *You most likely don't need this option.*
 
 ##### argv
 
-Type: `Array`<br>
+Type: `string[]`<br>
 Default: `process.argv.slice(2)`
 
 Custom arguments object.
@@ -182,7 +182,7 @@ By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would 
 
 ##### booleanDefault
 
-Type: `boolean` `null` `undefined`<br>
+Type: `boolean | null | undefined`<br>
 Default: `false`
 
 Value of `boolean` flags not defined in `argv`.
@@ -192,6 +192,8 @@ The `default` value set in `boolean` flags take precedence over `booleanDefault`
 Example:
 
 ```js
+const meow = require('meow');
+
 const cli = meow(`
 	Usage
 	  $ foo
@@ -276,6 +278,14 @@ See [`update-notifier`](https://github.com/yeoman/update-notifier) if you want u
 
 [More useful CLI utilities…](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
 
-## License
+---
 
-MIT © [Sindre Sorhus](https://sindresorhus.com)
+<div align="center">
+	<b>
+		<a href="https://tidelift.com/subscription/pkg/npm-meow?utm_source=npm-meow&utm_medium=referral&utm_campaign=readme">Get professional support for this package with a Tidelift subscription</a>
+	</b>
+	<br>
+	<sub>
+		Tidelift helps make open source sustainable for maintainers while giving companies<br>assurances about security, maintenance, and licensing for their dependencies.
+	</sub>
+</div>
