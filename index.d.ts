@@ -52,11 +52,15 @@ declare namespace meow {
 
 		/**
 		Automatically show the help text when the `--help` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own help text.
+
+		This option is only considered when there is only one argument in `process.argv`.
 		*/
 		readonly autoHelp?: boolean;
 
 		/**
 		Automatically show the version text when the `--version` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own version text.
+
+		This option is only considered when there is only one argument in `process.argv`.
 		*/
 		readonly autoVersion?: boolean;
 

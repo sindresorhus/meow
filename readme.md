@@ -157,7 +157,7 @@ Default: `true`
 
 Automatically show the version text when the `--version` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own version text.
 
- This option will only enabled when there is only one argument in `process.argv`.
+ This option is only considered when there is only one argument in `process.argv`.
 
 ##### pkg
 
@@ -275,6 +275,7 @@ See [`conf`](https://github.com/sindresorhus/conf) if you need to persist some d
 See [`update-notifier`](https://github.com/yeoman/update-notifier) if you want update notifications.
 
 [More useful CLI utilities…](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
+
 
 ---
 
