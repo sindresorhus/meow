@@ -148,7 +148,7 @@ Default: `true`
 
 Automatically show the help text when the `--help` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own help text.
 
-This option will only enabled when there is only one argument in `process.argv`.
+This option is only considered when there is only one argument in `process.argv`.
 
 ##### autoVersion
 
