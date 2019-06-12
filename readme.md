@@ -155,7 +155,7 @@ Automatically show the version text when the `--version` flag is present. Useful
 Type: `boolean`<br>
 Default: `true`
 
-Automatically show help on flags/switches.
+Automatically show help on flags.
 
 ##### pkg
 
