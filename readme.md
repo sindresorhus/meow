@@ -74,7 +74,7 @@ Returns an `object` with:
 
 - `input` *(Array)* - Non-flag arguments
 - `flags` *(Object)* - Flags converted to camelCase excluding aliases
-- `unnormalizedFlags` *(Object)* - Flags converted camelCase including aliases
+- `unnormalizedFlags` *(Object)* - Flags converted to camelCase including aliases
 - `pkg` *(Object)* - The `package.json` object
 - `help` *(string)* - The help text used with `--help`
 - `showHelp([exitCode=2])` *(Function)* - Show the help text and exit with `exitCode`
