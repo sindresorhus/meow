@@ -39,12 +39,22 @@ expectType<Result<never>>(meow({booleanDefault: null}));
 expectType<Result<never>>(meow({booleanDefault: undefined}));
 expectType<Result<never>>(meow({hardRejection: false}));
 
-const result = meow('Help text');
+const result = meow('Help text', {
+	flags: {
+		foo: {type: 'boolean', alias: 'f'},
+		'foo-bar': 'number'
+	}}
+);
 
 expectType<string[]>(result.input);
-expectType<{[name: string]: unknown}>(result.unnormalizedFlags);
 expectType<PackageJson>(result.pkg);
 expectType<string>(result.help);
+
+expectType<boolean>(result.flags.foo);
+expectType<boolean>(result.unnormalizedFlags.foo);
+expectType<unknown>(result.unnormalizedFlags.f);
+expectType<number>(result.unnormalizedFlags['foo-bar']);
+expectType<unknown>(result.flags.fooBar);
 
 result.showHelp();
 result.showHelp(1);

@@ -178,12 +178,12 @@ declare namespace meow {
 		/**
 		Flags converted to camelCase excluding aliases.
 		*/
-		flags: TypedFlags<Flags>;
+		flags: TypedFlags<Flags> & {[name: string]: unknown};
 
 		/**
 		Flags converted camelCase including aliases.
 		*/
-		unnormalizedFlags: {[name: string]: unknown};
+		unnormalizedFlags: TypedFlags<Flags> & {[name: string]: unknown};
 
 		/**
 		The `package.json` object.
