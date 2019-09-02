@@ -101,6 +101,7 @@ The key is the flag name and the value is an object with any of:
 - `type`: Type of value. (Possible values: `string` `boolean`)
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
+- `multiple`: To indicate that a flag can be passed multiple times, value will be an array. Default value is `false`
 
 Example:
 
@@ -110,6 +111,7 @@ flags: {
 		type: 'string',
 		alias: 'u',
 		default: 'rainbow'
+		multiple: true
 	}
 }
 ```
