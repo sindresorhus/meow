@@ -62,6 +62,14 @@ const meow = (helpText, options) => {
 		delete minimistoptions.arguments;
 	}
 
+	minimistoptions = Object.keys(minimistoptions).reduce((options, key) => {
+		if (options[key].multiple) {
+			options[key].type = 'array';
+		}
+
+		return options;
+	}, minimistoptions);
+
 	minimistoptions = buildMinimistOptions(minimistoptions);
 
 	if (minimistoptions['--']) {
@@ -113,8 +121,12 @@ const meow = (helpText, options) => {
 	const unnormalizedFlags = {...flags};
 
 	if (options.flags !== undefined) {
-		for (const flagValue of Object.values(options.flags)) {
-			delete flags[flagValue.alias];
+		for (const [key, value] of Object.entries(options.flags)) {
+			delete flags[value.alias];
+
+			if (!value.multiple && Array.isArray(flags[key])) {
+				flags[key] = flags[key].slice(-1)[0];
+			}
 		}
 	}
 

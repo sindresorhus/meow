@@ -22,7 +22,7 @@ test('return object', t => {
 	t.true(cli.flags.fooBar);
 	t.is(cli.flags.meow, 'dog');
 	t.is(cli.flags.unicorn, 'cat');
-	t.deepEqual(cli.flags['--'], ['unicorn', 'cake']);
+	t.deepEqual(cli.flags['--'], 'cake');
 	t.is(cli.pkg.name, 'meow');
 	t.is(cli.help, indentString('\nCLI app helper\n\nUsage\n  foo <input>\n', 2));
 });
@@ -239,4 +239,68 @@ test('disable autoVersion/autoHelp if `cli.input.length > 0`', t => {
 	t.is(meow({argv: ['bar', '--version']}).input[0], 'bar');
 	t.is(meow({argv: ['bar', '--help']}).input[0], 'bar');
 	t.is(meow({argv: ['bar', '--version', '--help']}).input[0], 'bar');
+});
+
+test('string returns array when multiple flag is true', t => {
+	const cli = meow({
+		argv: ['--unicorn=dog', '--unicorn=abc', '-u', 'dog1', '--meow', 'cat', '--unicorn=dog2'],
+		flags: {
+			unicorn: {alias: 'u', type: 'string', multiple: true},
+			meow: {type: 'string'}
+		}
+	});
+	t.deepEqual(cli.flags.unicorn, ['dog', 'abc', 'dog1', 'dog2']);
+	t.deepEqual(cli.flags.meow, 'cat');
+});
+
+test('combination of multi flag and single', t => {
+	const cli = meow({
+		argv: ['--foo=1', '--foo=2', '--bar', '1', '--foo', '3', '--bar=5', '-f', '4'],
+		flags: {
+			foo: {multiple: true, alias: 'f', type: 'string'},
+			bar: {type: 'string'}
+		}
+	});
+	t.deepEqual(cli.flags.foo, [1, 2, 3, 4]);
+	t.deepEqual(cli.flags.bar, '5');
+});
+
+test('string flag return one result when not multiple', t => {
+	t.deepEqual(meow({
+		flags: {
+			foo: {
+				type: 'string'
+			}
+		},
+		argv: ['--foo=a', '--foo=b']
+	}).flags, {foo: 'b'});
+});
+
+test('string flags with multiple options are always arrays', t => {
+	const flags = {
+		foo: {
+			type: 'string',
+			multiple: true
+		}
+	};
+
+	t.deepEqual(meow({
+		flags,
+		argv: ['--foo=a']
+	}).flags, {foo: ['a']});
+
+	t.deepEqual(meow({
+		flags,
+		argv: ['--foo', 'a', 'b']
+	}).flags, {foo: ['a', 'b']});
+
+	t.deepEqual(meow({
+		flags,
+		argv: [
+			'--foo=a',
+			'--foo=b',
+			'--foo=c',
+			'--foo=d'
+		]
+	}).flags, {foo: ['a', 'b', 'c', 'd']});
 });
