@@ -1,26 +1,26 @@
-import {expectType} from 'tsd';
+import {expectAssignable, expectType} from 'tsd';
 import {PackageJson} from 'type-fest';
 import meow = require('.');
 import {Result} from '.';
 
 expectType<Result<never>>(meow('Help text'));
 expectType<Result<never>>(meow('Help text', {hardRejection: false}));
-expectType<{flags: {foo: number}}>(
+expectAssignable<{flags: {foo: number}}>(
 	meow({flags: {foo: {type: 'number'}}})
 );
-expectType<{flags: {foo: string}}>(
+expectAssignable<{flags: {foo: string}}>(
 	meow({flags: {foo: {type: 'string'}}})
 );
-expectType<{flags: {foo: boolean}}>(
+expectAssignable<{flags: {foo: boolean}}>(
 	meow({flags: {foo: {type: 'boolean'}}})
 );
-expectType<{flags: {foo: number}}>(
+expectAssignable<{flags: {foo: number}}>(
 	meow({flags: {foo: 'number'}})
 );
-expectType<{flags: {foo: string}}>(
+expectAssignable<{flags: {foo: string}}>(
 	meow({flags: {foo: 'string'}})
 );
-expectType<{flags: {foo: boolean}}>(
+expectAssignable<{flags: {foo: boolean}}>(
 	meow({flags: {foo: 'boolean'}})
 );
 expectType<Result<never>>(meow({description: 'foo'}));
