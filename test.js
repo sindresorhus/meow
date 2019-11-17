@@ -1,7 +1,7 @@
 import test from 'ava';
 import indentString from 'indent-string';
 import execa from 'execa';
-import pkg from './package';
+import pkg from './package.json';
 import meow from '.';
 
 test('return object', t => {
@@ -80,8 +80,7 @@ test('spawn cli and test input flag', async t => {
 	t.is(stdout, 'bar');
 });
 
-// TODO: This fails in Node.js 7.10.0, but not 6 or 4
-test.serial.skip('pkg.bin as a string should work', t => { // eslint-disable-line ava/no-skip-test
+test.serial('pkg.bin as a string should work', t => {
 	meow({
 		pkg: {
 			name: 'browser-sync',

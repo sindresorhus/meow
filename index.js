@@ -24,7 +24,7 @@ const meow = (helpText, options) => {
 		pkg: readPkgUp.sync({
 			cwd: parentDir,
 			normalize: false
-		}).pkg || {},
+		}).packageJson || {},
 		argv: process.argv.slice(2),
 		inferType: false,
 		input: 'string',
