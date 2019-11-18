@@ -160,11 +160,11 @@ declare namespace meow {
 	}
 
 	type TypedFlags<Flags extends MinimistOptions> = {
-		[F in keyof Flags]: Flags[F] extends { type: 'number' } | 'number'
+		[F in keyof Flags]: Flags[F] extends { type: 'number' }
 			? number
-			: Flags[F] extends { type: 'string' } | 'string'
+			: Flags[F] extends { type: 'string' }
 				? string
-				: Flags[F] extends { type: 'boolean' } | 'boolean'
+				: Flags[F] extends { type: 'boolean' }
 					? boolean
 					: unknown;
 	};

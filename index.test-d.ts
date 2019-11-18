@@ -14,15 +14,6 @@ expectAssignable<{flags: {foo: string}}>(
 expectAssignable<{flags: {foo: boolean}}>(
 	meow({flags: {foo: {type: 'boolean'}}})
 );
-expectAssignable<{flags: {foo: number}}>(
-	meow({flags: {foo: 'number'}})
-);
-expectAssignable<{flags: {foo: string}}>(
-	meow({flags: {foo: 'string'}})
-);
-expectAssignable<{flags: {foo: boolean}}>(
-	meow({flags: {foo: 'boolean'}})
-);
 expectType<Result<never>>(meow({description: 'foo'}));
 expectType<Result<never>>(meow({description: false}));
 expectType<Result<never>>(meow({help: 'foo'}));
@@ -42,7 +33,7 @@ expectType<Result<never>>(meow({hardRejection: false}));
 const result = meow('Help text', {
 	flags: {
 		foo: {type: 'boolean', alias: 'f'},
-		'foo-bar': 'number'
+		'foo-bar': {type: 'number'}
 	}}
 );
 
