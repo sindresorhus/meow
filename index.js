@@ -114,8 +114,15 @@ const meow = (helpText, options) => {
 
 	if (options.flags !== undefined) {
 		for (const flagValue of Object.values(options.flags)) {
-			delete flags[flagValue.alias];
+			if (Array.isArray(flagValue.alias)) {
+				flagValue.alias.forEach(alias =>
+					delete flags[flagValue.alias]
+				);
+			} else {
+				delete flags[flagValue.alias];
+			}
 		}
+
 	}
 
 	return {
