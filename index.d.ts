@@ -13,9 +13,9 @@ declare namespace meow {
 	type BooleanFlag = Flag<'boolean', boolean>;
 	type NumberFlag = Flag<'number', number>;
 
-	type BaseFlags = { [key: string]: StringFlag | BooleanFlag | NumberFlag };
+	type AnyFlags = { [key: string]: StringFlag | BooleanFlag | NumberFlag };
 
-	interface Options<Flags extends BaseFlags> {
+	interface Options<Flags extends AnyFlags> {
 		/**
 		Define argument flags.
 
@@ -172,7 +172,7 @@ declare namespace meow {
 		readonly hardRejection?: boolean;
 	}
 
-	type TypedFlags<Flags extends BaseFlags> = {
+	type TypedFlags<Flags extends AnyFlags> = {
 		[F in keyof Flags]: Flags[F] extends {type: 'number'}
 			? number
 			: Flags[F] extends {type: 'string'}
@@ -182,7 +182,7 @@ declare namespace meow {
 					: unknown;
 	};
 
-	interface Result<Flags extends BaseFlags> {
+	interface Result<Flags extends AnyFlags> {
 		/**
 		Non-flag arguments.
 		*/
@@ -259,7 +259,7 @@ const cli = meow(`
 foo(cli.input[0], cli.flags);
 ```
 */
-declare function meow<Flags extends meow.BaseFlags>(helpMessage: string, options?: meow.Options<Flags>): meow.Result<Flags>;
-declare function meow<Flags extends meow.BaseFlags>(options?: meow.Options<Flags>): meow.Result<Flags>;
+declare function meow<Flags extends meow.AnyFlags>(helpMessage: string, options?: meow.Options<Flags>): meow.Result<Flags>;
+declare function meow<Flags extends meow.AnyFlags>(options?: meow.Options<Flags>): meow.Result<Flags>;
 
 export = meow;
