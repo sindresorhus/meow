@@ -1,8 +1,21 @@
 import {PackageJson} from 'type-fest';
-import {Options as MinimistOptions} from 'minimist-options';
 
 declare namespace meow {
-	interface Options<Flags extends MinimistOptions> {
+	type FlagType = 'string' | 'boolean' | 'number';
+
+	interface Flag<Type extends FlagType, Default> {
+		readonly type?: Type;
+		readonly alias?: string;
+		readonly default?: Default;
+	}
+
+	type StringFlag = Flag<'string', string>;
+	type BooleanFlag = Flag<'boolean', boolean>;
+	type NumberFlag = Flag<'number', number>;
+
+	type AnyFlags = {[key: string]: StringFlag | BooleanFlag | NumberFlag};
+
+	interface Options<Flags extends AnyFlags> {
 		/**
 		Define argument flags.
 
@@ -159,7 +172,7 @@ declare namespace meow {
 		readonly hardRejection?: boolean;
 	}
 
-	type TypedFlags<Flags extends MinimistOptions> = {
+	type TypedFlags<Flags extends AnyFlags> = {
 		[F in keyof Flags]: Flags[F] extends {type: 'number'}
 			? number
 			: Flags[F] extends {type: 'string'}
@@ -169,7 +182,7 @@ declare namespace meow {
 					: unknown;
 	};
 
-	interface Result<Flags extends MinimistOptions> {
+	interface Result<Flags extends AnyFlags> {
 		/**
 		Non-flag arguments.
 		*/
@@ -246,7 +259,7 @@ const cli = meow(`
 foo(cli.input[0], cli.flags);
 ```
 */
-declare function meow<Flags extends MinimistOptions>(helpMessage: string, options?: meow.Options<Flags>): meow.Result<Flags>;
-declare function meow<Flags extends MinimistOptions>(options?: meow.Options<Flags>): meow.Result<Flags>;
+declare function meow<Flags extends meow.AnyFlags>(helpMessage: string, options?: meow.Options<Flags>): meow.Result<Flags>;
+declare function meow<Flags extends meow.AnyFlags>(options?: meow.Options<Flags>): meow.Result<Flags>;
 
 export = meow;
