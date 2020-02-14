@@ -13,7 +13,7 @@ declare namespace meow {
 	type BooleanFlag = Flag<'boolean', boolean>;
 	type NumberFlag = Flag<'number', number>;
 
-	type AnyFlags = { [key: string]: StringFlag | BooleanFlag | NumberFlag };
+	type AnyFlags = {[key: string]: StringFlag | BooleanFlag | NumberFlag};
 
 	interface Options<Flags extends AnyFlags> {
 		/**
