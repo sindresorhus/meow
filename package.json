@@ -4,10 +4,11 @@
 	"description": "CLI app helper",
 	"license": "MIT",
 	"repository": "sindresorhus/meow",
+	"funding": "https://github.com/sponsors/sindresorhus",
 	"author": {
 		"name": "Sindre Sorhus",
 		"email": "sindresorhus@gmail.com",
-		"url": "sindresorhus.com"
+		"url": "https://sindresorhus.com"
 	},
 	"engines": {
 		"node": ">=8"

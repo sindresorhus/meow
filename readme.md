@@ -4,7 +4,6 @@
 
 ![](meow.gif)
 
-
 ## Features
 
 - Parses arguments
@@ -15,13 +14,11 @@
 - Makes unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail
 - Sets the process title to the binary name defined in package.json
 
-
 ## Install
 
 ```
 $ npm install meow
 ```
-
 
 ## Usage
 
@@ -63,7 +60,6 @@ const cli = meow(`
 
 foo(cli.input[0], cli.flags);
 ```
-
 
 ## API
 
@@ -114,10 +110,9 @@ flags: {
 }
 ```
 
-
 ##### description
 
-Type: `string | boolean`<br>
+Type: `string | boolean`\
 Default: The package.json `"description"` property
 
 Description to show above the help text.
@@ -136,14 +131,14 @@ The description will be shown above your help text automatically.
 
 ##### version
 
-Type: `string | boolean`<br>
+Type: `string | boolean`\
 Default: The package.json `"version"` property
 
 Set a custom version output.
 
 ##### autoHelp
 
-Type: `boolean`<br>
+Type: `boolean`\
 Default: `true`
 
 Automatically show the help text when the `--help` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own help text.
@@ -152,7 +147,7 @@ This option is only considered when there is only one argument in `process.argv`
 
 ##### autoVersion
 
-Type: `boolean`<br>
+Type: `boolean`\
 Default: `true`
 
 Automatically show the version text when the `--version` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own version text.
@@ -161,7 +156,7 @@ Automatically show the version text when the `--version` flag is present. Useful
 
 ##### pkg
 
-Type: `object`<br>
+Type: `object`\
 Default: Closest package.json upwards
 
 package.json as an `object`.
@@ -170,14 +165,14 @@ package.json as an `object`.
 
 ##### argv
 
-Type: `string[]`<br>
+Type: `string[]`\
 Default: `process.argv.slice(2)`
 
 Custom arguments object.
 
 ##### inferType
 
-Type: `boolean`<br>
+Type: `boolean`\
 Default: `false`
 
 Infer the argument type.
@@ -186,7 +181,7 @@ By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would 
 
 ##### booleanDefault
 
-Type: `boolean | null | undefined`<br>
+Type: `boolean | null | undefined`\
 Default: `false`
 
 Value of `boolean` flags not defined in `argv`.
@@ -254,7 +249,7 @@ const cli = meow(`
 
 ##### hardRejection
 
-Type: `boolean`<br>
+Type: `boolean`\
 Default: `true`
 
 Whether to use [`hard-rejection`](https://github.com/sindresorhus/hard-rejection) or not. Disabling this can be useful if you need to handle `process.on('unhandledRejection')` yourself.
@@ -262,7 +257,6 @@ Whether to use [`hard-rejection`](https://github.com/sindresorhus/hard-rejection
 ## Promises
 
 Meow will make unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail. Meaning you don't have to manually `.catch()` promises used in your CLI.
-
 
 ## Tips
 
@@ -275,7 +269,6 @@ See [`conf`](https://github.com/sindresorhus/conf) if you need to persist some d
 See [`update-notifier`](https://github.com/yeoman/update-notifier) if you want update notifications.
 
 [More useful CLI utilities…](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
-
 
 ---
 
