@@ -49,7 +49,7 @@
 		"redent": "^3.0.0",
 		"trim-newlines": "^3.0.0",
 		"type-fest": "^0.8.1",
-		"yargs-parser": "^16.1.0"
+		"yargs-parser": "^18.1.1"
 	},
 	"devDependencies": {
 		"ava": "^2.4.0",
