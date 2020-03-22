@@ -7,6 +7,7 @@ declare namespace meow {
 		readonly type?: Type;
 		readonly alias?: string;
 		readonly default?: Default;
+		readonly description?: string;
 	}
 
 	type StringFlag = Flag<'string', string>;
@@ -31,7 +32,8 @@ declare namespace meow {
 			unicorn: {
 				type: 'string',
 				alias: 'u',
-				default: 'rainbow'
+				default: 'rainbow',
+				description: 'This is an unicorn option'
 			}
 		}
 		```
@@ -55,6 +57,11 @@ declare namespace meow {
 		Set it to `false` to disable it altogether.
 		*/
 		readonly help?: string | false;
+
+		/**
+		Whether show the help text with defined descriptions for options (flags). Default: `false`.
+		 */
+		readonly helpOptions?: boolean;
 
 		/**
 		Set a custom version output. Default: The package.json `"version"` property.

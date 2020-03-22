@@ -97,6 +97,7 @@ The key is the flag name and the value is an object with any of:
 - `type`: Type of value. (Possible values: `string` `boolean` `number`)
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
+- `description`: Description of the flag.
 
 Example:
 
@@ -105,7 +106,8 @@ flags: {
 	unicorn: {
 		type: 'string',
 		alias: 'u',
-		default: 'rainbow'
+		default: 'rainbow',
+		description: 'This is an unicorn option'
 	}
 }
 ```
@@ -128,6 +130,13 @@ The help text you want shown.
 The input is reindented and starting/ending newlines are trimmed which means you can use a [template literal](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/template_strings) without having to care about using the correct amount of indent.
 
 The description will be shown above your help text automatically.
+
+##### helpOptions
+
+Type: `boolean`
+Default: `false`
+
+Whether show the help text with defined descriptions for options (flags).
 
 ##### version
 

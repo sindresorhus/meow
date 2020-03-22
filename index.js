@@ -29,6 +29,7 @@ const meow = (helpText, options) => {
 		inferType: false,
 		input: 'string',
 		help: helpText,
+		helpOptions: false,
 		autoHelp: true,
 		autoVersion: true,
 		booleanDefault: false,
@@ -73,7 +74,8 @@ const meow = (helpText, options) => {
 
 	const {pkg} = options;
 	const argv = yargs(options.argv, minimistoptions);
-	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
+	const indentSize = 2;
+	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), indentSize);
 
 	normalizePackageData(pkg);
 
@@ -85,6 +87,53 @@ const meow = (helpText, options) => {
 	}
 
 	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
+
+	if (options.helpOptions) {
+		const cliOption = name => name.length === 1 ? `-${name}` : `--${name}`;
+		const indent = str => str ? (' '.repeat(indentSize) + str) : str;
+
+		let helpOptions = Object.entries(decamelizeKeys(options.flags, '-')).map(([name, definition]) => {
+			const type = definition.type || definition;
+			const {alias, default: defaultValue, description} = definition;
+
+			let firstLine = '';
+			switch (type) {
+				case 'boolean':
+					if (alias) {
+						firstLine = `${cliOption(alias)}, `;
+					}
+
+					firstLine += cliOption(name);
+					break;
+				case 'number':
+				case 'string':
+					if (alias) {
+						firstLine = `${cliOption(alias)} <${type}>, `;
+					}
+
+					firstLine += `${cliOption(name)} <${type}>`;
+					break;
+				default:
+					throw new Error(`Unexpected flag type: '${type}'`);
+			}
+
+			if (defaultValue !== null && defaultValue !== undefined) {
+				firstLine += `  (default: ${defaultValue})`;
+			}
+
+			const descLines = [];
+			if (description) {
+				descLines.push(...description.split(/\r?\n/));
+			}
+
+			return [firstLine, ...descLines.map(indent), ''];
+		});
+		helpOptions = [].concat(...helpOptions); // Flatten
+		helpOptions = ['Options:', ...helpOptions.map(indent)].map(indent);
+
+		help = help.replace(/\n+$/, '\n'); // Trim end
+		help += '\n' + helpOptions.join('\n');
+	}
 
 	const showHelp = code => {
 		console.log(help);
