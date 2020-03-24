@@ -97,6 +97,7 @@ The key is the flag name and the value is an object with any of:
 - `type`: Type of value. (Possible values: `string` `boolean` `number`)
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
+- `isRequired`: Boolean or Function that specified is this flag is required.
 
 Example:
 
@@ -106,6 +107,9 @@ flags: {
 		type: 'string',
 		alias: 'u',
 		default: 'rainbow'
+		isRequired: (flags, input) => {
+			if (flags.otherFlag) return true;
+		}
 	}
 }
 ```
