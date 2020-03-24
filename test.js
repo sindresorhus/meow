@@ -125,6 +125,27 @@ test('spawn cli and test required flag with empty number', async t => {
 	}
 });
 
+test('spawn cli and test required (specified as function) flag with without arguments', async t => {
+	const {stdout} = await execa('./fixture-required-function.js', []);
+	t.is(stdout, 'false,undefined');
+});
+
+test('spawn cli and test required (specified as function) flag with trigger only', async t => {
+	try {
+		await execa('./fixture-required-function.js', ['--trigger']);
+	} catch (error) {
+		const {stdout, message} = error;
+		t.regex(message, /Command failed with exit code 2/);
+		t.regex(stdout, /Missing required option/);
+		t.regex(stdout, /--withTrigger/);
+	}
+});
+
+test('spawn cli and test required (specified as function) flag with trigger and dynamically required option', async t => {
+	const {stdout} = await execa('./fixture-required-function.js', ['--trigger', '--withTrigger', 'specified']);
+	t.is(stdout, 'true,specified');
+});
+
 test.serial('pkg.bin as a string should work', t => {
 	meow({
 		pkg: {

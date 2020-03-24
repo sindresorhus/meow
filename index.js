@@ -131,7 +131,13 @@ const meow = (helpText, options) => {
 	// Get a list of missing flags, that are required
 	const missing = [];
 	for (const requiredFlag of requiredFlags) {
-		if (typeof flags[requiredFlag] === 'undefined') {
+		let requiredByFunction = true;
+
+		if (typeof options.flags[requiredFlag].isRequired === 'function') {
+			requiredByFunction = options.flags[requiredFlag].isRequired(flags, input);
+		}
+
+		if (typeof flags[requiredFlag] === 'undefined' && requiredByFunction) {
 			missing.push({key: requiredFlag, ...options.flags[requiredFlag]});
 		}
 	}
