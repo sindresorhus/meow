@@ -2,11 +2,13 @@ import {PackageJson} from 'type-fest';
 
 declare namespace meow {
 	type FlagType = 'string' | 'boolean' | 'number';
+	type IsRequiredPredicate = (flags: AnyFlags, input: string[]) => boolean;
 
 	interface Flag<Type extends FlagType, Default> {
 		readonly type?: Type;
 		readonly alias?: string;
 		readonly default?: Default;
+		readonly isRequired?: boolean | IsRequiredPredicate
 	}
 
 	type StringFlag = Flag<'string', string>;
@@ -24,6 +26,7 @@ declare namespace meow {
 		- `type`: Type of value. (Possible values: `string` `boolean` `number`)
 		- `alias`: Usually used to define a short flag alias.
 		- `default`: Default value when the flag is not specified.
+		- `isRequired`: Boolean or Function that specifies if this flag is required.
 
 		@example
 		```
@@ -32,6 +35,9 @@ declare namespace meow {
 				type: 'string',
 				alias: 'u',
 				default: 'rainbow'
+				isRequired: (flags, input) => {
+					if (flags.otherFlag) return true;
+				}
 			}
 		}
 		```
