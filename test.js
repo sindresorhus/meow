@@ -80,6 +80,51 @@ test('spawn cli and test input flag', async t => {
 	t.is(stdout, 'bar');
 });
 
+test('spawn cli and test required flag with missing args', async t => {
+	try {
+		await execa('./fixture-required.js', []);
+	} catch (error) {
+		const {stdout, message} = error;
+		t.regex(message, /Command failed with exit code 2/);
+		t.regex(stdout, /Missing required option/);
+		t.regex(stdout, /--test, -t/);
+		t.regex(stdout, /--number/);
+		t.notRegex(stdout, /--notRequired/);
+	}
+});
+
+test('spawn cli and test required flag with all args given', async t => {
+	const {stdout} = await execa('./fixture-required.js', [
+		'-t',
+		'test',
+		'--number',
+		'6'
+	]);
+	t.is(stdout, 'test,6');
+});
+
+test('spawn cli and test required flag with empty string', async t => {
+	try {
+		await execa('./fixture-required.js', ['--test', '']);
+	} catch (error) {
+		const {stdout, message} = error;
+		t.regex(message, /Command failed with exit code 2/);
+		t.regex(stdout, /Missing required option/);
+		t.notRegex(stdout, /--test, -t/);
+	}
+});
+
+test('spawn cli and test required flag with empty number', async t => {
+	try {
+		await execa('./fixture-required.js', ['--number']);
+	} catch (error) {
+		const {stdout, message} = error;
+		t.regex(message, /Command failed with exit code 2/);
+		t.regex(stdout, /Missing required option/);
+		t.regex(stdout, /--number/);
+	}
+});
+
 test.serial('pkg.bin as a string should work', t => {
 	meow({
 		pkg: {

@@ -51,6 +51,16 @@ const meow = (helpText, options) => {
 		options.flags
 	) : options.flags;
 
+	// Get a list of required flags
+	const requiredFlags = [];
+	if (typeof options.flags !== 'undefined') {
+		for (const flagName of Object.keys(options.flags)) {
+			if (options.flags[flagName].isRequired) {
+				requiredFlags.push(flagName);
+			}
+		}
+	}
+
 	let minimistoptions = {
 		arguments: options.input,
 		...minimistFlags
@@ -116,6 +126,24 @@ const meow = (helpText, options) => {
 		for (const flagValue of Object.values(options.flags)) {
 			delete flags[flagValue.alias];
 		}
+	}
+
+	// Get a list of missing flags, that are required
+	const missing = [];
+	for (const requiredFlag of requiredFlags) {
+		if (typeof flags[requiredFlag] === 'undefined') {
+			missing.push({key: requiredFlag, ...options.flags[requiredFlag]});
+		}
+	}
+
+	// Print error message for missing flags
+	if (missing.length > 0) {
+		console.log(`Missing required option${missing.length > 1 ? 's' : ''}`);
+		for (const flag of missing) {
+			console.log(`\t--${flag.key}${flag.alias ? `, -${flag.alias}` : ''}`);
+		}
+
+		process.exit(2);
 	}
 
 	return {
