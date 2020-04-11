@@ -9,6 +9,7 @@ const redent = require('redent');
 const readPkgUp = require('read-pkg-up');
 const hardRejection = require('hard-rejection');
 const normalizePackageData = require('normalize-package-data');
+const arrify = require('arrify');
 
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
@@ -26,6 +27,7 @@ const meow = (helpText, options) => {
 			normalize: false
 		}).packageJson || {},
 		argv: process.argv.slice(2),
+		flags: {},
 		inferType: false,
 		input: 'string',
 		help: helpText,
@@ -40,39 +42,57 @@ const meow = (helpText, options) => {
 		hardRejection();
 	}
 
-	const minimistFlags = options.flags && typeof options.booleanDefault !== 'undefined' ? Object.keys(options.flags).reduce(
-		(flags, flag) => {
-			if (flags[flag].type === 'boolean' && !Object.prototype.hasOwnProperty.call(flags[flag], 'default')) {
-				flags[flag].default = options.booleanDefault;
-			}
+	const minimistFlags = Object.entries(options.flags).reduce((flags, [flagKey, flagValue]) => {
+		const flag = {...flagValue};
+		const {booleanDefault} = options;
 
-			return flags;
-		},
-		options.flags
-	) : options.flags;
+		if (
+			typeof booleanDefault !== 'undefined' &&
+			flag.type === 'boolean' &&
+			!Object.prototype.hasOwnProperty.call(flag, 'default')
+		) {
+			flag.default = flag.multiple ? [booleanDefault] : booleanDefault;
+		}
 
-	let minimistoptions = {
+		if (flag.multiple) {
+			flag.type = 'array';
+			delete flag.multiple;
+		}
+
+		flags[flagKey] = flag;
+
+		return flags;
+	}, {});
+
+	let minimistOptions = {
 		arguments: options.input,
 		...minimistFlags
 	};
 
-	minimistoptions = decamelizeKeys(minimistoptions, '-', {exclude: ['stopEarly', '--']});
+	minimistOptions = decamelizeKeys(minimistOptions, '-', {exclude: ['stopEarly', '--']});
 
 	if (options.inferType) {
-		delete minimistoptions.arguments;
+		delete minimistOptions.arguments;
 	}
 
-	minimistoptions = buildMinimistOptions(minimistoptions);
+	minimistOptions = buildMinimistOptions(minimistOptions);
 
-	if (minimistoptions['--']) {
-		minimistoptions.configuration = {
-			...minimistoptions.configuration,
+	if (minimistOptions['--']) {
+		minimistOptions.configuration = {
+			...minimistOptions.configuration,
 			'populate--': true
 		};
 	}
 
+	if (minimistOptions.array !== undefined) {
+		minimistOptions.array = arrify(minimistOptions.array).map(flagKey => ({
+			key: flagKey,
+			[options.flags[flagKey].type || 'string']: true
+		}));
+	}
+
 	const {pkg} = options;
-	const argv = yargs(options.argv, minimistoptions);
+	const argv = yargs(options.argv, minimistOptions);
 	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(pkg);
@@ -112,10 +132,12 @@ const meow = (helpText, options) => {
 	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
 	const unnormalizedFlags = {...flags};
 
-	if (options.flags !== undefined) {
-		for (const flagValue of Object.values(options.flags)) {
-			delete flags[flagValue.alias];
+	for (const [flagKey, flagValue] of Object.entries(options.flags).filter(([key]) => key !== '--')) {
+		if (!flagValue.multiple && Array.isArray(flags[flagKey])) {
+			throw new Error(`Only one value allowed for --${flagKey}.`)
 		}
+
+		delete flags[flagValue.alias];
 	}
 
 	return {
