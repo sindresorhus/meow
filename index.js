@@ -51,28 +51,28 @@ const meow = (helpText, options) => {
 		options.flags
 	) : options.flags;
 
-	let minimistoptions = {
+	let minimistOptions = {
 		arguments: options.input,
 		...minimistFlags
 	};
 
-	minimistoptions = decamelizeKeys(minimistoptions, '-', {exclude: ['stopEarly', '--']});
+	minimistOptions = decamelizeKeys(minimistOptions, '-', {exclude: ['stopEarly', '--']});
 
 	if (options.inferType) {
-		delete minimistoptions.arguments;
+		delete minimistOptions.arguments;
 	}
 
-	minimistoptions = buildMinimistOptions(minimistoptions);
+	minimistOptions = buildMinimistOptions(minimistOptions);
 
-	if (minimistoptions['--']) {
-		minimistoptions.configuration = {
-			...minimistoptions.configuration,
+	if (minimistOptions['--']) {
+		minimistOptions.configuration = {
+			...minimistOptions.configuration,
 			'populate--': true
 		};
 	}
 
 	const {pkg} = options;
-	const argv = yargs(options.argv, minimistoptions);
+	const argv = yargs(options.argv, minimistOptions);
 	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(pkg);
