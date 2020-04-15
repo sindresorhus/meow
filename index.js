@@ -64,35 +64,35 @@ const meow = (helpText, options) => {
 		return flags;
 	}, {});
 
-	let minimistOptions = {
+	let minimistoptions = {
 		arguments: options.input,
 		...minimistFlags
 	};
 
-	minimistOptions = decamelizeKeys(minimistOptions, '-', {exclude: ['stopEarly', '--']});
+	minimistoptions = decamelizeKeys(minimistoptions, '-', {exclude: ['stopEarly', '--']});
 
 	if (options.inferType) {
-		delete minimistOptions.arguments;
+		delete minimistoptions.arguments;
 	}
 
-	minimistOptions = buildMinimistOptions(minimistOptions);
+	minimistoptions = buildMinimistOptions(minimistoptions);
 
-	if (minimistOptions['--']) {
-		minimistOptions.configuration = {
-			...minimistOptions.configuration,
+	if (minimistoptions['--']) {
+		minimistoptions.configuration = {
+			...minimistoptions.configuration,
 			'populate--': true
 		};
 	}
 
-	if (minimistOptions.array !== undefined) {
-		minimistOptions.array = arrify(minimistOptions.array).map(flagKey => ({
+	if (minimistoptions.array !== undefined) {
+		minimistoptions.array = arrify(minimistoptions.array).map(flagKey => ({
 			key: flagKey,
 			[options.flags[flagKey].type || 'string']: true
 		}));
 	}
 
 	const {pkg} = options;
-	const argv = yargs(options.argv, minimistOptions);
+	const argv = yargs(options.argv, minimistoptions);
 	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(pkg);
