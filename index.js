@@ -84,8 +84,8 @@ const meow = (helpText, options) => {
 		};
 	}
 
-	if (minimistoptions.array !== undefined) {
-		minimistoptions.array = arrify(minimistoptions.array).map(flagKey => ({
+	if (minimistOptions.array !== undefined) {
+		minimistOptions.array = arrify(minimistOptions.array).map(flagKey => ({
 			key: flagKey,
 			[options.flags[flagKey].type || 'string']: true
 		}));
