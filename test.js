@@ -360,7 +360,7 @@ test('single flag set more than once => throws', t => {
 				}
 			}
 		});
-	}, {message: 'Only one value allowed for --foo.'});
+	}, {message: 'The flag --foo can only be set once.'});
 });
 
 test('multiple boolean flag', t => {

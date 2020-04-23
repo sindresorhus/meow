@@ -134,7 +134,7 @@ const meow = (helpText, options) => {
 
 	for (const [flagKey, flagValue] of Object.entries(options.flags).filter(([key]) => key !== '--')) {
 		if (!flagValue.multiple && Array.isArray(flags[flagKey])) {
-			throw new Error(`Only one value allowed for --${flagKey}.`);
+			throw new Error(`The flag --${flagKey} can only be set once.`);
 		}
 
 		delete flags[flagValue.alias];
