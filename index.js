@@ -85,6 +85,11 @@ const meow = (helpText, options) => {
 	}
 
 	if (minimistOptions.array !== undefined) {
+		// `yargs` supports 'string|number|boolean' arrays,
+		// but `minimist-options` only support 'string' as element type.
+		// Convert to alternative syntax for coercing values to expected type,
+		// according to https://github.com/yargs/yargs-parser#requireyargs-parserargs-opts
+		// Open issue to add support to `minimist-options`: https://github.com/vadimdemedes/minimist-options/issues/18
 		minimistOptions.array = arrify(minimistOptions.array).map(flagKey => ({
 			key: flagKey,
 			[options.flags[flagKey].type || 'string']: true
