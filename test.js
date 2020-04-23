@@ -314,7 +314,7 @@ test('multiple flag set once returns array', t => {
 		flags: {
 			foo: {
 				type: 'string',
-				multiple: true
+				isMultiple: true
 			}
 		}
 	}).flags, {
@@ -328,7 +328,7 @@ test('multiple flag set multiple times', t => {
 		flags: {
 			foo: {
 				type: 'string',
-				multiple: true
+				isMultiple: true
 			}
 		}
 	}).flags, {
@@ -342,7 +342,7 @@ test('multiple flag with space separated values', t => {
 		flags: {
 			foo: {
 				type: 'string',
-				multiple: true
+				isMultiple: true
 			}
 		}
 	}).flags, {
@@ -369,7 +369,7 @@ test('multiple boolean flag', t => {
 		flags: {
 			foo: {
 				type: 'boolean',
-				multiple: true
+				isMultiple: true
 			}
 		}
 	}).flags, {
@@ -383,7 +383,7 @@ test('multiple boolean flag is false by default', t => {
 		flags: {
 			foo: {
 				type: 'boolean',
-				multiple: true
+				isMultiple: true
 			}
 		}
 	}).flags, {
@@ -398,11 +398,11 @@ test('multiple flag with `booleanDefault: undefined` => filter out unset boolean
 		flags: {
 			foo: {
 				type: 'boolean',
-				multiple: true
+				isMultiple: true
 			},
 			bar: {
 				type: 'boolean',
-				multiple: true
+				isMultiple: true
 			}
 		}
 	}).flags, {
@@ -416,7 +416,7 @@ test('multiple number flag', t => {
 		flags: {
 			foo: {
 				type: 'number',
-				multiple: true
+				isMultiple: true
 			}
 		}
 	}).flags, {
@@ -430,17 +430,17 @@ test('multiple flag default values', t => {
 		flags: {
 			string: {
 				type: 'string',
-				multiple: true,
+				isMultiple: true,
 				default: ['foo']
 			},
 			boolean: {
 				type: 'boolean',
-				multiple: true,
+				isMultiple: true,
 				default: [true]
 			},
 			number: {
 				type: 'number',
-				multiple: true,
+				isMultiple: true,
 				default: [0.5]
 			}
 		}

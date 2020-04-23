@@ -24,12 +24,12 @@ const buildMinimistFlags = ({flags, booleanDefault}) =>
 			flag.type === 'boolean' &&
 			!Object.prototype.hasOwnProperty.call(flag, 'default')
 		) {
-			flag.default = flag.multiple ? [booleanDefault] : booleanDefault;
+			flag.default = flag.isMultiple ? [booleanDefault] : booleanDefault;
 		}
 
-		if (flag.multiple) {
+		if (flag.isMultiple) {
 			flag.type = 'array';
-			delete flag.multiple;
+			delete flag.isMultiple;
 		}
 
 		minimistFlags[flagKey] = flag;
@@ -49,7 +49,7 @@ const convertToTypedArrayOption = (arrayOption, flags) =>
 
 const validateFlags = (flags, options) => {
 	for (const [flagKey, flagValue] of Object.entries(options.flags)) {
-		if (flagKey !== '--' && !flagValue.multiple && Array.isArray(flags[flagKey])) {
+		if (flagKey !== '--' && !flagValue.isMultiple && Array.isArray(flags[flagKey])) {
 			throw new Error(`The flag --${flagKey} can only be set once.`);
 		}
 	}
