@@ -97,7 +97,7 @@ The key is the flag name and the value is an object with any of:
 - `type`: Type of value. (Possible values: `string` `boolean` `number`)
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
-- `multiple`: Indicates a flag can be set multiple times. Returns an array. (Default: false)
+- `multiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 
 Example:
 

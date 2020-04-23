@@ -25,7 +25,7 @@ declare namespace meow {
 		- `type`: Type of value. (Possible values: `string` `boolean` `number`)
 		- `alias`: Usually used to define a short flag alias.
 		- `default`: Default value when the flag is not specified.
-		- `multiple`: Indicates a flag can be set multiple times. Returns an array. (Default: false)
+		- `multiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 
 		@example
 		```
@@ -177,12 +177,12 @@ declare namespace meow {
 
 	type TypedFlags<Flags extends AnyFlags> = {
 		[F in keyof Flags]: Flags[F] extends {type: 'number'}
-			? number
-			: Flags[F] extends {type: 'string'}
-				? string
-				: Flags[F] extends {type: 'boolean'}
-					? boolean
-					: unknown;
+		? number
+		: Flags[F] extends {type: 'string'}
+		? string
+		: Flags[F] extends {type: 'boolean'}
+		? boolean
+		: unknown;
 	};
 
 	interface Result<Flags extends AnyFlags> {
