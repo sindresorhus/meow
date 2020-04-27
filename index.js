@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const buildMinimistOptions = require('minimist-options');
+const buildParserOptions = require('minimist-options');
 const yargs = require('yargs-parser');
 const camelcaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
@@ -15,8 +15,8 @@ const arrify = require('arrify');
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
-const buildMinimistFlags = ({flags, booleanDefault}) =>
-	Object.entries(flags).reduce((minimistFlags, [flagKey, flagValue]) => {
+const buildParserFlags = ({flags, booleanDefault}) =>
+	Object.entries(flags).reduce((parserFlags, [flagKey, flagValue]) => {
 		const flag = {...flagValue};
 
 		if (
@@ -32,9 +32,9 @@ const buildMinimistFlags = ({flags, booleanDefault}) =>
 			delete flag.isMultiple;
 		}
 
-		minimistFlags[flagKey] = flag;
+		parserFlags[flagKey] = flag;
 
-		return minimistFlags;
+		return parserFlags;
 	}, {});
 
 /**
@@ -82,35 +82,35 @@ const meow = (helpText, options) => {
 		hardRejection();
 	}
 
-	let minimistOptions = {
+	let parserOptions = {
 		arguments: options.input,
-		...buildMinimistFlags(options)
+		...buildParserFlags(options)
 	};
 
-	minimistOptions = decamelizeKeys(minimistOptions, '-', {exclude: ['stopEarly', '--']});
+	parserOptions = decamelizeKeys(parserOptions, '-', {exclude: ['stopEarly', '--']});
 
 	if (options.inferType) {
-		delete minimistOptions.arguments;
+		delete parserOptions.arguments;
 	}
 
-	minimistOptions = buildMinimistOptions(minimistOptions);
+	parserOptions = buildParserOptions(parserOptions);
 
-	if (minimistOptions['--']) {
-		minimistOptions.configuration = {
-			...minimistOptions.configuration,
+	if (parserOptions['--']) {
+		parserOptions.configuration = {
+			...parserOptions.configuration,
 			'populate--': true
 		};
 	}
 
-	if (minimistOptions.array !== undefined) {
+	if (parserOptions.array !== undefined) {
 		// `yargs` supports 'string|number|boolean' arrays,
 		// but `minimist-options` only support 'string' as element type.
 		// Open issue to add support to `minimist-options`: https://github.com/vadimdemedes/minimist-options/issues/18.
-		minimistOptions.array = convertToTypedArrayOption(minimistOptions.array, options.flags);
+		parserOptions.array = convertToTypedArrayOption(parserOptions.array, options.flags);
 	}
 
 	const {pkg} = options;
-	const argv = yargs(options.argv, minimistOptions);
+	const argv = yargs(options.argv, parserOptions);
 	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(pkg);
