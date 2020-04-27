@@ -177,12 +177,12 @@ declare namespace meow {
 
 	type TypedFlags<Flags extends AnyFlags> = {
 		[F in keyof Flags]: Flags[F] extends {type: 'number'}
-		? number
-		: Flags[F] extends {type: 'string'}
-		? string
-		: Flags[F] extends {type: 'boolean'}
-		? boolean
-		: unknown;
+			? number
+			: Flags[F] extends {type: 'string'}
+				? string
+				: Flags[F] extends {type: 'boolean'}
+					? boolean
+					: unknown;
 	};
 
 	interface Result<Flags extends AnyFlags> {
