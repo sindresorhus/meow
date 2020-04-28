@@ -84,12 +84,12 @@ test('spawn cli and test required flag with missing args', async t => {
 	try {
 		await execa('./fixture-required.js', []);
 	} catch (error) {
-		const {stdout, message} = error;
+		const {stderr, message} = error;
 		t.regex(message, /Command failed with exit code 2/);
-		t.regex(stdout, /Missing required option/);
-		t.regex(stdout, /--test, -t/);
-		t.regex(stdout, /--number/);
-		t.notRegex(stdout, /--notRequired/);
+		t.regex(stderr, /Missing required flag/);
+		t.regex(stderr, /--test, -t/);
+		t.regex(stderr, /--number/);
+		t.notRegex(stderr, /--notRequired/);
 	}
 });
 
@@ -107,10 +107,10 @@ test('spawn cli and test required flag with empty string', async t => {
 	try {
 		await execa('./fixture-required.js', ['--test', '']);
 	} catch (error) {
-		const {stdout, message} = error;
+		const {stderr, message} = error;
 		t.regex(message, /Command failed with exit code 2/);
-		t.regex(stdout, /Missing required option/);
-		t.notRegex(stdout, /--test, -t/);
+		t.regex(stderr, /Missing required flag/);
+		t.notRegex(stderr, /--test, -t/);
 	}
 });
 
@@ -118,10 +118,10 @@ test('spawn cli and test required flag with empty number', async t => {
 	try {
 		await execa('./fixture-required.js', ['--number']);
 	} catch (error) {
-		const {stdout, message} = error;
+		const {stderr, message} = error;
 		t.regex(message, /Command failed with exit code 2/);
-		t.regex(stdout, /Missing required option/);
-		t.regex(stdout, /--number/);
+		t.regex(stderr, /Missing required flag/);
+		t.regex(stderr, /--number/);
 	}
 });
 
@@ -134,10 +134,10 @@ test('spawn cli and test required (specified as function) flag with trigger only
 	try {
 		await execa('./fixture-required-function.js', ['--trigger']);
 	} catch (error) {
-		const {stdout, message} = error;
+		const {stderr, message} = error;
 		t.regex(message, /Command failed with exit code 2/);
-		t.regex(stdout, /Missing required option/);
-		t.regex(stdout, /--withTrigger/);
+		t.regex(stderr, /Missing required flag/);
+		t.regex(stderr, /--withTrigger/);
 	}
 });
 
