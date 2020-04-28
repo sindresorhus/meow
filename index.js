@@ -14,6 +14,37 @@ const normalizePackageData = require('normalize-package-data');
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
+const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
+	const flag = definedFlags[flagName];
+	let isFlagRequired = true;
+
+	if (typeof flag.isRequired === 'function') {
+		isFlagRequired = flag.isRequired(receivedFlags, input);
+	}
+
+	return typeof receivedFlags[flagName] === 'undefined' && isFlagRequired;
+};
+
+const getMissingRequiredFlags = (flags, receivedFlags, input) => {
+	const missingRequiredFlags = [];
+	if (typeof flags !== 'undefined') {
+		for (const flagName of Object.keys(flags)) {
+			if (flags[flagName].isRequired && isFlagMissing(flagName, flags, receivedFlags, input)) {
+				missingRequiredFlags.push({key: flagName, ...flags[flagName]});
+			}
+		}
+	}
+
+	return missingRequiredFlags;
+};
+
+const reportMissingRequiredFlags = missingRequiredFlags => {
+	console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
+	for (const flag of missingRequiredFlags) {
+		console.error(`\t--${flag.key}${flag.alias ? `, -${flag.alias}` : ''}`);
+	}
+};
+
 const meow = (helpText, options) => {
 	if (typeof helpText !== 'string') {
 		options = helpText;
@@ -50,16 +81,6 @@ const meow = (helpText, options) => {
 		},
 		options.flags
 	) : options.flags;
-
-	// Get a list of required flags
-	const requiredFlags = [];
-	if (typeof options.flags !== 'undefined') {
-		for (const flagName of Object.keys(options.flags)) {
-			if (options.flags[flagName].isRequired) {
-				requiredFlags.push(flagName);
-			}
-		}
-	}
 
 	let parserOptions = {
 		arguments: options.input,
@@ -128,27 +149,12 @@ const meow = (helpText, options) => {
 		}
 	}
 
-	// Get a list of missing flags, that are required
-	const missingRequiredFlags = [];
-	for (const requiredFlag of requiredFlags) {
-		let requiredByFunction = true;
+	// Get a list of missing flags that are required
+	const missingRequiredFlags = getMissingRequiredFlags(options.flags, flags, input);
 
-		if (typeof options.flags[requiredFlag].isRequired === 'function') {
-			requiredByFunction = options.flags[requiredFlag].isRequired(flags, input);
-		}
-
-		if (typeof flags[requiredFlag] === 'undefined' && requiredByFunction) {
-			missingRequiredFlags.push({key: requiredFlag, ...options.flags[requiredFlag]});
-		}
-	}
-
-	// Print error message for missing flags
+	// Print error message for missing flags that are required
 	if (missingRequiredFlags.length > 0) {
-		console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
-		for (const flag of missingRequiredFlags) {
-			console.error(`\t--${flag.key}${flag.alias ? `, -${flag.alias}` : ''}`);
-		}
-
+		reportMissingRequiredFlags(missingRequiredFlags);
 		process.exit(2);
 	}
 
