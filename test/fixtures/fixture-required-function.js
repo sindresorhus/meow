@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-const meow = require('.');
+const meow = require('../..');
 
 const cli = meow({
 	description: 'Custom description',

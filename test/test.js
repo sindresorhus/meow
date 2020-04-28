@@ -1,8 +1,8 @@
 import test from 'ava';
 import indentString from 'indent-string';
 import execa from 'execa';
-import pkg from './package.json';
-import meow from '.';
+import pkg from '../package.json';
+import meow from '..';
 
 test('return object', t => {
 	const cli = meow({
@@ -36,53 +36,53 @@ test('support help shortcut', t => {
 });
 
 test('spawn cli and show version', async t => {
-	const {stdout} = await execa('./fixture.js', ['--version']);
+	const {stdout} = await execa('./test/fixtures/fixture.js', ['--version']);
 	t.is(stdout, pkg.version);
 });
 
 test('spawn cli and disabled autoVersion and autoHelp', async t => {
-	const {stdout} = await execa('./fixture.js', ['--version', '--help']);
+	const {stdout} = await execa('./test/fixtures/fixture.js', ['--version', '--help']);
 	t.is(stdout, 'version\nhelp\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and disabled autoVersion', async t => {
-	const {stdout} = await execa('./fixture.js', ['--version', '--no-auto-version']);
+	const {stdout} = await execa('./test/fixtures/fixture.js', ['--version', '--no-auto-version']);
 	t.is(stdout, 'version\nautoVersion\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and not show version', async t => {
-	const {stdout} = await execa('./fixture.js', ['--version=beta']);
+	const {stdout} = await execa('./test/fixtures/fixture.js', ['--version=beta']);
 	t.is(stdout, 'version\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and show help screen', async t => {
-	const {stdout} = await execa('./fixture.js', ['--help']);
+	const {stdout} = await execa('./test/fixtures/fixture.js', ['--help']);
 	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2));
 });
 
 test('spawn cli and disabled autoHelp', async t => {
-	const {stdout} = await execa('./fixture.js', ['--help', '--no-auto-help']);
+	const {stdout} = await execa('./test/fixtures/fixture.js', ['--help', '--no-auto-help']);
 	t.is(stdout, 'help\nautoHelp\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and not show help', async t => {
-	const {stdout} = await execa('./fixture.js', ['--help=all']);
+	const {stdout} = await execa('./test/fixtures/fixture.js', ['--help=all']);
 	t.is(stdout, 'help\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and test input', async t => {
-	const {stdout} = await execa('./fixture.js', ['-u', 'cat']);
+	const {stdout} = await execa('./test/fixtures/fixture.js', ['-u', 'cat']);
 	t.is(stdout, 'unicorn\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and test input flag', async t => {
-	const {stdout} = await execa('./fixture.js', ['--camel-case-option', 'bar']);
+	const {stdout} = await execa('./test/fixtures/fixture.js', ['--camel-case-option', 'bar']);
 	t.is(stdout, 'bar');
 });
 
 test('spawn cli and test required flag with missing args', async t => {
 	try {
-		await execa('./fixture-required.js', []);
+		await execa('./test/fixtures/fixture-required.js', []);
 	} catch (error) {
 		const {stderr, message} = error;
 		t.regex(message, /Command failed with exit code 2/);
@@ -94,7 +94,7 @@ test('spawn cli and test required flag with missing args', async t => {
 });
 
 test('spawn cli and test required flag with all args given', async t => {
-	const {stdout} = await execa('./fixture-required.js', [
+	const {stdout} = await execa('./test/fixtures/fixture-required.js', [
 		'-t',
 		'test',
 		'--number',
@@ -105,7 +105,7 @@ test('spawn cli and test required flag with all args given', async t => {
 
 test('spawn cli and test required flag with empty string', async t => {
 	try {
-		await execa('./fixture-required.js', ['--test', '']);
+		await execa('./test/fixtures/fixture-required.js', ['--test', '']);
 	} catch (error) {
 		const {stderr, message} = error;
 		t.regex(message, /Command failed with exit code 2/);
@@ -116,7 +116,7 @@ test('spawn cli and test required flag with empty string', async t => {
 
 test('spawn cli and test required flag with empty number', async t => {
 	try {
-		await execa('./fixture-required.js', ['--number']);
+		await execa('./test/fixtures/fixture-required.js', ['--number']);
 	} catch (error) {
 		const {stderr, message} = error;
 		t.regex(message, /Command failed with exit code 2/);
@@ -126,13 +126,13 @@ test('spawn cli and test required flag with empty number', async t => {
 });
 
 test('spawn cli and test required (specified as function) flag with without arguments', async t => {
-	const {stdout} = await execa('./fixture-required-function.js', []);
+	const {stdout} = await execa('./test/fixtures/fixture-required-function.js', []);
 	t.is(stdout, 'false,undefined');
 });
 
 test('spawn cli and test required (specified as function) flag with trigger only', async t => {
 	try {
-		await execa('./fixture-required-function.js', ['--trigger']);
+		await execa('./test/fixtures/fixture-required-function.js', ['--trigger']);
 	} catch (error) {
 		const {stderr, message} = error;
 		t.regex(message, /Command failed with exit code 2/);
@@ -142,7 +142,7 @@ test('spawn cli and test required (specified as function) flag with trigger only
 });
 
 test('spawn cli and test required (specified as function) flag with trigger and dynamically required option', async t => {
-	const {stdout} = await execa('./fixture-required-function.js', ['--trigger', '--withTrigger', 'specified']);
+	const {stdout} = await execa('./test/fixtures/fixture-required-function.js', ['--trigger', '--withTrigger', 'specified']);
 	t.is(stdout, 'true,specified');
 });
 

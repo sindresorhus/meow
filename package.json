@@ -63,5 +63,10 @@
 		"rules": {
 			"unicorn/no-process-exit": "off"
 		}
+	},
+	"ava": {
+		"files": [
+			"test/*"
+		]
 	}
 }
