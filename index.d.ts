@@ -30,6 +30,7 @@ declare namespace meow {
 			Two arguments are passed to the function.
 			The first arguments is the flags object, it contains the flags converted to camelCase excluding aliases.
 			The second arugment is the input string array, it contains the non-flag arguments.
+			The function should return a Boolean, true if the flag is requried, otherwise false.
 
 		@example
 		```
