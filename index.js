@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const buildMinimistOptions = require('minimist-options');
+const buildParserOptions = require('minimist-options');
 const yargs = require('yargs-parser');
 const camelcaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
@@ -40,7 +40,7 @@ const meow = (helpText, options) => {
 		hardRejection();
 	}
 
-	const minimistFlags = options.flags && typeof options.booleanDefault !== 'undefined' ? Object.keys(options.flags).reduce(
+	const parserFlags = options.flags && typeof options.booleanDefault !== 'undefined' ? Object.keys(options.flags).reduce(
 		(flags, flag) => {
 			if (flags[flag].type === 'boolean' && !Object.prototype.hasOwnProperty.call(flags[flag], 'default')) {
 				flags[flag].default = options.booleanDefault;
@@ -61,28 +61,28 @@ const meow = (helpText, options) => {
 		}
 	}
 
-	let minimistoptions = {
+	let parserOptions = {
 		arguments: options.input,
-		...minimistFlags
+		...parserFlags
 	};
 
-	minimistoptions = decamelizeKeys(minimistoptions, '-', {exclude: ['stopEarly', '--']});
+	parserOptions = decamelizeKeys(parserOptions, '-', {exclude: ['stopEarly', '--']});
 
 	if (options.inferType) {
-		delete minimistoptions.arguments;
+		delete parserOptions.arguments;
 	}
 
-	minimistoptions = buildMinimistOptions(minimistoptions);
+	parserOptions = buildParserOptions(parserOptions);
 
-	if (minimistoptions['--']) {
-		minimistoptions.configuration = {
-			...minimistoptions.configuration,
+	if (parserOptions['--']) {
+		parserOptions.configuration = {
+			...parserOptions.configuration,
 			'populate--': true
 		};
 	}
 
 	const {pkg} = options;
-	const argv = yargs(options.argv, minimistoptions);
+	const argv = yargs(options.argv, parserOptions);
 	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(pkg);
