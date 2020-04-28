@@ -97,7 +97,10 @@ The key is the flag name and the value is an object with any of:
 - `type`: Type of value. (Possible values: `string` `boolean` `number`)
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
-- `isRequired`: Boolean or Function that specified is this flag is required.
+- `isRequired`: Boolean or Function that specifies if this flag is required.
+	Two arguments are passed to the function.
+	The first arguments is the **flags** object, it contains the flags converted to camelCase excluding aliases.
+	The second arugment is the **input** string array, it contains the non-flag arguments.
 
 Example:
 
@@ -108,7 +111,9 @@ flags: {
 		alias: 'u',
 		default: 'rainbow'
 		isRequired: (flags, input) => {
-			if (flags.otherFlag) return true;
+			if (flags.otherFlag) {
+				return true;
+			}
 		}
 	}
 }
