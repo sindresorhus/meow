@@ -3,6 +3,9 @@ import indentString from 'indent-string';
 import execa from 'execa';
 import pkg from '../package.json';
 import meow from '..';
+const path = require('path');
+
+const fixturePath = path.join(__dirname, 'fixtures', 'fixture.js');
 
 test('return object', t => {
 	const cli = meow({
@@ -36,47 +39,47 @@ test('support help shortcut', t => {
 });
 
 test('spawn cli and show version', async t => {
-	const {stdout} = await execa('./test/fixtures/fixture.js', ['--version']);
+	const {stdout} = await execa(fixturePath, ['--version']);
 	t.is(stdout, pkg.version);
 });
 
 test('spawn cli and disabled autoVersion and autoHelp', async t => {
-	const {stdout} = await execa('./test/fixtures/fixture.js', ['--version', '--help']);
+	const {stdout} = await execa(fixturePath, ['--version', '--help']);
 	t.is(stdout, 'version\nhelp\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and disabled autoVersion', async t => {
-	const {stdout} = await execa('./test/fixtures/fixture.js', ['--version', '--no-auto-version']);
+	const {stdout} = await execa(fixturePath, ['--version', '--no-auto-version']);
 	t.is(stdout, 'version\nautoVersion\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and not show version', async t => {
-	const {stdout} = await execa('./test/fixtures/fixture.js', ['--version=beta']);
+	const {stdout} = await execa(fixturePath, ['--version=beta']);
 	t.is(stdout, 'version\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and show help screen', async t => {
-	const {stdout} = await execa('./test/fixtures/fixture.js', ['--help']);
+	const {stdout} = await execa(fixturePath, ['--help']);
 	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2));
 });
 
 test('spawn cli and disabled autoHelp', async t => {
-	const {stdout} = await execa('./test/fixtures/fixture.js', ['--help', '--no-auto-help']);
+	const {stdout} = await execa(fixturePath, ['--help', '--no-auto-help']);
 	t.is(stdout, 'help\nautoHelp\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and not show help', async t => {
-	const {stdout} = await execa('./test/fixtures/fixture.js', ['--help=all']);
+	const {stdout} = await execa(fixturePath, ['--help=all']);
 	t.is(stdout, 'help\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and test input', async t => {
-	const {stdout} = await execa('./test/fixtures/fixture.js', ['-u', 'cat']);
+	const {stdout} = await execa(fixturePath, ['-u', 'cat']);
 	t.is(stdout, 'unicorn\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and test input flag', async t => {
-	const {stdout} = await execa('./test/fixtures/fixture.js', ['--camel-case-option', 'bar']);
+	const {stdout} = await execa(fixturePath, ['--camel-case-option', 'bar']);
 	t.is(stdout, 'bar');
 });
 
