@@ -78,7 +78,7 @@ declare namespace meow {
 		readonly autoVersion?: boolean;
 
 		/**
-		package.json as an `Object`. Default: Closest package.json upwards.
+		`package.json` as an `Object`. Default: Closest `package.json` upwards.
 
 		_You most likely don't need this option._
 		*/
@@ -89,7 +89,7 @@ declare namespace meow {
 
 		@default process.argv.slice(2)
 		*/
-		readonly argv?: ReadonlyArray<string>;
+		readonly argv?: readonly string[];
 
 		/**
 		Infer the argument type.
@@ -213,12 +213,12 @@ declare namespace meow {
 
 		@param exitCode - The exit code to use. Default: `2`.
 		*/
-		showHelp(exitCode?: number): void;
+		showHelp: (exitCode?: number) => void;
 
 		/**
 		Show the version text and exit.
 		*/
-		showVersion(): void;
+		showVersion: () => void;
 	}
 }
 /**
