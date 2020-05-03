@@ -26,11 +26,51 @@ $ npm install meow
 $ ./foo-app.js unicorns --rainbow
 ```
 
+**CommonJS**
+
 ```js
 #!/usr/bin/env node
 'use strict';
 const meow = require('meow');
 const foo = require('.');
+
+const cli = meow(`
+	Usage
+	  $ foo <input>
+
+	Options
+	  --rainbow, -r  Include a rainbow
+
+	Examples
+	  $ foo unicorns --rainbow
+	  🌈 unicorns 🌈
+`, {
+	flags: {
+		rainbow: {
+			type: 'boolean',
+			alias: 'r'
+		}
+	}
+});
+/*
+{
+	input: ['unicorns'],
+	flags: {rainbow: true},
+	...
+}
+*/
+
+foo(cli.input[0], cli.flags);
+```
+
+**ES Modules**
+
+```js
+#!/usr/bin/env node
+import {createRequire} from 'module';
+import foo from './lib/index.js';
+
+const meow = createRequire(import.meta.url)('meow');
 
 const cli = meow(`
 	Usage
