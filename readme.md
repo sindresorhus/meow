@@ -67,10 +67,10 @@ foo(cli.input[0], cli.flags);
 
 ```js
 #!/usr/bin/env node
-import { createRequire } from "module";
+import {createRequire} from 'module';
 import foo from './lib/index.js';
 
-const meow = createRequire(import.meta.url)("meow");
+const meow = createRequire(import.meta.url)('meow');
 
 const cli = meow(`
 	Usage
