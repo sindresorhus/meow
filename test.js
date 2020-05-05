@@ -1,8 +1,11 @@
 import test from 'ava';
 import indentString from 'indent-string';
 import execa from 'execa';
+import path from 'path';
 import pkg from './package.json';
 import meow from '.';
+
+const NODE_MAJOR_VERSION = process.versions.node.split('.')[0];
 
 test('return object', t => {
 	const cli = meow({
@@ -477,3 +480,16 @@ test('isMultiple - multiple flag default values', t => {
 		number: [0.5, 1]
 	});
 });
+
+if (NODE_MAJOR_VERSION >= 14) {
+	test('supports es modules', async t => {
+		try {
+			const {stdout} = await execa('node', ['index.js', '--version'], {
+				cwd: path.join(__dirname, 'estest')
+			});
+			t.regex(stdout, /1.2.3/);
+		} catch (error) {
+			t.is(error, undefined);
+		}
+	});
+}
