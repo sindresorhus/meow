@@ -308,7 +308,7 @@ test('supports `number` flag type - throws on incorrect default value', t => {
 	});
 });
 
-test('multiple flag set once returns array', t => {
+test('isMultiple - flag set once returns array', t => {
 	t.deepEqual(meow({
 		argv: ['--foo=bar'],
 		flags: {
@@ -322,7 +322,7 @@ test('multiple flag set once returns array', t => {
 	});
 });
 
-test('multiple flag set multiple times', t => {
+test('isMultiple - flag set multiple times', t => {
 	t.deepEqual(meow({
 		argv: ['--foo=bar', '--foo=baz'],
 		flags: {
@@ -336,7 +336,7 @@ test('multiple flag set multiple times', t => {
 	});
 });
 
-test('multiple flag with space separated values', t => {
+test('isMultiple - flag with space separated values', t => {
 	t.deepEqual(meow({
 		argv: ['--foo', 'bar', 'baz'],
 		flags: {
@@ -363,7 +363,7 @@ test('single flag set more than once => throws', t => {
 	}, {message: 'The flag --foo can only be set once.'});
 });
 
-test('multiple boolean flag', t => {
+test('isMultiple - boolean flag', t => {
 	t.deepEqual(meow({
 		argv: ['--foo', '--foo=false'],
 		flags: {
@@ -377,7 +377,7 @@ test('multiple boolean flag', t => {
 	});
 });
 
-test('multiple boolean flag is false by default', t => {
+test('isMultiple - boolean flag is false by default', t => {
 	t.deepEqual(meow({
 		argv: [],
 		flags: {
@@ -391,7 +391,7 @@ test('multiple boolean flag is false by default', t => {
 	});
 });
 
-test('multiple flag with `booleanDefault: undefined` => filter out unset boolean args', t => {
+test('isMultiple - flag with `booleanDefault: undefined` => filter out unset boolean args', t => {
 	t.deepEqual(meow({
 		argv: ['--foo'],
 		booleanDefault: undefined,
@@ -410,7 +410,7 @@ test('multiple flag with `booleanDefault: undefined` => filter out unset boolean
 	});
 });
 
-test('multiple number flag', t => {
+test('isMultiple - number flag', t => {
 	t.deepEqual(meow({
 		argv: ['--foo=1.3', '--foo=-1'],
 		flags: {
@@ -424,7 +424,7 @@ test('multiple number flag', t => {
 	});
 });
 
-test('multiple flag default values', t => {
+test('isMultiple - flag default values', t => {
 	t.deepEqual(meow({
 		argv: [],
 		flags: {
