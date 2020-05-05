@@ -38,9 +38,8 @@ const buildParserFlags = ({flags, booleanDefault}) =>
 	}, {});
 
 /**
- * Convert to alternative syntax for coercing values to expected type,
- * according to https://github.com/yargs/yargs-parser#requireyargs-parserargs-opts.
- */
+Convert to alternative syntax for coercing values to expected type, according to https://github.com/yargs/yargs-parser#requireyargs-parserargs-opts.
+*/
 const convertToTypedArrayOption = (arrayOption, flags) =>
 	arrify(arrayOption).map(flagKey => ({
 		key: flagKey,
