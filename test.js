@@ -450,3 +450,30 @@ test('isMultiple - flag default values', t => {
 		number: [0.5]
 	});
 });
+
+test('isMultiple - multiple flag default values', t => {
+	t.deepEqual(meow({
+		argv: [],
+		flags: {
+			string: {
+				type: 'string',
+				isMultiple: true,
+				default: ['foo', 'bar']
+			},
+			boolean: {
+				type: 'boolean',
+				isMultiple: true,
+				default: [true, false]
+			},
+			number: {
+				type: 'number',
+				isMultiple: true,
+				default: [0.5, 1]
+			}
+		}
+	}).flags, {
+		string: ['foo', 'bar'],
+		boolean: [true, false],
+		number: [0.5, 1]
+	});
+});
