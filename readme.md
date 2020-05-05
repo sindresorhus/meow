@@ -137,6 +137,7 @@ The key is the flag name and the value is an object with any of:
 - `type`: Type of value. (Possible values: `string` `boolean` `number`)
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
+- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 
 Example:
 
@@ -145,7 +146,8 @@ flags: {
 	unicorn: {
 		type: 'string',
 		alias: 'u',
-		default: 'rainbow'
+		default: ['rainbow', 'cat'],
+		isMultiple: true
 	}
 }
 ```

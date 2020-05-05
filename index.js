@@ -9,10 +9,50 @@ const redent = require('redent');
 const readPkgUp = require('read-pkg-up');
 const hardRejection = require('hard-rejection');
 const normalizePackageData = require('normalize-package-data');
+const arrify = require('arrify');
 
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
+
+const buildParserFlags = ({flags, booleanDefault}) =>
+	Object.entries(flags).reduce((parserFlags, [flagKey, flagValue]) => {
+		const flag = {...flagValue};
+
+		if (
+			typeof booleanDefault !== 'undefined' &&
+			flag.type === 'boolean' &&
+			!Object.prototype.hasOwnProperty.call(flag, 'default')
+		) {
+			flag.default = flag.isMultiple ? [booleanDefault] : booleanDefault;
+		}
+
+		if (flag.isMultiple) {
+			flag.type = 'array';
+			delete flag.isMultiple;
+		}
+
+		parserFlags[flagKey] = flag;
+
+		return parserFlags;
+	}, {});
+
+/**
+Convert to alternative syntax for coercing values to expected type, according to https://github.com/yargs/yargs-parser#requireyargs-parserargs-opts.
+*/
+const convertToTypedArrayOption = (arrayOption, flags) =>
+	arrify(arrayOption).map(flagKey => ({
+		key: flagKey,
+		[flags[flagKey].type || 'string']: true
+	}));
+
+const validateFlags = (flags, options) => {
+	for (const [flagKey, flagValue] of Object.entries(options.flags)) {
+		if (flagKey !== '--' && !flagValue.isMultiple && Array.isArray(flags[flagKey])) {
+			throw new Error(`The flag --${flagKey} can only be set once.`);
+		}
+	}
+};
 
 const meow = (helpText, options) => {
 	if (typeof helpText !== 'string') {
@@ -26,6 +66,7 @@ const meow = (helpText, options) => {
 			normalize: false
 		}).packageJson || {},
 		argv: process.argv.slice(2),
+		flags: {},
 		inferType: false,
 		input: 'string',
 		help: helpText,
@@ -40,20 +81,9 @@ const meow = (helpText, options) => {
 		hardRejection();
 	}
 
-	const parserFlags = options.flags && typeof options.booleanDefault !== 'undefined' ? Object.keys(options.flags).reduce(
-		(flags, flag) => {
-			if (flags[flag].type === 'boolean' && !Object.prototype.hasOwnProperty.call(flags[flag], 'default')) {
-				flags[flag].default = options.booleanDefault;
-			}
-
-			return flags;
-		},
-		options.flags
-	) : options.flags;
-
 	let parserOptions = {
 		arguments: options.input,
-		...parserFlags
+		...buildParserFlags(options)
 	};
 
 	parserOptions = decamelizeKeys(parserOptions, '-', {exclude: ['stopEarly', '--']});
@@ -69,6 +99,13 @@ const meow = (helpText, options) => {
 			...parserOptions.configuration,
 			'populate--': true
 		};
+	}
+
+	if (parserOptions.array !== undefined) {
+		// `yargs` supports 'string|number|boolean' arrays,
+		// but `minimist-options` only support 'string' as element type.
+		// Open issue to add support to `minimist-options`: https://github.com/vadimdemedes/minimist-options/issues/18.
+		parserOptions.array = convertToTypedArrayOption(parserOptions.array, options.flags);
 	}
 
 	const {pkg} = options;
@@ -112,10 +149,10 @@ const meow = (helpText, options) => {
 	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
 	const unnormalizedFlags = {...flags};
 
-	if (options.flags !== undefined) {
-		for (const flagValue of Object.values(options.flags)) {
-			delete flags[flagValue.alias];
-		}
+	validateFlags(flags, options);
+
+	for (const flagValue of Object.values(options.flags)) {
+		delete flags[flagValue.alias];
 	}
 
 	return {

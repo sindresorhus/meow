@@ -7,6 +7,7 @@ declare namespace meow {
 		readonly type?: Type;
 		readonly alias?: string;
 		readonly default?: Default;
+		readonly isMultiple?: boolean;
 	}
 
 	type StringFlag = Flag<'string', string>;
@@ -24,6 +25,7 @@ declare namespace meow {
 		- `type`: Type of value. (Possible values: `string` `boolean` `number`)
 		- `alias`: Usually used to define a short flag alias.
 		- `default`: Default value when the flag is not specified.
+		- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 
 		@example
 		```
@@ -31,7 +33,8 @@ declare namespace meow {
 			unicorn: {
 				type: 'string',
 				alias: 'u',
-				default: 'rainbow'
+				default: ['rainbow', 'cat'],
+				isMultiple: true
 			}
 		}
 		```
