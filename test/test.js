@@ -486,7 +486,7 @@ if (NODE_MAJOR_VERSION >= 14) {
 	test('supports es modules', async t => {
 		try {
 			const {stdout} = await execa('node', ['index.js', '--version'], {
-				cwd: path.join(__dirname, 'estest')
+				cwd: path.join(__dirname, '..', 'estest')
 			});
 			t.regex(stdout, /1.2.3/);
 		} catch (error) {
