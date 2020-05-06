@@ -9,6 +9,7 @@ declare namespace meow {
 		readonly alias?: string;
 		readonly default?: Default;
 		readonly isRequired?: boolean | IsRequiredPredicate
+		readonly isMultiple?: boolean;
 	}
 
 	type StringFlag = Flag<'string', string>;
@@ -31,6 +32,7 @@ declare namespace meow {
 			The first arguments is the flags object, it contains the flags converted to camelCase excluding aliases.
 			The second arugment is the input string array, it contains the non-flag arguments.
 			The function should return a Boolean, true if the flag is requried, otherwise false.
+		- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 
 		@example
 		```
@@ -38,7 +40,8 @@ declare namespace meow {
 			unicorn: {
 				type: 'string',
 				alias: 'u',
-				default: 'rainbow'
+				default: ['rainbow', 'cat'],
+				isMultiple: true,
 				isRequired: (flags, input) => {
 					if (flags.otherFlag) {
 						return true;
@@ -90,7 +93,7 @@ declare namespace meow {
 		readonly autoVersion?: boolean;
 
 		/**
-		package.json as an `Object`. Default: Closest package.json upwards.
+		`package.json` as an `Object`. Default: Closest `package.json` upwards.
 
 		_You most likely don't need this option._
 		*/
@@ -101,7 +104,7 @@ declare namespace meow {
 
 		@default process.argv.slice(2)
 		*/
-		readonly argv?: ReadonlyArray<string>;
+		readonly argv?: readonly string[];
 
 		/**
 		Infer the argument type.
@@ -225,12 +228,12 @@ declare namespace meow {
 
 		@param exitCode - The exit code to use. Default: `2`.
 		*/
-		showHelp(exitCode?: number): void;
+		showHelp: (exitCode?: number) => void;
 
 		/**
 		Show the version text and exit.
 		*/
-		showVersion(): void;
+		showVersion: () => void;
 	}
 }
 /**
