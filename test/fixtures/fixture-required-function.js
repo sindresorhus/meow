@@ -18,6 +18,20 @@ const cli = meow({
 			isRequired: (flags, _) => {
 				return flags.trigger;
 			}
+		},
+		allowError: {
+			type: 'boolean',
+			alias: 'a'
+		},
+		shouldError: {
+			type: 'boolean',
+			isRequired: (flags, _) => {
+				if (flags.allowError) {
+					return 'should error';
+				}
+
+				return false;
+			}
 		}
 	}
 });

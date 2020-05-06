@@ -70,3 +70,13 @@ test('spawn cli and test setting isRequired as a function and specifying both th
 	const {stdout} = await execa(fixtureRequiredFunctionPath, ['--trigger', '--withTrigger', 'specified']);
 	t.is(stdout, 'true,specified');
 });
+
+test('spawn cli and test setting isRequired as a function and check if returning a non-boolean value throws an error', async t => {
+	try {
+		await execa(fixtureRequiredFunctionPath, ['--allowError', '--shouldError', 'specified']);
+	} catch (error) {
+		const {stderr, message} = error;
+		t.regex(message, /Command failed with exit code 1/);
+		t.regex(stderr, /Return value for isRequired callback should be of type boolean, but string was returned./);
+	}
+});
