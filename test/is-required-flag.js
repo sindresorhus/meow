@@ -4,6 +4,7 @@ const path = require('path');
 
 const fixtureRequiredPath = path.join(__dirname, 'fixtures', 'fixture-required.js');
 const fixtureRequiredFunctionPath = path.join(__dirname, 'fixtures', 'fixture-required-function.js');
+const fixtureRequiredMultiplePath = path.join(__dirname, 'fixtures', 'fixture-required-multiple.js');
 
 test('spawn cli and test not specifying required flags', async t => {
 	try {
@@ -78,5 +79,37 @@ test('spawn cli and test setting isRequired as a function and check if returning
 		const {stderr, message} = error;
 		t.regex(message, /Command failed with exit code 1/);
 		t.regex(stderr, /Return value for isRequired callback should be of type boolean, but string was returned./);
+	}
+});
+
+test('spawn cli and test isRequired with isMultiple giving a single value', async t => {
+	const {stdout} = await execa(fixtureRequiredMultiplePath, ['--test', '1']);
+	t.is(stdout, '[ 1 ]');
+});
+
+test('spawn cli and test isRequired with isMultiple giving a multiple values', async t => {
+	const {stdout} = await execa(fixtureRequiredMultiplePath, ['--test', '1', '2', '3']);
+	t.is(stdout, '[ 1, 2, 3 ]');
+});
+
+test('spawn cli and test isRequired with isMultiple giving no values, but flag is given', async t => {
+	try {
+		await execa(fixtureRequiredMultiplePath, ['--test']);
+	} catch (error) {
+		const {stderr, message} = error;
+		t.regex(message, /Command failed with exit code 2/);
+		t.regex(stderr, /Missing required flag/);
+		t.regex(stderr, /--test/);
+	}
+});
+
+test('spawn cli and test isRequired with isMultiple giving no values, but flag is not given', async t => {
+	try {
+		await execa(fixtureRequiredMultiplePath, []);
+	} catch (error) {
+		const {stderr, message} = error;
+		t.regex(message, /Command failed with exit code 2/);
+		t.regex(stderr, /Missing required flag/);
+		t.regex(stderr, /--test/);
 	}
 });
