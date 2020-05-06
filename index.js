@@ -21,6 +21,9 @@ const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
 
 	if (typeof flag.isRequired === 'function') {
 		isFlagRequired = flag.isRequired(receivedFlags, input);
+		if (typeof isFlagRequired !== 'boolean') {
+			throw new TypeError(`Return value for isRequired callback should be of type boolean, but ${typeof isFlagRequired} was returned.`);
+		}
 	}
 
 	return typeof receivedFlags[flagName] === 'undefined' && isFlagRequired;
@@ -28,11 +31,13 @@ const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
 
 const getMissingRequiredFlags = (flags, receivedFlags, input) => {
 	const missingRequiredFlags = [];
-	if (typeof flags !== 'undefined') {
-		for (const flagName of Object.keys(flags)) {
-			if (flags[flagName].isRequired && isFlagMissing(flagName, flags, receivedFlags, input)) {
-				missingRequiredFlags.push({key: flagName, ...flags[flagName]});
-			}
+	if (typeof flags === 'undefined') {
+		return [];
+	}
+
+	for (const flagName of Object.keys(flags)) {
+		if (flags[flagName].isRequired && isFlagMissing(flagName, flags, receivedFlags, input)) {
+			missingRequiredFlags.push({key: flagName, ...flags[flagName]});
 		}
 	}
 
