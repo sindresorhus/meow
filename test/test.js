@@ -2,8 +2,8 @@ import test from 'ava';
 import indentString from 'indent-string';
 import execa from 'execa';
 import path from 'path';
-import pkg from './package.json';
-import meow from '.';
+import pkg from '../package.json';
+import meow from '..';
 
 const fixturePath = path.join(__dirname, 'fixtures', 'fixture.js');
 const NODE_MAJOR_VERSION = process.versions.node.split('.')[0];

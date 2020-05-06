@@ -43,6 +43,8 @@ const reportMissingRequiredFlags = missingRequiredFlags => {
 	console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
 	for (const flag of missingRequiredFlags) {
 		console.error(`\t--${flag.key}${flag.alias ? `, -${flag.alias}` : ''}`);
+	}
+};
 
 const buildParserFlags = ({flags, booleanDefault}) =>
 	Object.entries(flags).reduce((parserFlags, [flagKey, flagValue]) => {

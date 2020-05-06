@@ -2,13 +2,13 @@ import {PackageJson} from 'type-fest';
 
 declare namespace meow {
 	type FlagType = 'string' | 'boolean' | 'number';
-	type IsRequiredPredicate = (flags: AnyFlags, input: string[]) => boolean;
+	type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
 
 	interface Flag<Type extends FlagType, Default> {
 		readonly type?: Type;
 		readonly alias?: string;
 		readonly default?: Default;
-		readonly isRequired?: boolean | IsRequiredPredicate
+		readonly isRequired?: boolean | IsRequiredPredicate;
 		readonly isMultiple?: boolean;
 	}
 
