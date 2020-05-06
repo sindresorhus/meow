@@ -2,6 +2,14 @@ import {PackageJson} from 'type-fest';
 
 declare namespace meow {
 	type FlagType = 'string' | 'boolean' | 'number';
+	/**
+	Callback function to determine if a flag is required during runtime
+
+	@param flags - Contains the flags converted to camelCase excluding aliases.
+	@param input - Contains the non-flag arguments.
+
+	@returns True if the flag is required, otherwise false.
+	*/
 	type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
 
 	interface Flag<Type extends FlagType, Default> {
@@ -27,11 +35,8 @@ declare namespace meow {
 		- `type`: Type of value. (Possible values: `string` `boolean` `number`)
 		- `alias`: Usually used to define a short flag alias.
 		- `default`: Default value when the flag is not specified.
-		- `isRequired`: Boolean or Function that specifies if this flag is required.
-			Two arguments are passed to the function.
-			The first arguments is the flags object, it contains the flags converted to camelCase excluding aliases.
-			The second arugment is the input string array, it contains the non-flag arguments.
-			The function should return a Boolean, true if the flag is requried, otherwise false.
+		- `isRequired`: Determine if the flag is required.
+			If it's only known at runtime whether the flag is requried or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
 		- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 
 		@example
@@ -46,6 +51,7 @@ declare namespace meow {
 					if (flags.otherFlag) {
 						return true;
 					}
+					return false;
 				}
 			}
 		}

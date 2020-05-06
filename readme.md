@@ -137,11 +137,12 @@ The key is the flag name and the value is an object with any of:
 - `type`: Type of value. (Possible values: `string` `boolean` `number`)
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
-- `isRequired`: Boolean or Function that specifies if this flag is required.
+- `isRequired`: Determine if the flag is required.
+	If it's only known at runtime whether the flag is requried or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
 	Two arguments are passed to the function.
-	The first arguments is the **flags** object, it contains the flags converted to camelCase excluding aliases.
-	The second arugment is the **input** string array, it contains the non-flag arguments.
-	The function should return a Boolean, true if the flag is requried, otherwise false.
+	The first argument is the **flags** object, it contains the flags converted to camelCase excluding aliases.
+	The second argument is the **input** string array, it contains the non-flag arguments.
+	The function should return a Boolean, true if the flag is required, otherwise false.
 - `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 
 Example:
@@ -157,6 +158,7 @@ flags: {
 			if (flags.otherFlag) {
 				return true;
 			}
+			return false;
 		}
 	}
 }
