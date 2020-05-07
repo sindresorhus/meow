@@ -1,8 +1,12 @@
 import test from 'ava';
 import indentString from 'indent-string';
 import execa from 'execa';
-import pkg from './package.json';
-import meow from '.';
+import path from 'path';
+import pkg from '../package.json';
+import meow from '..';
+
+const fixturePath = path.join(__dirname, 'fixtures', 'fixture.js');
+const NODE_MAJOR_VERSION = process.versions.node.split('.')[0];
 
 test('return object', t => {
 	const cli = meow({
@@ -136,47 +140,47 @@ test('auto-generated help options with a help message', t => {
 });
 
 test('spawn cli and show version', async t => {
-	const {stdout} = await execa('./fixture.js', ['--version']);
+	const {stdout} = await execa(fixturePath, ['--version']);
 	t.is(stdout, pkg.version);
 });
 
 test('spawn cli and disabled autoVersion and autoHelp', async t => {
-	const {stdout} = await execa('./fixture.js', ['--version', '--help']);
+	const {stdout} = await execa(fixturePath, ['--version', '--help']);
 	t.is(stdout, 'version\nhelp\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and disabled autoVersion', async t => {
-	const {stdout} = await execa('./fixture.js', ['--version', '--no-auto-version']);
+	const {stdout} = await execa(fixturePath, ['--version', '--no-auto-version']);
 	t.is(stdout, 'version\nautoVersion\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and not show version', async t => {
-	const {stdout} = await execa('./fixture.js', ['--version=beta']);
+	const {stdout} = await execa(fixturePath, ['--version=beta']);
 	t.is(stdout, 'version\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and show help screen', async t => {
-	const {stdout} = await execa('./fixture.js', ['--help']);
+	const {stdout} = await execa(fixturePath, ['--help']);
 	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2));
 });
 
 test('spawn cli and disabled autoHelp', async t => {
-	const {stdout} = await execa('./fixture.js', ['--help', '--no-auto-help']);
+	const {stdout} = await execa(fixturePath, ['--help', '--no-auto-help']);
 	t.is(stdout, 'help\nautoHelp\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and not show help', async t => {
-	const {stdout} = await execa('./fixture.js', ['--help=all']);
+	const {stdout} = await execa(fixturePath, ['--help=all']);
 	t.is(stdout, 'help\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and test input', async t => {
-	const {stdout} = await execa('./fixture.js', ['-u', 'cat']);
+	const {stdout} = await execa(fixturePath, ['-u', 'cat']);
 	t.is(stdout, 'unicorn\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and test input flag', async t => {
-	const {stdout} = await execa('./fixture.js', ['--camel-case-option', 'bar']);
+	const {stdout} = await execa(fixturePath, ['--camel-case-option', 'bar']);
 	t.is(stdout, 'bar');
 });
 
@@ -407,3 +411,186 @@ test('supports `number` flag type - throws on incorrect default value', t => {
 		});
 	});
 });
+
+test('isMultiple - flag set once returns array', t => {
+	t.deepEqual(meow({
+		argv: ['--foo=bar'],
+		flags: {
+			foo: {
+				type: 'string',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: ['bar']
+	});
+});
+
+test('isMultiple - flag set multiple times', t => {
+	t.deepEqual(meow({
+		argv: ['--foo=bar', '--foo=baz'],
+		flags: {
+			foo: {
+				type: 'string',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: ['bar', 'baz']
+	});
+});
+
+test('isMultiple - flag with space separated values', t => {
+	t.deepEqual(meow({
+		argv: ['--foo', 'bar', 'baz'],
+		flags: {
+			foo: {
+				type: 'string',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: ['bar', 'baz']
+	});
+});
+
+test('single flag set more than once => throws', t => {
+	t.throws(() => {
+		meow({
+			argv: ['--foo=bar', '--foo=baz'],
+			flags: {
+				foo: {
+					type: 'string'
+				}
+			}
+		});
+	}, {message: 'The flag --foo can only be set once.'});
+});
+
+test('isMultiple - boolean flag', t => {
+	t.deepEqual(meow({
+		argv: ['--foo', '--foo=false'],
+		flags: {
+			foo: {
+				type: 'boolean',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: [true, false]
+	});
+});
+
+test('isMultiple - boolean flag is false by default', t => {
+	t.deepEqual(meow({
+		argv: [],
+		flags: {
+			foo: {
+				type: 'boolean',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: [false]
+	});
+});
+
+test('isMultiple - flag with `booleanDefault: undefined` => filter out unset boolean args', t => {
+	t.deepEqual(meow({
+		argv: ['--foo'],
+		booleanDefault: undefined,
+		flags: {
+			foo: {
+				type: 'boolean',
+				isMultiple: true
+			},
+			bar: {
+				type: 'boolean',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: [true]
+	});
+});
+
+test('isMultiple - number flag', t => {
+	t.deepEqual(meow({
+		argv: ['--foo=1.3', '--foo=-1'],
+		flags: {
+			foo: {
+				type: 'number',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: [1.3, -1]
+	});
+});
+
+test('isMultiple - flag default values', t => {
+	t.deepEqual(meow({
+		argv: [],
+		flags: {
+			string: {
+				type: 'string',
+				isMultiple: true,
+				default: ['foo']
+			},
+			boolean: {
+				type: 'boolean',
+				isMultiple: true,
+				default: [true]
+			},
+			number: {
+				type: 'number',
+				isMultiple: true,
+				default: [0.5]
+			}
+		}
+	}).flags, {
+		string: ['foo'],
+		boolean: [true],
+		number: [0.5]
+	});
+});
+
+test('isMultiple - multiple flag default values', t => {
+	t.deepEqual(meow({
+		argv: [],
+		flags: {
+			string: {
+				type: 'string',
+				isMultiple: true,
+				default: ['foo', 'bar']
+			},
+			boolean: {
+				type: 'boolean',
+				isMultiple: true,
+				default: [true, false]
+			},
+			number: {
+				type: 'number',
+				isMultiple: true,
+				default: [0.5, 1]
+			}
+		}
+	}).flags, {
+		string: ['foo', 'bar'],
+		boolean: [true, false],
+		number: [0.5, 1]
+	});
+});
+
+if (NODE_MAJOR_VERSION >= 14) {
+	test('supports es modules', async t => {
+		try {
+			const {stdout} = await execa('node', ['index.js', '--version'], {
+				cwd: path.join(__dirname, '..', 'estest')
+			});
+			t.regex(stdout, /1.2.3/);
+		} catch (error) {
+			t.is(error, undefined);
+		}
+	});
+}

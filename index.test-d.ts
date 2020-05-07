@@ -36,8 +36,8 @@ const result = meow('Help text', {
 		foo: {type: 'boolean', alias: 'f'},
 		'foo-bar': {type: 'number'},
 		bar: {type: 'string', default: '', description: 'This is bar'}
-	}}
-);
+	}
+});
 
 expectType<string[]>(result.input);
 expectType<PackageJson>(result.pkg);

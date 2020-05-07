@@ -26,11 +26,51 @@ $ npm install meow
 $ ./foo-app.js unicorns --rainbow
 ```
 
+**CommonJS**
+
 ```js
 #!/usr/bin/env node
 'use strict';
 const meow = require('meow');
 const foo = require('.');
+
+const cli = meow(`
+	Usage
+	  $ foo <input>
+
+	Options
+	  --rainbow, -r  Include a rainbow
+
+	Examples
+	  $ foo unicorns --rainbow
+	  🌈 unicorns 🌈
+`, {
+	flags: {
+		rainbow: {
+			type: 'boolean',
+			alias: 'r'
+		}
+	}
+});
+/*
+{
+	input: ['unicorns'],
+	flags: {rainbow: true},
+	...
+}
+*/
+
+foo(cli.input[0], cli.flags);
+```
+
+**ES Modules**
+
+```js
+#!/usr/bin/env node
+import {createRequire} from 'module';
+import foo from './lib/index.js';
+
+const meow = createRequire(import.meta.url)('meow');
 
 const cli = meow(`
 	Usage
@@ -98,6 +138,12 @@ The key is the flag name and the value is an object with any of:
 - `alias`: Usually used to define a short flag alias.
 - `default`: Default value when the flag is not specified.
 - `description`: Description of the flag.
+- `isRequired`: Determine if the flag is required. (Default: false)
+	- If it's only known at runtime whether the flag is requried or not, you can pass a `Function` instead of a `boolean`, which based on the given flags and other non-flag arguments, should decide if the flag is required. Two arguments are passed to the function:
+	- The first argument is the **flags** object, which contains the flags converted to camel-case excluding aliases.
+	- The second argument is the **input** string array, which contains the non-flag arguments.
+	- The function should return a `boolean`, true if the flag is required, otherwise false.
+- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 
 Example:
 
@@ -106,8 +152,16 @@ flags: {
 	unicorn: {
 		type: 'string',
 		alias: 'u',
-		default: 'rainbow',
+		default: ['rainbow', 'cat'],
 		description: 'This is an unicorn option'
+		isMultiple: true,
+		isRequired: (flags, input) => {
+			if (flags.otherFlag) {
+				return true;
+			}
+
+			return false;
+		}
 	}
 }
 ```

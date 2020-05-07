@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const buildMinimistOptions = require('minimist-options');
+const buildParserOptions = require('minimist-options');
 const yargs = require('yargs-parser');
 const camelcaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
@@ -9,10 +9,90 @@ const redent = require('redent');
 const readPkgUp = require('read-pkg-up');
 const hardRejection = require('hard-rejection');
 const normalizePackageData = require('normalize-package-data');
+const arrify = require('arrify');
 
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
+
+const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
+	const flag = definedFlags[flagName];
+	let isFlagRequired = true;
+
+	if (typeof flag.isRequired === 'function') {
+		isFlagRequired = flag.isRequired(receivedFlags, input);
+		if (typeof isFlagRequired !== 'boolean') {
+			throw new TypeError(`Return value for isRequired callback should be of type boolean, but ${typeof isFlagRequired} was returned.`);
+		}
+	}
+
+	if (typeof receivedFlags[flagName] === 'undefined') {
+		return isFlagRequired;
+	}
+
+	return flag.isMultiple && receivedFlags[flagName].length === 0;
+};
+
+const getMissingRequiredFlags = (flags, receivedFlags, input) => {
+	const missingRequiredFlags = [];
+	if (typeof flags === 'undefined') {
+		return [];
+	}
+
+	for (const flagName of Object.keys(flags)) {
+		if (flags[flagName].isRequired && isFlagMissing(flagName, flags, receivedFlags, input)) {
+			missingRequiredFlags.push({key: flagName, ...flags[flagName]});
+		}
+	}
+
+	return missingRequiredFlags;
+};
+
+const reportMissingRequiredFlags = missingRequiredFlags => {
+	console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
+	for (const flag of missingRequiredFlags) {
+		console.error(`\t--${flag.key}${flag.alias ? `, -${flag.alias}` : ''}`);
+	}
+};
+
+const buildParserFlags = ({flags, booleanDefault}) =>
+	Object.entries(flags).reduce((parserFlags, [flagKey, flagValue]) => {
+		const flag = {...flagValue};
+
+		if (
+			typeof booleanDefault !== 'undefined' &&
+			flag.type === 'boolean' &&
+			!Object.prototype.hasOwnProperty.call(flag, 'default')
+		) {
+			flag.default = flag.isMultiple ? [booleanDefault] : booleanDefault;
+		}
+
+		if (flag.isMultiple) {
+			flag.type = 'array';
+			delete flag.isMultiple;
+		}
+
+		parserFlags[flagKey] = flag;
+
+		return parserFlags;
+	}, {});
+
+/**
+Convert to alternative syntax for coercing values to expected type, according to https://github.com/yargs/yargs-parser#requireyargs-parserargs-opts.
+*/
+const convertToTypedArrayOption = (arrayOption, flags) =>
+	arrify(arrayOption).map(flagKey => ({
+		key: flagKey,
+		[flags[flagKey].type || 'string']: true
+	}));
+
+const validateFlags = (flags, options) => {
+	for (const [flagKey, flagValue] of Object.entries(options.flags)) {
+		if (flagKey !== '--' && !flagValue.isMultiple && Array.isArray(flags[flagKey])) {
+			throw new Error(`The flag --${flagKey} can only be set once.`);
+		}
+	}
+};
 
 const meow = (helpText, options) => {
 	if (typeof helpText !== 'string') {
@@ -26,6 +106,7 @@ const meow = (helpText, options) => {
 			normalize: false
 		}).packageJson || {},
 		argv: process.argv.slice(2),
+		flags: {},
 		inferType: false,
 		input: 'string',
 		help: helpText,
@@ -41,39 +122,35 @@ const meow = (helpText, options) => {
 		hardRejection();
 	}
 
-	const minimistFlags = options.flags && typeof options.booleanDefault !== 'undefined' ? Object.keys(options.flags).reduce(
-		(flags, flag) => {
-			if (flags[flag].type === 'boolean' && !Object.prototype.hasOwnProperty.call(flags[flag], 'default')) {
-				flags[flag].default = options.booleanDefault;
-			}
-
-			return flags;
-		},
-		options.flags
-	) : options.flags;
-
-	let minimistoptions = {
+	let parserOptions = {
 		arguments: options.input,
-		...minimistFlags
+		...buildParserFlags(options)
 	};
 
-	minimistoptions = decamelizeKeys(minimistoptions, '-', {exclude: ['stopEarly', '--']});
+	parserOptions = decamelizeKeys(parserOptions, '-', {exclude: ['stopEarly', '--']});
 
 	if (options.inferType) {
-		delete minimistoptions.arguments;
+		delete parserOptions.arguments;
 	}
 
-	minimistoptions = buildMinimistOptions(minimistoptions);
+	parserOptions = buildParserOptions(parserOptions);
 
-	if (minimistoptions['--']) {
-		minimistoptions.configuration = {
-			...minimistoptions.configuration,
+	if (parserOptions['--']) {
+		parserOptions.configuration = {
+			...parserOptions.configuration,
 			'populate--': true
 		};
 	}
 
+	if (parserOptions.array !== undefined) {
+		// `yargs` supports 'string|number|boolean' arrays,
+		// but `minimist-options` only support 'string' as element type.
+		// Open issue to add support to `minimist-options`: https://github.com/vadimdemedes/minimist-options/issues/18.
+		parserOptions.array = convertToTypedArrayOption(parserOptions.array, options.flags);
+	}
+
 	const {pkg} = options;
-	const argv = yargs(options.argv, minimistoptions);
+	const argv = yargs(options.argv, parserOptions);
 	const indentSize = 2;
 	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), indentSize);
 
@@ -161,10 +238,19 @@ const meow = (helpText, options) => {
 	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
 	const unnormalizedFlags = {...flags};
 
-	if (options.flags !== undefined) {
-		for (const flagValue of Object.values(options.flags)) {
-			delete flags[flagValue.alias];
-		}
+	validateFlags(flags, options);
+
+	for (const flagValue of Object.values(options.flags)) {
+		delete flags[flagValue.alias];
+	}
+
+	// Get a list of missing flags that are required
+	const missingRequiredFlags = getMissingRequiredFlags(options.flags, flags, input);
+
+	// Print error message for missing flags that are required
+	if (missingRequiredFlags.length > 0) {
+		reportMissingRequiredFlags(missingRequiredFlags);
+		process.exit(2);
 	}
 
 	return {

@@ -3,11 +3,23 @@ import {PackageJson} from 'type-fest';
 declare namespace meow {
 	type FlagType = 'string' | 'boolean' | 'number';
 
+	/**
+	Callback function to determine if a flag is required during runtime.
+
+	@param flags - Contains the flags converted to camel-case excluding aliases.
+	@param input - Contains the non-flag arguments.
+
+	@returns True if the flag is required, otherwise false.
+	*/
+	type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
+
 	interface Flag<Type extends FlagType, Default> {
 		readonly type?: Type;
 		readonly alias?: string;
 		readonly default?: Default;
 		readonly description?: string;
+		readonly isRequired?: boolean | IsRequiredPredicate;
+		readonly isMultiple?: boolean;
 	}
 
 	type StringFlag = Flag<'string', string>;
@@ -25,6 +37,9 @@ declare namespace meow {
 		- `type`: Type of value. (Possible values: `string` `boolean` `number`)
 		- `alias`: Usually used to define a short flag alias.
 		- `default`: Default value when the flag is not specified.
+		- `isRequired`: Determine if the flag is required.
+			If it's only known at runtime whether the flag is requried or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
+		- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 
 		@example
 		```
@@ -32,8 +47,16 @@ declare namespace meow {
 			unicorn: {
 				type: 'string',
 				alias: 'u',
-				default: 'rainbow',
+				default: ['rainbow', 'cat'],
 				description: 'This is an unicorn option'
+				isMultiple: true,
+				isRequired: (flags, input) => {
+					if (flags.otherFlag) {
+						return true;
+					}
+
+					return false;
+				}
 			}
 		}
 		```
@@ -85,7 +108,7 @@ declare namespace meow {
 		readonly autoVersion?: boolean;
 
 		/**
-		package.json as an `Object`. Default: Closest package.json upwards.
+		`package.json` as an `Object`. Default: Closest `package.json` upwards.
 
 		_You most likely don't need this option._
 		*/
@@ -96,7 +119,7 @@ declare namespace meow {
 
 		@default process.argv.slice(2)
 		*/
-		readonly argv?: ReadonlyArray<string>;
+		readonly argv?: readonly string[];
 
 		/**
 		Infer the argument type.
@@ -220,12 +243,12 @@ declare namespace meow {
 
 		@param exitCode - The exit code to use. Default: `2`.
 		*/
-		showHelp(exitCode?: number): void;
+		showHelp: (exitCode?: number) => void;
 
 		/**
 		Show the version text and exit.
 		*/
-		showVersion(): void;
+		showVersion: () => void;
 	}
 }
 /**
