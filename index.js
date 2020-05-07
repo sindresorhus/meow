@@ -167,7 +167,7 @@ const meow = (helpText, options) => {
 
 	if (options.helpOptions) {
 		const cliOption = name => name.length === 1 ? `-${name}` : `--${name}`;
-		const indent = str => str ? (' '.repeat(indentSize) + str) : str;
+		const indent = string => string ? (' '.repeat(indentSize) + string) : string;
 
 		let helpOptions = Object.entries(decamelizeKeys(options.flags, '-')).map(([name, definition]) => {
 			const type = definition.type || definition;
@@ -203,10 +203,10 @@ const meow = (helpText, options) => {
 				descLines.push(...description.split(/\r?\n/));
 			}
 
-			return [firstLine, ...descLines.map(indent), ''];
+			return [firstLine, ...descLines.map(line => indent(line)), ''];
 		});
 		helpOptions = [].concat(...helpOptions); // Flatten
-		helpOptions = ['Options:', ...helpOptions.map(indent)].map(indent);
+		helpOptions = ['Options:', ...helpOptions.map(opt => indent(opt))].map(line => indent(line));
 
 		help = help.replace(/\n+$/, '\n'); // Trim end
 		help += '\n' + helpOptions.join('\n');
