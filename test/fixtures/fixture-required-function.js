@@ -35,4 +35,5 @@ const cli = meow({
 		}
 	}
 });
+
 console.log(`${cli.flags.trigger},${cli.flags.withTrigger}`);
