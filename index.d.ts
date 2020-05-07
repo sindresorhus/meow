@@ -2,10 +2,11 @@ import {PackageJson} from 'type-fest';
 
 declare namespace meow {
 	type FlagType = 'string' | 'boolean' | 'number';
-	/**
-	Callback function to determine if a flag is required during runtime
 
-	@param flags - Contains the flags converted to camelCase excluding aliases.
+	/**
+	Callback function to determine if a flag is required during runtime.
+
+	@param flags - Contains the flags converted to camel-case excluding aliases.
 	@param input - Contains the non-flag arguments.
 
 	@returns True if the flag is required, otherwise false.
@@ -51,6 +52,7 @@ declare namespace meow {
 					if (flags.otherFlag) {
 						return true;
 					}
+
 					return false;
 				}
 			}
