@@ -17,4 +17,5 @@ const cli = meow({
 		}
 	}
 });
+
 console.log(cli.flags.test);
