@@ -68,5 +68,10 @@
 		"ignores": [
 			"estest/index.js"
 		]
+	},
+	"ava": {
+		"files": [
+			"test/*"
+		]
 	}
 }

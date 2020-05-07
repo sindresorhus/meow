@@ -15,6 +15,46 @@ const arrify = require('arrify');
 delete require.cache[__filename];
 const parentDir = path.dirname(module.parent.filename);
 
+const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
+	const flag = definedFlags[flagName];
+	let isFlagRequired = true;
+
+	if (typeof flag.isRequired === 'function') {
+		isFlagRequired = flag.isRequired(receivedFlags, input);
+		if (typeof isFlagRequired !== 'boolean') {
+			throw new TypeError(`Return value for isRequired callback should be of type boolean, but ${typeof isFlagRequired} was returned.`);
+		}
+	}
+
+	if (typeof receivedFlags[flagName] === 'undefined') {
+		return isFlagRequired;
+	}
+
+	return flag.isMultiple && receivedFlags[flagName].length === 0;
+};
+
+const getMissingRequiredFlags = (flags, receivedFlags, input) => {
+	const missingRequiredFlags = [];
+	if (typeof flags === 'undefined') {
+		return [];
+	}
+
+	for (const flagName of Object.keys(flags)) {
+		if (flags[flagName].isRequired && isFlagMissing(flagName, flags, receivedFlags, input)) {
+			missingRequiredFlags.push({key: flagName, ...flags[flagName]});
+		}
+	}
+
+	return missingRequiredFlags;
+};
+
+const reportMissingRequiredFlags = missingRequiredFlags => {
+	console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
+	for (const flag of missingRequiredFlags) {
+		console.error(`\t--${flag.key}${flag.alias ? `, -${flag.alias}` : ''}`);
+	}
+};
+
 const buildParserFlags = ({flags, booleanDefault}) =>
 	Object.entries(flags).reduce((parserFlags, [flagKey, flagValue]) => {
 		const flag = {...flagValue};
@@ -153,6 +193,15 @@ const meow = (helpText, options) => {
 
 	for (const flagValue of Object.values(options.flags)) {
 		delete flags[flagValue.alias];
+	}
+
+	// Get a list of missing flags that are required
+	const missingRequiredFlags = getMissingRequiredFlags(options.flags, flags, input);
+
+	// Print error message for missing flags that are required
+	if (missingRequiredFlags.length > 0) {
+		reportMissingRequiredFlags(missingRequiredFlags);
+		process.exit(2);
 	}
 
 	return {
