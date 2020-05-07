@@ -23,4 +23,5 @@ const cli = meow({
 		}
 	}
 });
+
 console.log(`${cli.flags.test},${cli.flags.number}`);
