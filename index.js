@@ -2,7 +2,7 @@
 const path = require('path');
 const buildParserOptions = require('minimist-options');
 const yargs = require('yargs-parser');
-const camelcaseKeys = require('camelcase-keys');
+const camelCaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
 const redent = require('redent');
@@ -186,7 +186,7 @@ const meow = (helpText, options) => {
 	const input = argv._;
 	delete argv._;
 
-	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
+	const flags = camelCaseKeys(argv, {exclude: ['--', /^\w$/]});
 	const unnormalizedFlags = {...flags};
 
 	validateFlags(flags, options);
