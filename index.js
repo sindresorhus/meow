@@ -1,7 +1,7 @@
 'use strict';
 const path = require('path');
 const buildParserOptions = require('minimist-options');
-const yargs = require('yargs-parser');
+const parseArguments = require('yargs-parser');
 const camelcaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
@@ -149,7 +149,7 @@ const meow = (helpText, options) => {
 	}
 
 	const {pkg} = options;
-	const argv = yargs(options.argv, parserOptions);
+	const argv = parseArguments(options.argv, parserOptions);
 	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(pkg);
