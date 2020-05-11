@@ -482,6 +482,21 @@ test('isMultiple - multiple flag default values', t => {
 	});
 });
 
+// Happened in production 2020-05-10: https://github.com/sindresorhus/meow/pull/143#issuecomment-626287226
+test('isMultiple - handles multi-word flag name', t => {
+	t.deepEqual(meow({
+		argv: ['--foo-bar=baz'],
+		flags: {
+			fooBar: {
+				type: 'string',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		fooBar: ['baz']
+	});
+});
+
 if (NODE_MAJOR_VERSION >= 14) {
 	test('supports es modules', async t => {
 		try {
