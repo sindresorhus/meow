@@ -196,10 +196,7 @@ const meow = (helpText, options) => {
 		delete flags[flagValue.alias];
 	}
 
-	// Get a list of missing flags that are required
 	const missingRequiredFlags = getMissingRequiredFlags(options.flags, flags, input);
-
-	// Print error message for missing flags that are required
 	if (missingRequiredFlags.length > 0) {
 		reportMissingRequiredFlags(missingRequiredFlags);
 		process.exit(2);
