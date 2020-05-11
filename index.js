@@ -2,6 +2,7 @@
 const path = require('path');
 const buildParserOptions = require('minimist-options');
 const parseArguments = require('yargs-parser');
+const camelCase = require('camelcase');
 const camelcaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
@@ -83,7 +84,7 @@ Convert to alternative syntax for coercing values to expected type, according to
 const convertToTypedArrayOption = (arrayOption, flags) =>
 	arrify(arrayOption).map(flagKey => ({
 		key: flagKey,
-		[flags[flagKey].type || 'string']: true
+		[flags[camelCase(flagKey, '-')].type || 'string']: true
 	}));
 
 const validateFlags = (flags, options) => {

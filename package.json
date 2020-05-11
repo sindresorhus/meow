@@ -1,6 +1,6 @@
 {
 	"name": "meow",
-	"version": "7.0.0",
+	"version": "7.0.1",
 	"description": "CLI app helper",
 	"license": "MIT",
 	"repository": "sindresorhus/meow",
@@ -42,6 +42,7 @@
 	"dependencies": {
 		"@types/minimist": "^1.2.0",
 		"arrify": "^2.0.1",
+		"camelcase": "^6.0.0",
 		"camelcase-keys": "^6.2.2",
 		"decamelize-keys": "^1.1.0",
 		"hard-rejection": "^2.1.0",
