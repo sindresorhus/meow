@@ -3,7 +3,7 @@ const path = require('path');
 const buildParserOptions = require('minimist-options');
 const yargs = require('yargs-parser');
 const camelCase = require('camelcase');
-const camelcaseKeys = require('camelcase-keys');
+const camelCaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
 const redent = require('redent');
@@ -187,7 +187,7 @@ const meow = (helpText, options) => {
 	const input = argv._;
 	delete argv._;
 
-	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
+	const flags = camelCaseKeys(argv, {exclude: ['--', /^\w$/]});
 	const unnormalizedFlags = {...flags};
 
 	validateFlags(flags, options);
@@ -196,10 +196,7 @@ const meow = (helpText, options) => {
 		delete flags[flagValue.alias];
 	}
 
-	// Get a list of missing flags that are required
 	const missingRequiredFlags = getMissingRequiredFlags(options.flags, flags, input);
-
-	// Print error message for missing flags that are required
 	if (missingRequiredFlags.length > 0) {
 		reportMissingRequiredFlags(missingRequiredFlags);
 		process.exit(2);
