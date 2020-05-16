@@ -367,6 +367,19 @@ test('single flag set more than once => throws', t => {
 	}, {message: 'The flag --foo can only be set once.'});
 });
 
+test('isMultiple - default to type string', t => {
+	t.deepEqual(meow({
+		argv: ['--foo=bar'],
+		flags: {
+			foo: {
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: ['bar']
+	});
+});
+
 test('isMultiple - boolean flag', t => {
 	t.deepEqual(meow({
 		argv: ['--foo', '--foo=false'],
