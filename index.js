@@ -1,15 +1,14 @@
 'use strict';
 const path = require('path');
 const buildParserOptions = require('minimist-options');
-const yargs = require('yargs-parser');
-const camelcaseKeys = require('camelcase-keys');
+const parseArguments = require('yargs-parser');
+const camelCaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
 const redent = require('redent');
 const readPkgUp = require('read-pkg-up');
 const hardRejection = require('hard-rejection');
 const normalizePackageData = require('normalize-package-data');
-const arrify = require('arrify');
 
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
@@ -68,7 +67,7 @@ const buildParserFlags = ({flags, booleanDefault}) =>
 		}
 
 		if (flag.isMultiple) {
-			flag.type = 'array';
+			flag.type = flag.type ? `${flag.type}-array` : 'array';
 			delete flag.isMultiple;
 		}
 
@@ -76,15 +75,6 @@ const buildParserFlags = ({flags, booleanDefault}) =>
 
 		return parserFlags;
 	}, {});
-
-/**
-Convert to alternative syntax for coercing values to expected type, according to https://github.com/yargs/yargs-parser#requireyargs-parserargs-opts.
-*/
-const convertToTypedArrayOption = (arrayOption, flags) =>
-	arrify(arrayOption).map(flagKey => ({
-		key: flagKey,
-		[flags[flagKey].type || 'string']: true
-	}));
 
 const validateFlags = (flags, options) => {
 	for (const [flagKey, flagValue] of Object.entries(options.flags)) {
@@ -142,15 +132,8 @@ const meow = (helpText, options) => {
 		};
 	}
 
-	if (parserOptions.array !== undefined) {
-		// `yargs` supports 'string|number|boolean' arrays,
-		// but `minimist-options` only support 'string' as element type.
-		// Open issue to add support to `minimist-options`: https://github.com/vadimdemedes/minimist-options/issues/18.
-		parserOptions.array = convertToTypedArrayOption(parserOptions.array, options.flags);
-	}
-
 	const {pkg} = options;
-	const argv = yargs(options.argv, parserOptions);
+	const argv = parseArguments(options.argv, parserOptions);
 	const indentSize = 2;
 	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), indentSize);
 
@@ -235,7 +218,7 @@ const meow = (helpText, options) => {
 	const input = argv._;
 	delete argv._;
 
-	const flags = camelcaseKeys(argv, {exclude: ['--', /^\w$/]});
+	const flags = camelCaseKeys(argv, {exclude: ['--', /^\w$/]});
 	const unnormalizedFlags = {...flags};
 
 	validateFlags(flags, options);
@@ -244,10 +227,7 @@ const meow = (helpText, options) => {
 		delete flags[flagValue.alias];
 	}
 
-	// Get a list of missing flags that are required
 	const missingRequiredFlags = getMissingRequiredFlags(options.flags, flags, input);
-
-	// Print error message for missing flags that are required
 	if (missingRequiredFlags.length > 0) {
 		reportMissingRequiredFlags(missingRequiredFlags);
 		process.exit(2);

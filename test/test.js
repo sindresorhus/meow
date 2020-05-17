@@ -467,6 +467,19 @@ test('single flag set more than once => throws', t => {
 	}, {message: 'The flag --foo can only be set once.'});
 });
 
+test('isMultiple - default to type string', t => {
+	t.deepEqual(meow({
+		argv: ['--foo=bar'],
+		flags: {
+			foo: {
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: ['bar']
+	});
+});
+
 test('isMultiple - boolean flag', t => {
 	t.deepEqual(meow({
 		argv: ['--foo', '--foo=false'],
@@ -579,6 +592,21 @@ test('isMultiple - multiple flag default values', t => {
 		string: ['foo', 'bar'],
 		boolean: [true, false],
 		number: [0.5, 1]
+	});
+});
+
+// Happened in production 2020-05-10: https://github.com/sindresorhus/meow/pull/143#issuecomment-626287226
+test('isMultiple - handles multi-word flag name', t => {
+	t.deepEqual(meow({
+		argv: ['--foo-bar=baz'],
+		flags: {
+			fooBar: {
+				type: 'string',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		fooBar: ['baz']
 	});
 });
 
