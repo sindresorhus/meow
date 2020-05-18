@@ -4,11 +4,10 @@ const buildParserOptions = require('minimist-options');
 const parseArguments = require('yargs-parser');
 const camelCaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
-const trimNewlines = require('trim-newlines');
-const redent = require('redent');
 const readPkgUp = require('read-pkg-up');
 const hardRejection = require('hard-rejection');
 const normalizePackageData = require('normalize-package-data');
+const generateHelp = require('./generate-help');
 
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
@@ -134,66 +133,12 @@ const meow = (helpText, options) => {
 
 	const {pkg} = options;
 	const argv = parseArguments(options.argv, parserOptions);
-	const indentSize = 2;
-	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), indentSize);
 
 	normalizePackageData(pkg);
 
 	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
 
-	let {description} = options;
-	if (!description && description !== false) {
-		({description} = pkg);
-	}
-
-	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
-
-	if (options.helpOptions) {
-		const cliOption = name => name.length === 1 ? `-${name}` : `--${name}`;
-		const indent = string => string ? (' '.repeat(indentSize) + string) : string;
-
-		let helpOptions = Object.entries(decamelizeKeys(options.flags, '-')).map(([name, definition]) => {
-			const type = definition.type || definition;
-			const {alias, default: defaultValue, description} = definition;
-
-			let firstLine = '';
-			switch (type) {
-				case 'boolean':
-					if (alias) {
-						firstLine = `${cliOption(alias)}, `;
-					}
-
-					firstLine += cliOption(name);
-					break;
-				case 'number':
-				case 'string':
-					if (alias) {
-						firstLine = `${cliOption(alias)} <${type}>, `;
-					}
-
-					firstLine += `${cliOption(name)} <${type}>`;
-					break;
-				default:
-					throw new Error(`Unexpected flag type: '${type}'`);
-			}
-
-			if (defaultValue !== null && defaultValue !== undefined) {
-				firstLine += `  (default: ${defaultValue})`;
-			}
-
-			const descLines = [];
-			if (description) {
-				descLines.push(...description.split(/\r?\n/));
-			}
-
-			return [firstLine, ...descLines.map(line => indent(line)), ''];
-		});
-		helpOptions = [].concat(...helpOptions); // Flatten
-		helpOptions = ['Options:', ...helpOptions.map(opt => indent(opt))].map(line => indent(line));
-
-		help = help.replace(/\n+$/, '\n'); // Trim end
-		help += '\n' + helpOptions.join('\n');
-	}
+	const help = generateHelp(options, pkg);
 
 	const showHelp = code => {
 		console.log(help);

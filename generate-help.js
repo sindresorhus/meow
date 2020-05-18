@@ -1,0 +1,93 @@
+'use strict';
+const {EOL} = require('os');
+const decamelizeKeys = require('decamelize-keys');
+const trimNewlines = require('trim-newlines');
+const redent = require('redent');
+
+function flagName(name, alias, type) {
+	let result = `--${name}`;
+	if (alias) {
+		result += `, -${alias}`;
+	}
+
+	if (type && type !== 'boolean') {
+		result += ` <${type}>`;
+	}
+
+	return result;
+}
+
+function flagsSection(flags) {
+	flags = {...flags, help: {type: 'boolean', description: 'Show help'}};
+
+	const entries = Object.entries(decamelizeKeys(flags, '-')).map(([name, def]) => {
+		const type = def.type || def;
+
+		const entry = {
+			name: flagName(name, def.alias, type),
+			desc: def.description || ''
+		};
+		if (typeof def === 'object' && def !== null && 'default' in def) {
+			entry.desc += `  [default: ${def.default}]`;
+		}
+
+		entry.desc = entry.desc.trim();
+
+		return entry;
+	});
+
+	const maxNameLengh = Math.max(...entries.map(({name}) => name.length));
+
+	const lines = entries.map(({name, desc}) => {
+		if (!desc) {
+			return name;
+		}
+
+		const spaces = 4;
+		const padding = ' '.repeat(maxNameLengh - name.length + spaces);
+
+		let [firstLine, ...restLines] = desc.split(/\r?\n/);
+		if (restLines.length === 0) {
+			return `${name}${padding}${firstLine}`;
+		}
+
+		const fullPadding = ' '.repeat(maxNameLengh + spaces);
+		restLines = restLines.map(line => fullPadding + line).join(EOL);
+
+		return `${name}${padding}${firstLine}${EOL}${restLines}`;
+	});
+
+	return lines;
+}
+
+module.exports = function ({description, help, flags}, pkg) {
+	let lines = [];
+
+	if (!description && description !== false) {
+		description = pkg.description;
+	}
+
+	if (description) {
+		lines.push(description);
+	}
+
+	if (help) {
+		if (lines.length > 0) {
+			lines.push('');
+		}
+
+		lines.push(help);
+	} else {
+		if (lines.length > 0) {
+			lines.push('');
+		}
+
+		lines.push('Options:');
+		lines.push(...flagsSection(flags).map(line => redent(line, 2)));
+	}
+
+	lines = lines.map(line => trimNewlines(line));
+
+	const content = lines.join(EOL).replace(/^\t+/gm, '').replace(/[\t ]+[\r\n]*$/gm, '');
+	return EOL + trimNewlines(redent(content, 2)) + EOL;
+};
