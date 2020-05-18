@@ -99,7 +99,6 @@ const meow = (helpText, options) => {
 		inferType: false,
 		input: 'string',
 		help: helpText,
-		helpOptions: false,
 		autoHelp: true,
 		autoVersion: true,
 		booleanDefault: false,

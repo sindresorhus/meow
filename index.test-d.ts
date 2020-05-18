@@ -31,7 +31,6 @@ expectType<Result<never>>(meow({booleanDefault: undefined}));
 expectType<Result<never>>(meow({hardRejection: false}));
 
 const result = meow('Help text', {
-	helpOptions: true,
 	flags: {
 		foo: {type: 'boolean', alias: 'f'},
 		'foo-bar': {type: 'number'},

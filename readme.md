@@ -185,13 +185,6 @@ The input is reindented and starting/ending newlines are trimmed which means you
 
 The description will be shown above your help text automatically.
 
-##### helpOptions
-
-Type: `boolean`
-Default: `false`
-
-Whether show the help text with defined descriptions for options (flags).
-
 ##### version
 
 Type: `string | boolean`\

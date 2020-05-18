@@ -82,11 +82,6 @@ declare namespace meow {
 		readonly help?: string | false;
 
 		/**
-		Whether show the help text with defined descriptions for options (flags). Default: `false`.
-		 */
-		readonly helpOptions?: boolean;
-
-		/**
 		Set a custom version output. Default: The package.json `"version"` property.
 
 		Set it to `false` to disable it altogether.
