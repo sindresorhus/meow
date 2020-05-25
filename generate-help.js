@@ -1,5 +1,4 @@
 'use strict';
-const {EOL} = require('os');
 const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
 const redent = require('redent');
@@ -25,42 +24,42 @@ function flagsSection(flags) {
 
 		const entry = {
 			name: flagName(name, def.alias, type),
-			desc: def.description || ''
+			description: def.description || ''
 		};
 		if (typeof def === 'object' && def !== null && 'default' in def) {
-			entry.desc += `  [default: ${def.default}]`;
+			entry.description += `  [default: ${def.default}]`;
 		}
 
-		entry.desc = entry.desc.trim();
+		entry.description = entry.description.trim();
 
 		return entry;
 	});
 
 	const maxNameLengh = Math.max(...entries.map(({name}) => name.length));
 
-	const lines = entries.map(({name, desc}) => {
-		if (!desc) {
+	const lines = entries.map(({name, description}) => {
+		if (!description) {
 			return name;
 		}
 
 		const spaces = 4;
 		const padding = ' '.repeat(maxNameLengh - name.length + spaces);
 
-		let [firstLine, ...restLines] = desc.split(/\r?\n/);
+		let [firstLine, ...restLines] = description.split(/\r?\n/);
 		if (restLines.length === 0) {
 			return `${name}${padding}${firstLine}`;
 		}
 
 		const fullPadding = ' '.repeat(maxNameLengh + spaces);
-		restLines = restLines.map(line => fullPadding + line).join(EOL);
+		restLines = restLines.map(line => fullPadding + line).join('\n');
 
-		return `${name}${padding}${firstLine}${EOL}${restLines}`;
+		return `${name}${padding}${firstLine}\n${restLines}`;
 	});
 
 	return lines;
 }
 
-module.exports = function ({description, help, flags}, pkg) {
+module.exports = ({description, help, flags}, pkg) => {
 	let lines = [];
 
 	if (!description && description !== false) {
@@ -68,7 +67,7 @@ module.exports = function ({description, help, flags}, pkg) {
 	}
 
 	if (description) {
-		lines.push(description);
+		lines.push(redent(description));
 	}
 
 	if (help) {
@@ -76,7 +75,7 @@ module.exports = function ({description, help, flags}, pkg) {
 			lines.push('');
 		}
 
-		lines.push(help);
+		lines.push(redent(help));
 	} else {
 		if (lines.length > 0) {
 			lines.push('');
@@ -88,6 +87,6 @@ module.exports = function ({description, help, flags}, pkg) {
 
 	lines = lines.map(line => trimNewlines(line));
 
-	const content = lines.join(EOL).replace(/^\t+/gm, '').replace(/[\t ]+[\r\n]*$/gm, '');
-	return EOL + trimNewlines(redent(content, 2)) + EOL;
+	const content = lines.join('\n').trimEnd();
+	return '\n' + trimNewlines(redent(content, 2)) + '\n';
 };
