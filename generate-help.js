@@ -59,11 +59,11 @@ function flagsSection(flags) {
 	return lines;
 }
 
-module.exports = ({description, help, flags}, pkg) => {
+module.exports = ({description, defaultDescription, help, flags}) => {
 	let lines = [];
 
 	if (!description && description !== false) {
-		description = pkg.description;
+		description = defaultDescription;
 	}
 
 	if (description) {
