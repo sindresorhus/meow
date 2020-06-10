@@ -16,7 +16,7 @@ function flagName(name, alias, type) {
 	return result;
 }
 
-function flagsSection(flags) {
+function buildFlagLines(flags) {
 	flags = {...flags, help: {type: 'boolean', description: 'Show help'}};
 
 	const entries = Object.entries(decamelizeKeys(flags, '-')).map(([name, def]) => {
@@ -59,9 +59,10 @@ function flagsSection(flags) {
 	return lines;
 }
 
-module.exports = ({description, defaultDescription, help, flags}) => {
+module.exports = (options, defaultDescription) => {
 	let lines = [];
 
+	let {description} = options;
 	if (!description && description !== false) {
 		description = defaultDescription;
 	}
@@ -70,7 +71,10 @@ module.exports = ({description, defaultDescription, help, flags}) => {
 		lines.push(redent(description));
 	}
 
-	if (help) {
+	let flagLines;
+
+	const {help} = options;
+	if (typeof help === 'string' && help.length > 0) {
 		if (lines.length > 0) {
 			lines.push('');
 		}
@@ -81,12 +85,19 @@ module.exports = ({description, defaultDescription, help, flags}) => {
 			lines.push('');
 		}
 
+		flagLines = buildFlagLines(options.flags);
 		lines.push('Options:');
-		lines.push(...flagsSection(flags).map(line => redent(line, 2)));
+		lines.push(flagLines.map(line => redent(line, 2)).join('\n'));
 	}
 
 	lines = lines.map(line => trimNewlines(line));
 
 	const content = lines.join('\n').trimEnd();
-	return '\n' + trimNewlines(redent(content, 2)) + '\n';
+	const wholeText = '\n' + trimNewlines(redent(content, 2)) + '\n';
+
+	if (typeof help === 'function') {
+		return help({wholeText, flagLines, description, options});
+	}
+
+	return wholeText;
 };

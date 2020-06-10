@@ -28,6 +28,11 @@ declare namespace meow {
 
 	type AnyFlags = {[key: string]: StringFlag | BooleanFlag | NumberFlag};
 
+	/**
+	Callback function to generate a help text you want.
+	*/
+	type GenerateHelp = (args: Readonly<{wholeText: string; flagLines: readonly string[]; description: string; options: Readonly<Options<AnyFlags>>}>) => string;
+
 	interface Options<Flags extends AnyFlags> {
 		/**
 		Define argument flags.
@@ -79,7 +84,7 @@ declare namespace meow {
 
 		Set it to `false` to disable it altogether.
 		*/
-		readonly help?: string | false;
+		readonly help?: string | false | GenerateHelp;
 
 		/**
 		Set a custom version output. Default: The package.json `"version"` property.

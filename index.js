@@ -137,7 +137,7 @@ const meow = (helpText, options) => {
 
 	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
 
-	const help = generateHelp({...options, defaultDescription: pkg.description});
+	const help = generateHelp(options, pkg.description);
 
 	const showHelp = code => {
 		console.log(help);

@@ -1,7 +1,7 @@
 import {expectAssignable, expectType} from 'tsd';
 import {PackageJson} from 'type-fest';
 import meow = require('.');
-import {Result} from '.';
+import {Result, Options, AnyFlags} from '.';
 
 expectType<Result<never>>(meow('Help text'));
 expectType<Result<never>>(meow('Help text', {hardRejection: false}));
@@ -53,3 +53,14 @@ expectType<string>(result.unnormalizedFlags.bar);
 result.showHelp();
 result.showHelp(1);
 result.showVersion();
+
+meow({
+	// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+	help: ({wholeText, flagLines, description, options}) => {
+		expectType<string>(wholeText);
+		expectType<readonly string[]>(flagLines);
+		expectType<string>(description);
+		expectType<Readonly<Options<AnyFlags>>>(options);
+		return 'help text';
+	}
+});

@@ -112,7 +112,7 @@ Returns an `object` with:
 - `flags` *(Object)* - Flags converted to camelCase excluding aliases
 - `unnormalizedFlags` *(Object)* - Flags converted to camelCase including aliases
 - `pkg` *(Object)* - The `package.json` object
-- `help` *(string)* - The help text used with `--help`
+- `help` *(string | boolean | Function)* - The help text used with `--help`
 - `showHelp([exitCode=2])` *(Function)* - Show the help text and exit with `exitCode`
 - `showVersion()` *(Function)* - Show the version text and exit
 
@@ -177,13 +177,26 @@ Set it to `false` to disable it altogether.
 
 ##### help
 
-Type: `string | boolean`
+Type: `string | boolean | Function`
 
-The help text you want shown.
+The help text you want to show.
 
 The input is reindented and starting/ending newlines are trimmed which means you can use a [template literal](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/template_strings) without having to care about using the correct amount of indent.
 
 The description will be shown above your help text automatically.
+
+Also, you can customize the auto-generated help text by giving the function as follows:
+
+```js
+meow({
+  help: ({wholeText, flagLines, description, options}) => {
+    return 'A help text you want...';
+  },
+  flags: {
+    rainbow: {type: 'boolean', alias: 'r'}
+  }
+});
+```
 
 ##### version
 

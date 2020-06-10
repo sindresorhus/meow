@@ -154,3 +154,55 @@ test('when no description and flags', t => {
     --help              Show help
 `);
 });
+
+test('when a help function is given', t => {
+	const cli = meow({
+		help: ({wholeText, flagLines, description, options}) => {
+			return `
+**********
+${wholeText}
+**********
+${flagLines.join('\n')}
+**********
+${description}
+**********
+pkg.name: ${JSON.stringify(options.pkg.name)}
+argv: ${JSON.stringify(options.argv)}
+flags.input.description: ${JSON.stringify(options.flags.input.description)}
+inferType: ${JSON.stringify(options.inferType)}
+input: ${JSON.stringify(options.input)}
+autoHelp: ${JSON.stringify(options.autoHelp)}
+autoVersion: ${JSON.stringify(options.autoVersion)}
+`;
+		},
+		flags: {
+			input: {
+				type: 'string',
+				description: 'Input file path'
+			}
+		}
+	});
+	t.is(cli.help, `
+**********
+
+  CLI app helper
+
+  Options:
+    --input <string>    Input file path
+    --help              Show help
+
+**********
+--input <string>    Input file path
+--help              Show help
+**********
+CLI app helper
+**********
+pkg.name: "meow"
+argv: ["undefined"]
+flags.input.description: "Input file path"
+inferType: false
+input: "string"
+autoHelp: true
+autoVersion: true
+`);
+});
