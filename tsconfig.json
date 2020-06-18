@@ -1,0 +1,21 @@
+{
+  "files": [
+    "index.d.ts",
+    "index.test-d.ts",
+  ],
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "react",
+    "target": "es2017",
+    "lib": ["es2017"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+
+    /* Strict Type-Checking Options */
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+
+    /* Additional Checks */
+    "noUnusedLocals": true
+  }
+}
