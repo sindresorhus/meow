@@ -25,7 +25,8 @@ declare namespace meow {
 	type BooleanFlag = Flag<'boolean', boolean>;
 	type NumberFlag = Flag<'number', number>;
 
-	type AnyFlags = {[key: string]: StringFlag | BooleanFlag | NumberFlag};
+  type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
+	type AnyFlags = {[key: string]: AnyFlag};
 
 	interface Options<Flags extends AnyFlags> {
 		/**
@@ -195,14 +196,26 @@ declare namespace meow {
 		readonly hardRejection?: boolean;
 	}
 
-	type TypedFlags<Flags extends AnyFlags> = {
-		[F in keyof Flags]: Flags[F] extends {type: 'number'}
+	type TypedFlag<Flag extends AnyFlag> =
+		Flag extends {type: 'number'}
 			? number
-			: Flags[F] extends {type: 'string'}
+			: Flag extends {type: 'string'}
 				? string
-				: Flags[F] extends {type: 'boolean'}
+				: Flag extends {type: 'boolean'}
 					? boolean
 					: unknown;
+
+	type PossiblyOptionalFlag<Flag extends AnyFlag> =
+		Flag extends {isRequired: true}
+			? TypedFlag<Flag>
+			: Flag extends {default: any}
+				? TypedFlag<Flag>
+				: TypedFlag<Flag>|undefined;
+
+	type TypedFlags<Flags extends AnyFlags> = {
+		[F in keyof Flags]: Flags[F] extends {isMultiple: true}
+			? Array<TypedFlag<Flags[F]>>
+			: PossiblyOptionalFlag<Flags[F]>
 	};
 
 	interface Result<Flags extends AnyFlags> {
