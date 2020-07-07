@@ -14,13 +14,13 @@ expectAssignable<{flags: {foo: string}}>(
 expectAssignable<{flags: {foo: boolean}}>(
 	meow({flags: {foo: {type: 'boolean', isRequired: true}}})
 );
-expectAssignable<{flags: {foo: number|undefined}}>(
+expectAssignable<{flags: {foo: number | undefined}}>(
 	meow({flags: {foo: {type: 'number'}}})
 );
-expectAssignable<{flags: {foo: string|undefined}}>(
+expectAssignable<{flags: {foo: string | undefined}}>(
 	meow({flags: {foo: {type: 'string'}}})
 );
-expectAssignable<{flags: {foo: boolean|undefined}}>(
+expectAssignable<{flags: {foo: boolean | undefined}}>(
 	meow({flags: {foo: {type: 'boolean'}}})
 );
 expectType<Result<never>>(meow({description: 'foo'}));
@@ -52,13 +52,13 @@ expectType<string[]>(result.input);
 expectType<PackageJson>(result.pkg);
 expectType<string>(result.help);
 
-expectType<boolean|undefined>(result.flags.foo);
+expectType<boolean | undefined>(result.flags.foo);
 expectType<unknown>(result.flags.fooBar);
 expectType<string>(result.flags.bar);
 expectType<string[]>(result.flags.abc);
-expectType<boolean|undefined>(result.unnormalizedFlags.foo);
+expectType<boolean | undefined>(result.unnormalizedFlags.foo);
 expectType<unknown>(result.unnormalizedFlags.f);
-expectType<number|undefined>(result.unnormalizedFlags['foo-bar']);
+expectType<number | undefined>(result.unnormalizedFlags['foo-bar']);
 expectType<string>(result.unnormalizedFlags.bar);
 expectType<string[]>(result.unnormalizedFlags.abc);
 
