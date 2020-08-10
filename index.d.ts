@@ -205,17 +205,17 @@ declare namespace meow {
 					? boolean
 					: unknown;
 
-	type PossiblyOptionalFlag<Flag extends AnyFlag> =
+	type PossiblyOptionalFlag<Flag extends AnyFlag, FlagType> =
 		Flag extends {isRequired: true}
-			? TypedFlag<Flag>
+			? FlagType
 			: Flag extends {default: any}
-				? TypedFlag<Flag>
-				: TypedFlag<Flag>|undefined;
+				? FlagType
+				: FlagType|undefined;
 
 	type TypedFlags<Flags extends AnyFlags> = {
 		[F in keyof Flags]: Flags[F] extends {isMultiple: true}
-			? Array<TypedFlag<Flags[F]>>
-			: PossiblyOptionalFlag<Flags[F]>
+			? PossiblyOptionalFlag<Flags[F], Array<TypedFlag<Flags[F]>>>
+			: PossiblyOptionalFlag<Flags[F], TypedFlag<Flags[F]>>
 	};
 
 	interface Result<Flags extends AnyFlags> {

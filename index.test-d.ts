@@ -55,12 +55,12 @@ expectType<string>(result.help);
 expectType<boolean | undefined>(result.flags.foo);
 expectType<unknown>(result.flags.fooBar);
 expectType<string>(result.flags.bar);
-expectType<string[]>(result.flags.abc);
+expectType<string[] | undefined>(result.flags.abc);
 expectType<boolean | undefined>(result.unnormalizedFlags.foo);
 expectType<unknown>(result.unnormalizedFlags.f);
 expectType<number | undefined>(result.unnormalizedFlags['foo-bar']);
 expectType<string>(result.unnormalizedFlags.bar);
-expectType<string[]>(result.unnormalizedFlags.abc);
+expectType<string[] | undefined>(result.unnormalizedFlags.abc);
 
 result.showHelp();
 result.showHelp(1);
