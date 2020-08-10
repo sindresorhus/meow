@@ -25,7 +25,7 @@ declare namespace meow {
 	type BooleanFlag = Flag<'boolean', boolean>;
 	type NumberFlag = Flag<'number', number>;
 
-  type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
+	type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
 	type AnyFlags = {[key: string]: AnyFlag};
 
 	interface Options<Flags extends AnyFlags> {
@@ -210,7 +210,7 @@ declare namespace meow {
 			? FlagType
 			: Flag extends {default: any}
 				? FlagType
-				: FlagType|undefined;
+				: FlagType | undefined;
 
 	type TypedFlags<Flags extends AnyFlags> = {
 		[F in keyof Flags]: Flags[F] extends {isMultiple: true}
