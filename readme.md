@@ -139,7 +139,7 @@ The key is the flag name and the value is an object with any of:
 - `default`: Default value when the flag is not specified.
 - `description`: Description of the flag.
 - `isRequired`: Determine if the flag is required. (Default: false)
-	- If it's only known at runtime whether the flag is requried or not, you can pass a `Function` instead of a `boolean`, which based on the given flags and other non-flag arguments, should decide if the flag is required. Two arguments are passed to the function:
+	- If it's only known at runtime whether the flag is required or not, you can pass a `Function` instead of a `boolean`, which based on the given flags and other non-flag arguments, should decide if the flag is required. Two arguments are passed to the function:
 	- The first argument is the **flags** object, which contains the flags converted to camel-case excluding aliases.
 	- The second argument is the **input** string array, which contains the non-flag arguments.
 	- The function should return a `boolean`, true if the flag is required, otherwise false.

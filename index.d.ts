@@ -26,7 +26,8 @@ declare namespace meow {
 	type BooleanFlag = Flag<'boolean', boolean>;
 	type NumberFlag = Flag<'number', number>;
 
-	type AnyFlags = {[key: string]: StringFlag | BooleanFlag | NumberFlag};
+	type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
+	type AnyFlags = {[key: string]: AnyFlag};
 
 	/**
 	Callback function to generate a help text you want.
@@ -43,7 +44,7 @@ declare namespace meow {
 		- `alias`: Usually used to define a short flag alias.
 		- `default`: Default value when the flag is not specified.
 		- `isRequired`: Determine if the flag is required.
-			If it's only known at runtime whether the flag is requried or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
+			If it's only known at runtime whether the flag is required or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
 		- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 
 		@example
@@ -202,14 +203,26 @@ declare namespace meow {
 		readonly hardRejection?: boolean;
 	}
 
-	type TypedFlags<Flags extends AnyFlags> = {
-		[F in keyof Flags]: Flags[F] extends {type: 'number'}
+	type TypedFlag<Flag extends AnyFlag> =
+		Flag extends {type: 'number'}
 			? number
-			: Flags[F] extends {type: 'string'}
+			: Flag extends {type: 'string'}
 				? string
-				: Flags[F] extends {type: 'boolean'}
+				: Flag extends {type: 'boolean'}
 					? boolean
 					: unknown;
+
+	type PossiblyOptionalFlag<Flag extends AnyFlag, FlagType> =
+		Flag extends {isRequired: true}
+			? FlagType
+			: Flag extends {default: any}
+				? FlagType
+				: FlagType | undefined;
+
+	type TypedFlags<Flags extends AnyFlags> = {
+		[F in keyof Flags]: Flags[F] extends {isMultiple: true}
+			? PossiblyOptionalFlag<Flags[F], Array<TypedFlag<Flags[F]>>>
+			: PossiblyOptionalFlag<Flags[F], TypedFlag<Flags[F]>>
 	};
 
 	interface Result<Flags extends AnyFlags> {

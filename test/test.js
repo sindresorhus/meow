@@ -502,6 +502,17 @@ test('isMultiple - handles multi-word flag name', t => {
 	});
 });
 
+test('isMultiple - handles non-set flags correctly', t => {
+	t.deepEqual(meow({
+		argv: [],
+		flags: {
+			foo: {
+				isMultiple: true
+			}
+		}
+	}).flags, {});
+});
+
 if (NODE_MAJOR_VERSION >= 14) {
 	test('supports es modules', async t => {
 		try {
