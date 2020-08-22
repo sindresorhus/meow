@@ -43,7 +43,7 @@ const result = meow('Help text', {
 	flags: {
 		foo: {type: 'boolean', alias: 'f'},
 		'foo-bar': {type: 'number'},
-		bar: {type: 'string', default: '', description: 'This is bar'}
+		bar: {type: 'string', default: '', description: 'This is bar'},
 		abc: {type: 'string', isMultiple: true}
 	}
 });
@@ -67,7 +67,6 @@ result.showHelp(1);
 result.showVersion();
 
 meow({
-	// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
 	help: ({wholeText, flagLines, description, options}) => {
 		expectType<string>(wholeText);
 		expectType<readonly string[]>(flagLines);
