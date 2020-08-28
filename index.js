@@ -153,7 +153,7 @@ const meow = (helpText, options) => {
 
 	const showVersion = () => {
 		console.log(typeof options.version === 'string' ? options.version : pkg.version);
-		process.exit();
+		process.exit(0);
 	};
 
 	if (argv._.length === 0 && options.argv.length === 1) {
