@@ -12,7 +12,7 @@ const normalizePackageData = require('normalize-package-data');
 
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename];
-const parentDir = path.dirname(module.parent.filename);
+const parentDir = path.dirname(module.parent && module.parent.filename ? module.parent.filename : '.');
 
 const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
 	const flag = definedFlags[flagName];
@@ -153,7 +153,7 @@ const meow = (helpText, options) => {
 
 	const showVersion = () => {
 		console.log(typeof options.version === 'string' ? options.version : pkg.version);
-		process.exit();
+		process.exit(0);
 	};
 
 	if (argv._.length === 0 && options.argv.length === 1) {
