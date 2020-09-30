@@ -96,7 +96,7 @@ module.exports = (options, defaultDescription) => {
 	const wholeText = '\n' + trimNewlines(redent(content, 2)) + '\n';
 
 	if (typeof help === 'function') {
-		return help({wholeText, flagLines, description, options});
+		return help({wholeText, description, flagLines, flagOptions: options});
 	}
 
 	return wholeText;

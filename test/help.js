@@ -157,7 +157,7 @@ test('when no description and flags', t => {
 
 test('when a help function is given', t => {
 	const cli = meow({
-		help: ({wholeText, flagLines, description, options}) => {
+		help: ({wholeText, description, flagLines, flagOptions}) => {
 			return `
 **********
 ${wholeText}
@@ -166,13 +166,13 @@ ${flagLines.join('\n')}
 **********
 ${description}
 **********
-pkg.name: ${JSON.stringify(options.pkg.name)}
-argv: ${JSON.stringify(options.argv)}
-flags.input.description: ${JSON.stringify(options.flags.input.description)}
-inferType: ${JSON.stringify(options.inferType)}
-input: ${JSON.stringify(options.input)}
-autoHelp: ${JSON.stringify(options.autoHelp)}
-autoVersion: ${JSON.stringify(options.autoVersion)}
+pkg.name: ${JSON.stringify(flagOptions.pkg.name)}
+argv: ${JSON.stringify(flagOptions.argv)}
+flags.input.description: ${JSON.stringify(flagOptions.flags.input.description)}
+inferType: ${JSON.stringify(flagOptions.inferType)}
+input: ${JSON.stringify(flagOptions.input)}
+autoHelp: ${JSON.stringify(flagOptions.autoHelp)}
+autoVersion: ${JSON.stringify(flagOptions.autoVersion)}
 `;
 		},
 		flags: {

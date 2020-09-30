@@ -1,0 +1,76 @@
+Info 0    [22:50:26.846] Starting TS Server
+Info 1    [22:50:26.847] Version: 3.9.7
+Info 2    [22:50:26.847] Arguments: /Users/masafumi.koba/.nvm/versions/node/v14.11.0/bin/node /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.bin/tsserver --logFile /Users/masafumi.koba/git/ybiquitous/meow/.log/tsserver.log --logVerbosity info --cancellationPipeName /private/var/folders/w7/xmkvcyt15lgbzwq9ndf52lj00000gq/T/c31446645c91e276d0227ac7f3b4dee3/tscancellation*
+Info 3    [22:50:26.847] Platform: darwin NodeVersion: 14 CaseSensitive: false
+Info 4    [22:50:26.855] Search path: /Users/masafumi.koba/git/ybiquitous/meow
+Info 5    [22:50:26.855] For info: /Users/masafumi.koba/git/ybiquitous/meow/index.test-d.ts :: Config file name: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 6    [22:50:26.856] Opened configuration file /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 7    [22:50:26.863] Config: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json : {
+ "rootNames": [
+  "/Users/masafumi.koba/git/ybiquitous/meow/index.d.ts",
+  "/Users/masafumi.koba/git/ybiquitous/meow/index.test-d.ts"
+ ],
+ "options": {
+  "strict": true,
+  "jsx": 2,
+  "target": 5,
+  "lib": [
+   "lib.es2018.d.ts"
+  ],
+  "module": 1,
+  "moduleResolution": 2,
+  "noImplicitAny": true,
+  "strictNullChecks": true,
+  "noUnusedLocals": true,
+  "configFilePath": "/Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json"
+ }
+}
+Info 8    [22:50:26.882] Starting updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 9    [22:50:27.625] Finishing updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json Version: 1 structureChanged: true Elapsed: 743ms
+Info 10   [22:50:27.625] Project '/Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json' (Configured)
+Info 11   [22:50:27.625] 	Files (127)
+
+Info 12   [22:50:27.625] -----------------------------------------------
+Info 13   [22:50:50.359] Search path: /Users/masafumi.koba/git/ybiquitous/meow
+Info 14   [22:50:50.359] For info: /Users/masafumi.koba/git/ybiquitous/meow/index.d.ts :: Config file name: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 15   [22:51:11.600] Starting updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 16   [22:51:11.631] Finishing updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json Version: 2 structureChanged: false Elapsed: 31ms
+Info 17   [22:51:11.631] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 18   [22:51:12.153] Starting updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 19   [22:51:12.167] Finishing updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json Version: 3 structureChanged: false Elapsed: 13ms
+Info 20   [22:51:12.167] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 21   [22:51:12.262] Starting updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 22   [22:51:12.273] Finishing updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json Version: 4 structureChanged: false Elapsed: 11ms
+Info 23   [22:51:12.273] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 24   [22:51:13.112] Starting updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 25   [22:51:13.124] Finishing updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json Version: 5 structureChanged: false Elapsed: 12ms
+Info 26   [22:51:13.124] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 27   [22:51:20.771] Starting updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 28   [22:51:20.806] Finishing updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json Version: 6 structureChanged: true Elapsed: 35ms
+Info 29   [22:51:20.807] Different program with same set of files:: oldProgram.structureIsReused:: 1
+Info 30   [22:51:21.350] Starting updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 31   [22:51:21.365] Finishing updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json Version: 7 structureChanged: false Elapsed: 14ms
+Info 32   [22:51:21.365] Different program with same set of files:: oldProgram.structureIsReused:: 2
+Info 33   [22:51:21.958] Starting updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json
+Info 34   [22:51:21.991] Finishing updateGraphWorker: Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json Version: 8 structureChanged: true Elapsed: 32ms
+Info 35   [22:51:21.991] Different program with same set of files:: oldProgram.structureIsReused:: 1
+Info 36   [22:52:3.901] DirectoryWatcher:: Triggered with /users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.map.3469259393 :: WatchInfo: /users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project:  WatchType: node_modules for closed script infos in them
+Info 37   [22:52:3.901] Elapsed:: 0ms DirectoryWatcher:: Triggered with /users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.map.3469259393 :: WatchInfo: /users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project:  WatchType: node_modules for closed script infos in them
+Info 38   [22:52:3.901] DirectoryWatcher:: Triggered with /users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.map :: WatchInfo: /users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project:  WatchType: node_modules for closed script infos in them
+Info 39   [22:52:3.901] Elapsed:: 0ms DirectoryWatcher:: Triggered with /users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.map :: WatchInfo: /users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project:  WatchType: node_modules for closed script infos in them
+Info 40   [22:52:3.901] DirectoryWatcher:: Triggered with /users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.595687562 :: WatchInfo: /users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project:  WatchType: node_modules for closed script infos in them
+Info 41   [22:52:3.901] Elapsed:: 0ms DirectoryWatcher:: Triggered with /users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.595687562 :: WatchInfo: /users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project:  WatchType: node_modules for closed script infos in them
+Info 42   [22:52:3.901] DirectoryWatcher:: Triggered with /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.map.3469259393 :: WatchInfo: /Users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json WatchType: Failed Lookup Locations
+Info 43   [22:52:3.902] Elapsed:: 1ms DirectoryWatcher:: Triggered with /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.map.3469259393 :: WatchInfo: /Users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json WatchType: Failed Lookup Locations
+Info 44   [22:52:3.902] DirectoryWatcher:: Triggered with /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.map :: WatchInfo: /Users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json WatchType: Failed Lookup Locations
+Info 45   [22:52:3.902] Elapsed:: 0ms DirectoryWatcher:: Triggered with /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.map :: WatchInfo: /Users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json WatchType: Failed Lookup Locations
+Info 46   [22:52:3.902] DirectoryWatcher:: Triggered with /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.595687562 :: WatchInfo: /Users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json WatchType: Failed Lookup Locations
+Info 47   [22:52:3.902] Elapsed:: 0ms DirectoryWatcher:: Triggered with /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.595687562 :: WatchInfo: /Users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json WatchType: Failed Lookup Locations
+Info 48   [22:52:3.951] DirectoryWatcher:: Triggered with /users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.595687562 :: WatchInfo: /users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project:  WatchType: node_modules for closed script infos in them
+Info 49   [22:52:3.952] Elapsed:: 0ms DirectoryWatcher:: Triggered with /users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.595687562 :: WatchInfo: /users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project:  WatchType: node_modules for closed script infos in them
+Info 50   [22:52:3.952] DirectoryWatcher:: Triggered with /users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js :: WatchInfo: /users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project:  WatchType: node_modules for closed script infos in them
+Info 51   [22:52:3.952] Elapsed:: 0ms DirectoryWatcher:: Triggered with /users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js :: WatchInfo: /users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project:  WatchType: node_modules for closed script infos in them
+Info 52   [22:52:3.952] DirectoryWatcher:: Triggered with /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.595687562 :: WatchInfo: /Users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json WatchType: Failed Lookup Locations
+Info 53   [22:52:3.952] Elapsed:: 0ms DirectoryWatcher:: Triggered with /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js.595687562 :: WatchInfo: /Users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json WatchType: Failed Lookup Locations
+Info 54   [22:52:3.952] DirectoryWatcher:: Triggered with /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js :: WatchInfo: /Users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json WatchType: Failed Lookup Locations
+Info 55   [22:52:3.952] Elapsed:: 0ms DirectoryWatcher:: Triggered with /Users/masafumi.koba/git/ybiquitous/meow/node_modules/.cache/ava/efa810df3d247408731fad7bfb7e9a10.js :: WatchInfo: /Users/masafumi.koba/git/ybiquitous/meow/node_modules 1 undefined Project: /Users/masafumi.koba/git/ybiquitous/meow/tsconfig.json WatchType: Failed Lookup Locations

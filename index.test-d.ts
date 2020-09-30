@@ -67,11 +67,11 @@ result.showHelp(1);
 result.showVersion();
 
 meow({
-	help: ({wholeText, flagLines, description, options}) => {
+	help: ({wholeText, description, flagLines, flagOptions}) => {
 		expectType<string>(wholeText);
-		expectType<readonly string[]>(flagLines);
 		expectType<string>(description);
-		expectType<Readonly<Options<AnyFlags>>>(options);
+		expectType<readonly string[]>(flagLines);
+		expectType<Readonly<Options<AnyFlags>>>(flagOptions);
 		return 'help text';
 	}
 });
