@@ -189,12 +189,12 @@ Also, you can customize the auto-generated help text by giving the function as f
 
 ```js
 meow({
-  help: ({wholeText, flagLines, description, options}) => {
-    return 'A help text you want...';
-  },
-  flags: {
-    rainbow: {type: 'boolean', alias: 'r'}
-  }
+	help: ({wholeText, flagLines, description, options}) => {
+		return 'A help text you want...';
+	},
+	flags: {
+		rainbow: {type: 'boolean', alias: 'r'}
+	}
 });
 ```
 
