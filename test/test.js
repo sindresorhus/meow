@@ -312,6 +312,20 @@ test('supports `number` flag type - throws on incorrect default value', t => {
 	});
 });
 
+test('isMultiple - unset flag returns empty array', t => {
+	t.deepEqual(meow({
+		argv: [],
+		flags: {
+			foo: {
+				type: 'string',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: []
+	});
+});
+
 test('isMultiple - flag set once returns array', t => {
 	t.deepEqual(meow({
 		argv: ['--foo=bar'],
@@ -408,25 +422,6 @@ test('isMultiple - boolean flag is false by default', t => {
 	});
 });
 
-test('isMultiple - flag with `booleanDefault: undefined` => filter out unset boolean args', t => {
-	t.deepEqual(meow({
-		argv: ['--foo'],
-		booleanDefault: undefined,
-		flags: {
-			foo: {
-				type: 'boolean',
-				isMultiple: true
-			},
-			bar: {
-				type: 'boolean',
-				isMultiple: true
-			}
-		}
-	}).flags, {
-		foo: [true]
-	});
-});
-
 test('isMultiple - number flag', t => {
 	t.deepEqual(meow({
 		argv: ['--foo=1.3', '--foo=-1'],
@@ -508,17 +503,6 @@ test('isMultiple - handles multi-word flag name', t => {
 	}).flags, {
 		fooBar: ['baz']
 	});
-});
-
-test('isMultiple - handles non-set flags correctly', t => {
-	t.deepEqual(meow({
-		argv: [],
-		flags: {
-			foo: {
-				isMultiple: true
-			}
-		}
-	}).flags, {});
 });
 
 if (NODE_MAJOR_VERSION >= 14) {
