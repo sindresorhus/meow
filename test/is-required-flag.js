@@ -87,9 +87,9 @@ test('spawn cli and test isRequired with isMultiple giving a single value', asyn
 	t.is(stdout, '[ 1 ]');
 });
 
-test('spawn cli and test isRequired with isMultiple giving a multiple values', async t => {
-	const {stdout} = await execa(fixtureRequiredMultiplePath, ['--test', '1', '2', '3']);
-	t.is(stdout, '[ 1, 2, 3 ]');
+test('spawn cli and test isRequired with isMultiple giving multiple values', async t => {
+	const {stdout} = await execa(fixtureRequiredMultiplePath, ['--test', '1', '--test', '2']);
+	t.is(stdout, '[ 1, 2 ]');
 });
 
 test('spawn cli and test isRequired with isMultiple giving no values, but flag is given', async t => {

@@ -124,11 +124,13 @@ const meow = (helpText, options) => {
 
 	parserOptions = buildParserOptions(parserOptions);
 
+	parserOptions.configuration = {
+		...parserOptions.configuration,
+		'greedy-arrays': false
+	};
+
 	if (parserOptions['--']) {
-		parserOptions.configuration = {
-			...parserOptions.configuration,
-			'populate--': true
-		};
+		parserOptions.configuration['populate--'] = true;
 	}
 
 	const {pkg} = options;
