@@ -14,6 +14,7 @@ test('spawn cli and test not specifying required flags', async t => {
 		t.regex(message, /Command failed with exit code 2/);
 		t.regex(stderr, /Missing required flag/);
 		t.regex(stderr, /--test, -t/);
+		t.regex(stderr, /--kebab-case/);
 		t.regex(stderr, /--number/);
 		t.notRegex(stderr, /--notRequired/);
 	}
@@ -23,10 +24,12 @@ test('spawn cli and test specifying all required flags', async t => {
 	const {stdout} = await execa(fixtureRequiredPath, [
 		'-t',
 		'test',
+		'--kebab-case',
+		'kebab',
 		'--number',
 		'6'
 	]);
-	t.is(stdout, 'test,6');
+	t.is(stdout, 'test,kebab,6');
 });
 
 test('spawn cli and test specifying required string flag with an empty string as value', async t => {

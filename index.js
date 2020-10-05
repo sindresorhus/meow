@@ -2,6 +2,7 @@
 const path = require('path');
 const buildParserOptions = require('minimist-options');
 const parseArguments = require('yargs-parser');
+const camelCase = require('camelcase');
 const camelCaseKeys = require('camelcase-keys');
 const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
@@ -25,11 +26,12 @@ const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
 		}
 	}
 
-	if (typeof receivedFlags[flagName] === 'undefined') {
+	const normalizedFlagName = camelCase(flagName);
+	if (typeof receivedFlags[normalizedFlagName] === 'undefined') {
 		return isFlagRequired;
 	}
 
-	return flag.isMultiple && receivedFlags[flagName].length === 0;
+	return flag.isMultiple && receivedFlags[normalizedFlagName].length === 0;
 };
 
 const getMissingRequiredFlags = (flags, receivedFlags, input) => {

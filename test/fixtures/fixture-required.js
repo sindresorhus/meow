@@ -14,6 +14,10 @@ const cli = meow({
 			alias: 't',
 			isRequired: true
 		},
+		'kebab-case': {
+			type: 'string',
+			isRequired: true
+		},
 		number: {
 			type: 'number',
 			isRequired: true
@@ -24,4 +28,4 @@ const cli = meow({
 	}
 });
 
-console.log(`${cli.flags.test},${cli.flags.number}`);
+console.log(`${cli.flags.test},${cli.flags.kebabCase},${cli.flags.number}`);
