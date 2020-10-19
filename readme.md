@@ -245,6 +245,8 @@ The `default` value set in `boolean` flags take precedence over `booleanDefault`
 
 _Note: If used in conjunction with `isMultiple`, the default flag value is set to `[]`._
 
+__Caution: Explicitly specifying `undefined` for `booleanDefault` has different meaning from omitting key itself.__
+
 Example:
 
 ```js
