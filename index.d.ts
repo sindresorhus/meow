@@ -125,9 +125,13 @@ declare namespace meow {
 		readonly inferType?: boolean;
 
 		/**
-		Value of `boolean` flags not defined in `argv`. If set to `undefined` the flags not defined in `argv` will be excluded from the result. The `default` value set in `boolean` flags take precedence over `booleanDefault`.
+		Value of `boolean` flags not defined in `argv`.
 
-		__Caution: Explicitly specifying undefined for `booleanDefault` has different meaning from omitting key itself.__
+		If set to `undefined`, the flags not defined in `argv` will be excluded from the result. The `default` value set in `boolean` flags take precedence over `booleanDefault`.
+
+		_Note: If used in conjunction with `isMultiple`, the default flag value is set to `[]`._
+
+		__Caution: Explicitly specifying `undefined` for `booleanDefault` has different meaning from omitting key itself.__
 
 		@example
 		```
