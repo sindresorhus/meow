@@ -202,24 +202,24 @@ declare namespace meow {
 
 	type TypedFlag<Flag extends AnyFlag> =
 		Flag extends {type: 'number'}
-		? number
-		: Flag extends {type: 'string'}
-		? string
-		: Flag extends {type: 'boolean'}
-		? boolean
-		: unknown;
+			? number
+			: Flag extends {type: 'string'}
+				? string
+				: Flag extends {type: 'boolean'}
+					? boolean
+					: unknown;
 
 	type PossiblyOptionalFlag<Flag extends AnyFlag, FlagType> =
 		Flag extends {isRequired: true}
-		? FlagType
-		: Flag extends {default: any}
-		? FlagType
-		: FlagType | undefined;
+			? FlagType
+			: Flag extends {default: any}
+				? FlagType
+				: FlagType | undefined;
 
 	type TypedFlags<Flags extends AnyFlags> = {
 		[F in keyof Flags]: Flags[F] extends {isMultiple: true}
-		? PossiblyOptionalFlag<Flags[F], Array<TypedFlag<Flags[F]>>>
-		: PossiblyOptionalFlag<Flags[F], TypedFlag<Flags[F]>>
+			? PossiblyOptionalFlag<Flags[F], Array<TypedFlag<Flags[F]>>>
+			: PossiblyOptionalFlag<Flags[F], TypedFlag<Flags[F]>>
 	};
 
 	interface Result<Flags extends AnyFlags> {
@@ -273,14 +273,14 @@ import foo = require('.');
 
 const cli = meow(`
 	Usage
-		$ foo <input>
+	  $ foo <input>
 
 	Options
-		--rainbow, -r  Include a rainbow
+	  --rainbow, -r  Include a rainbow
 
 	Examples
-		$ foo unicorns --rainbow
-		🌈 unicorns 🌈
+	  $ foo unicorns --rainbow
+	  🌈 unicorns 🌈
 `, {
 	flags: {
 		rainbow: {
