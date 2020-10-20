@@ -143,6 +143,7 @@ The key is the flag name and the value is an object with any of:
 	- The second argument is the **input** string array, which contains the non-flag arguments.
 	- The function should return a `boolean`, true if the flag is required, otherwise false.
 - `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
+	- Multiple values are provided by specifying the flag multiple times, e.g. `$ foo -u rainbow -u cat`. Space- or comma-separated values are *not* supported.
 
 Example:
 

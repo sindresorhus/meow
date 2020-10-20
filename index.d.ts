@@ -40,6 +40,8 @@ declare namespace meow {
 		- `isRequired`: Determine if the flag is required.
 			If it's only known at runtime whether the flag is required or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
 		- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
+			Multiple values are provided by specifying the flag multiple times, e.g. `$ foo -u rainbow -u cat`.
+			Space- or comma-separated values are *not* supported.
 
 		@example
 		```
@@ -198,24 +200,24 @@ declare namespace meow {
 
 	type TypedFlag<Flag extends AnyFlag> =
 		Flag extends {type: 'number'}
-			? number
-			: Flag extends {type: 'string'}
-				? string
-				: Flag extends {type: 'boolean'}
-					? boolean
-					: unknown;
+		? number
+		: Flag extends {type: 'string'}
+		? string
+		: Flag extends {type: 'boolean'}
+		? boolean
+		: unknown;
 
 	type PossiblyOptionalFlag<Flag extends AnyFlag, FlagType> =
 		Flag extends {isRequired: true}
-			? FlagType
-			: Flag extends {default: any}
-				? FlagType
-				: FlagType | undefined;
+		? FlagType
+		: Flag extends {default: any}
+		? FlagType
+		: FlagType | undefined;
 
 	type TypedFlags<Flags extends AnyFlags> = {
 		[F in keyof Flags]: Flags[F] extends {isMultiple: true}
-			? PossiblyOptionalFlag<Flags[F], Array<TypedFlag<Flags[F]>>>
-			: PossiblyOptionalFlag<Flags[F], TypedFlag<Flags[F]>>
+		? PossiblyOptionalFlag<Flags[F], Array<TypedFlag<Flags[F]>>>
+		: PossiblyOptionalFlag<Flags[F], TypedFlag<Flags[F]>>
 	};
 
 	interface Result<Flags extends AnyFlags> {
@@ -269,14 +271,14 @@ import foo = require('.');
 
 const cli = meow(`
 	Usage
-	  $ foo <input>
+		$ foo <input>
 
 	Options
-	  --rainbow, -r  Include a rainbow
+		--rainbow, -r  Include a rainbow
 
 	Examples
-	  $ foo unicorns --rainbow
-	  🌈 unicorns 🌈
+		$ foo unicorns --rainbow
+		🌈 unicorns 🌈
 `, {
 	flags: {
 		rainbow: {
