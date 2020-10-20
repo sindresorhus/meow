@@ -136,7 +136,7 @@ declare namespace meow {
 
 		const cli = meow(`
 			Usage
-			  $ foo
+				$ foo
 
 			Options
 				--rainbow, -r  Include a rainbow
