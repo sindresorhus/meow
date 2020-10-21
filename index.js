@@ -95,10 +95,8 @@ const meow = (helpText, options) => {
 		cwd: parentDir,
 		normalize: false
 	})
-	const pkg = foundPkg ? foundPkg.packageJson : {}
-
 	options = {
-		pkg,
+		pkg: foundPkg ? foundPkg.packageJson : {},
 		argv: process.argv.slice(2),
 		flags: {},
 		inferType: false,
