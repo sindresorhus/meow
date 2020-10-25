@@ -355,6 +355,20 @@ test('isMultiple - flag with space separated values', t => {
 	t.deepEqual(flags.foo, ['bar']);
 });
 
+test('isMultiple - flag with comma separated values', t => {
+	t.deepEqual(meow({
+		argv: ['--foo', 'bar,baz'],
+		flags: {
+			foo: {
+				type: 'string',
+				isMultiple: true
+			}
+		}
+	}).flags, {
+		foo: ['bar,baz']
+	});
+});
+
 test('single flag set more than once => throws', t => {
 	t.throws(() => {
 		meow({
