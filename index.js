@@ -95,6 +95,7 @@ const meow = (helpText, options) => {
 		cwd: parentDir,
 		normalize: false
 	});
+
 	options = {
 		pkg: foundPkg ? foundPkg.packageJson : {},
 		argv: process.argv.slice(2),
