@@ -91,11 +91,13 @@ const meow = (helpText, options) => {
 		helpText = '';
 	}
 
+	const foundPkg = readPkgUp.sync({
+		cwd: parentDir,
+		normalize: false
+	});
+
 	options = {
-		pkg: readPkgUp.sync({
-			cwd: parentDir,
-			normalize: false
-		}).packageJson || {},
+		pkg: foundPkg ? foundPkg.packageJson : {},
 		argv: process.argv.slice(2),
 		flags: {},
 		inferType: false,
