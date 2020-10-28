@@ -54,8 +54,10 @@ const reportMissingRequiredFlags = missingRequiredFlags => {
 	}
 };
 
-const buildParserFlags = ({flags, booleanDefault}) =>
-	Object.entries(flags).reduce((parserFlags, [flagKey, flagValue]) => {
+const buildParserFlags = ({flags, booleanDefault}) => {
+	const parserFlags = {};
+
+	for (const [flagKey, flagValue] of Object.entries(flags)) {
 		const flag = {...flagValue};
 
 		if (
@@ -73,9 +75,10 @@ const buildParserFlags = ({flags, booleanDefault}) =>
 		}
 
 		parserFlags[flagKey] = flag;
+	}
 
-		return parserFlags;
-	}, {});
+	return parserFlags;
+};
 
 const validateFlags = (flags, options) => {
 	for (const [flagKey, flagValue] of Object.entries(options.flags)) {

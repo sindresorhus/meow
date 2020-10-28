@@ -26,7 +26,7 @@ declare namespace meow {
 	type NumberFlag = Flag<'number', number>;
 
 	type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
-	type AnyFlags = {[key: string]: AnyFlag};
+	type AnyFlags = Record<string, AnyFlag>;
 
 	interface Options<Flags extends AnyFlags> {
 		/**
@@ -107,7 +107,7 @@ declare namespace meow {
 
 		_You most likely don't need this option._
 		*/
-		readonly pkg?: {[key: string]: unknown};
+		readonly pkg?: Record<string, unknown>;
 
 		/**
 		Custom arguments object.
@@ -232,12 +232,12 @@ declare namespace meow {
 		/**
 		Flags converted to camelCase excluding aliases.
 		*/
-		flags: TypedFlags<Flags> & {[name: string]: unknown};
+		flags: TypedFlags<Flags> & Record<string, unknown>;
 
 		/**
 		Flags converted camelCase including aliases.
 		*/
-		unnormalizedFlags: TypedFlags<Flags> & {[name: string]: unknown};
+		unnormalizedFlags: TypedFlags<Flags> & Record<string, unknown>;
 
 		/**
 		The `package.json` object.
