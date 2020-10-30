@@ -15,7 +15,8 @@ test('spawn cli and test not specifying required flags', async t => {
 		t.regex(stderr, /Missing required flag/);
 		t.regex(stderr, /--test, -t/);
 		t.regex(stderr, /--number/);
-		t.notRegex(stderr, /--notRequired/);
+		t.regex(stderr, /--kebab-case/);
+		t.notRegex(stderr, /--not-required/);
 	}
 });
 
@@ -24,7 +25,9 @@ test('spawn cli and test specifying all required flags', async t => {
 		'-t',
 		'test',
 		'--number',
-		'6'
+		'6',
+		'--kebab-case',
+		'test'
 	]);
 	t.is(stdout, 'test,6');
 });
@@ -63,7 +66,7 @@ test('spawn cli and test setting isRequired as a function and specifying only th
 		const {stderr, message} = error;
 		t.regex(message, /Command failed with exit code 2/);
 		t.regex(stderr, /Missing required flag/);
-		t.regex(stderr, /--withTrigger/);
+		t.regex(stderr, /--with-trigger/);
 	}
 });
 
