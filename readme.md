@@ -1,4 +1,4 @@
-# meow [![CI](https://github.com/sindresorhus/meow/workflows/CI/badge.svg)](https://github.com/sindresorhus/meow/actions)
+# meow
 
 > CLI app helper
 
