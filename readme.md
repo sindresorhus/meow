@@ -1,4 +1,4 @@
-# meow [![Build Status](https://travis-ci.org/sindresorhus/meow.svg?branch=master)](https://travis-ci.org/sindresorhus/meow)
+# meow
 
 > CLI app helper
 
