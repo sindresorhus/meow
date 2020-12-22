@@ -65,3 +65,14 @@ expectType<string[] | undefined>(result.unnormalizedFlags.abc);
 result.showHelp();
 result.showHelp(1);
 result.showVersion();
+
+const options = {
+	flags: {
+		rainbow: {
+			type: 'boolean',
+			alias: 'r'
+		}
+	}
+} as const;
+
+meow('', options);
