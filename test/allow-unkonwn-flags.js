@@ -6,11 +6,13 @@ const fixtureAllowUnknownFlags = path.join(__dirname, 'fixtures', 'fixture-allow
 
 test('spawn CLI and test specifying unknown flags', async t => {
 	const error = await t.throwsAsync(
-		execa(fixtureAllowUnknownFlags, ['--foo', 'bar', '--unspecified-a', '--unspecified-b', 'input-is-allowed'])
+		execa(fixtureAllowUnknownFlags, ['--foo', 'bar', '--unspecified-a', '--unspecified-b', 'input-is-allowed']),
+		{
+			message: /^Command failed with exit code 2/
+		}
 	);
-	const {stderr, message} = error;
-	t.regex(message, /Command failed with exit code 2/);
-	t.regex(stderr, /Unknown flag/);
+	const {stderr} = error;
+	t.regex(stderr, /Unknown flags/);
 	t.regex(stderr, /--unspecified-a/);
 	t.regex(stderr, /--unspecified-b/);
 	t.notRegex(stderr, /input-is-allowed/);

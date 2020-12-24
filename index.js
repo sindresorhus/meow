@@ -55,8 +55,10 @@ const reportMissingRequiredFlags = missingRequiredFlags => {
 };
 
 const reportUnknownFlags = unknownFlags => {
-	console.error(`Unknown flag${unknownFlags.length > 1 ? 's' : ''}`);
-	console.error(unknownFlags.join('\n'));
+	console.error([
+		`Unknown flag${unknownFlags.length > 1 ? 's' : ''}`,
+		...unknownFlags
+	].join('\n'));
 };
 
 const buildParserFlags = ({flags, booleanDefault}) => {
