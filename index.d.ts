@@ -199,6 +199,13 @@ declare namespace meow {
 		@default true
 		*/
 		readonly hardRejection?: boolean;
+
+		/**
+		Whether to allow unknown flags or not.
+
+		@default true
+		*/
+		readonly allowUnknownFlags?: boolean;
 	}
 
 	type TypedFlag<Flag extends AnyFlag> =

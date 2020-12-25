@@ -54,6 +54,13 @@ const reportMissingRequiredFlags = missingRequiredFlags => {
 	}
 };
 
+const reportUnknownFlags = unknownFlags => {
+	console.error([
+		`Unknown flag${unknownFlags.length > 1 ? 's' : ''}`,
+		...unknownFlags
+	].join('\n'));
+};
+
 const buildParserFlags = ({flags, booleanDefault}) => {
 	const parserFlags = {};
 
@@ -110,6 +117,7 @@ const meow = (helpText, options) => {
 		autoVersion: true,
 		booleanDefault: false,
 		hardRejection: true,
+		allowUnknownFlags: true,
 		...options
 	};
 
@@ -137,6 +145,11 @@ const meow = (helpText, options) => {
 
 	if (parserOptions['--']) {
 		parserOptions.configuration['populate--'] = true;
+	}
+
+	if (!options.allowUnknownFlags) {
+		// Collect unknown options in `argv._` to be checked later.
+		parserOptions.configuration['unknown-options-as-args'] = true;
 	}
 
 	const {pkg} = options;
@@ -176,6 +189,14 @@ const meow = (helpText, options) => {
 
 	const input = argv._;
 	delete argv._;
+
+	if (!options.allowUnknownFlags) {
+		const unknownFlags = input.filter(item => typeof item === 'string' && item.startsWith('-'));
+		if (unknownFlags.length > 0) {
+			reportUnknownFlags(unknownFlags);
+			process.exit(2);
+		}
+	}
 
 	const flags = camelCaseKeys(argv, {exclude: ['--', /^\w$/]});
 	const unnormalizedFlags = {...flags};
