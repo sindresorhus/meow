@@ -58,7 +58,7 @@ const reportMissingRequiredFlags = missingRequiredFlags => {
 const validateOptions = ({flags}) => {
 	const invalidFlags = Object.keys(flags).filter(flagKey => flagKey.includes('-') && flagKey !== '--');
 	if (invalidFlags.length > 0) {
-		throw new Error('Flag keys may not contain \'-\': ' + invalidFlags.join(', '));
+		throw new Error(`Flag keys may not contain '-': ${invalidFlags.join(', ')}`);
 	}
 };
 
