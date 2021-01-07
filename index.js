@@ -3,6 +3,7 @@ const path = require('path');
 const buildParserOptions = require('minimist-options');
 const parseArguments = require('yargs-parser');
 const camelCaseKeys = require('camelcase-keys');
+const decamelize = require('decamelize');
 const decamelizeKeys = require('decamelize-keys');
 const trimNewlines = require('trim-newlines');
 const redent = require('redent');
@@ -50,7 +51,14 @@ const getMissingRequiredFlags = (flags, receivedFlags, input) => {
 const reportMissingRequiredFlags = missingRequiredFlags => {
 	console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
 	for (const flag of missingRequiredFlags) {
-		console.error(`\t--${flag.key}${flag.alias ? `, -${flag.alias}` : ''}`);
+		console.error(`\t--${decamelize(flag.key, '-')}${flag.alias ? `, -${flag.alias}` : ''}`);
+	}
+};
+
+const validateOptions = ({flags}) => {
+	const invalidFlags = Object.keys(flags).filter(flagKey => flagKey.includes('-') && flagKey !== '--');
+	if (invalidFlags.length > 0) {
+		throw new Error(`Flag keys may not contain '-': ${invalidFlags.join(', ')}`);
 	}
 };
 
@@ -125,6 +133,7 @@ const meow = (helpText, options) => {
 		hardRejection();
 	}
 
+	validateOptions(options);
 	let parserOptions = {
 		arguments: options.input,
 		...buildParserFlags(options)

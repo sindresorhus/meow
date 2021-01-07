@@ -99,6 +99,13 @@ test('single character flag casing should be preserved', t => {
 	t.deepEqual(meow({argv: ['-F']}).flags, {F: true});
 });
 
+test('flag declared in kebab-case is an error', t => {
+	const error = t.throws(() => {
+		meow({flags: {'kebab-case': 'boolean', test: 'boolean', 'another-one': 'boolean'}});
+	});
+	t.is(error.message, 'Flag keys may not contain \'-\': kebab-case, another-one');
+});
+
 test('type inference', t => {
 	t.is(meow({argv: ['5']}).input[0], '5');
 	t.is(meow({argv: ['5']}, {input: 'string'}).input[0], '5');

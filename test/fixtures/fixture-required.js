@@ -18,6 +18,10 @@ const cli = meow({
 			type: 'number',
 			isRequired: true
 		},
+		kebabCase: {
+			type: 'string',
+			isRequired: true
+		},
 		notRequired: {
 			type: 'string'
 		}
