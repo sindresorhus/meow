@@ -189,9 +189,7 @@ const meow = (helpText, options) => {
 	if (argv._.length === 0 && options.argv.length === 1) {
 		if (argv.version === true && options.autoVersion) {
 			showVersion();
-		}
-
-		if (argv.help === true && options.autoHelp) {
+		} else if (argv.help === true && options.autoHelp) {
 			showHelp(0);
 		}
 	}
