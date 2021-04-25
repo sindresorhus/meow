@@ -138,7 +138,7 @@ declare namespace meow {
 
 		@example
 		```
-		import meow = require('meow');
+		import meow from 'meow';
 
 		const cli = meow(`
 			Usage
@@ -277,9 +277,8 @@ declare namespace meow {
 @example
 ```
 #!/usr/bin/env node
-'use strict';
-import meow = require('meow');
-import foo = require('.');
+import meow = from 'meow';
+import foo from './index.js';
 
 const cli = meow(`
 	Usage
@@ -309,7 +308,9 @@ const cli = meow(`
 foo(cli.input[0], cli.flags);
 ```
 */
+// eslint-disable-next-line no-redeclare
 declare function meow<Flags extends meow.AnyFlags>(helpMessage: string, options?: meow.Options<Flags>): meow.Result<Flags>;
+// eslint-disable-next-line no-redeclare
 declare function meow<Flags extends meow.AnyFlags>(options?: meow.Options<Flags>): meow.Result<Flags>;
 
-export = meow;
+export default meow;

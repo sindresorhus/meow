@@ -10,8 +10,10 @@
 		"email": "sindresorhus@gmail.com",
 		"url": "https://sindresorhus.com"
 	},
+	"type": "module",
+	"exports": "./index.js",
 	"engines": {
-		"node": ">=10"
+		"node": ">=12"
 	},
 	"scripts": {
 		"test": "xo && ava && tsd"
@@ -47,18 +49,19 @@
 		"hard-rejection": "^2.1.0",
 		"minimist-options": "4.1.0",
 		"normalize-package-data": "^3.0.0",
-		"read-pkg-up": "^7.0.1",
+		"read-pkg-up": "^8.0.0",
 		"redent": "^3.0.0",
 		"trim-newlines": "^3.0.0",
 		"type-fest": "^0.18.0",
 		"yargs-parser": "^20.2.3"
 	},
 	"devDependencies": {
-		"ava": "^2.4.0",
+		"ava": "^3.15.0",
 		"execa": "^4.1.0",
 		"indent-string": "^4.0.0",
+		"read-pkg": "^5.2.0",
 		"tsd": "^0.13.1",
-		"xo": "^0.34.1"
+		"xo": "^0.39.1"
 	},
 	"xo": {
 		"rules": {

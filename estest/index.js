@@ -1,6 +1,6 @@
-import {createRequire} from 'module';
+import meow from '../index.js';
 
-const meow = createRequire(import.meta.url)('../index.js');
+console.log(import.meta.url);
 
 meow(`
 	Usage

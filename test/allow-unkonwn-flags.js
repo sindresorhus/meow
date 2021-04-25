@@ -1,7 +1,9 @@
 import path from 'path';
+import {fileURLToPath} from 'url';
 import test from 'ava';
 import execa from 'execa';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixtureAllowUnknownFlags = path.join(__dirname, 'fixtures', 'fixture-allow-unknown-flags.js');
 
 test('spawn CLI and test specifying unknown flags', async t => {
