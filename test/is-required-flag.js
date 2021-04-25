@@ -1,6 +1,6 @@
 import test from 'ava';
 import execa from 'execa';
-import path from 'path';
+import path from 'node:path';
 import {fileURLToPath} from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
