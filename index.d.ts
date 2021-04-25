@@ -307,6 +307,6 @@ foo(cli.input[0], cli.flags);
 ```
 */
 
-declare function meow<Flags extends AnyFlags>(helpMessage: string | Options<Flags>, options?: Options<Flags>): Result<Flags>;
-
-export default meow;
+export default function meow<Flags extends AnyFlags>(helpMessage: string, options?: Options<Flags>): Result<Flags>;
+// eslint-disable-next-line no-redeclare
+export default function meow<Flags extends AnyFlags>(options?: Options<Flags>): Result<Flags>;
