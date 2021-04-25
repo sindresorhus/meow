@@ -1,9 +1,8 @@
 import {PackageJson} from 'type-fest';
 
-declare namespace meow {
-	type FlagType = 'string' | 'boolean' | 'number';
+export type FlagType = 'string' | 'boolean' | 'number';
 
-	/**
+/**
 	Callback function to determine if a flag is required during runtime.
 
 	@param flags - Contains the flags converted to camel-case excluding aliases.
@@ -11,15 +10,15 @@ declare namespace meow {
 
 	@returns True if the flag is required, otherwise false.
 	*/
-	type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
+export type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
 
-	interface Flag<Type extends FlagType, Default> {
-		readonly type?: Type;
-		readonly alias?: string;
-		readonly default?: Default;
-		readonly isRequired?: boolean | IsRequiredPredicate;
-		readonly isMultiple?: boolean;
-	}
+export interface Flag<Type extends FlagType, Default> {
+	readonly type?: Type;
+	readonly alias?: string;
+	readonly default?: Default;
+	readonly isRequired?: boolean | IsRequiredPredicate;
+	readonly isMultiple?: boolean;
+}
 
 	type StringFlag = Flag<'string', string>;
 	type BooleanFlag = Flag<'boolean', boolean>;
@@ -28,8 +27,8 @@ declare namespace meow {
 	type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
 	type AnyFlags = Record<string, AnyFlag>;
 
-	interface Options<Flags extends AnyFlags> {
-		/**
+export interface Options<Flags extends AnyFlags> {
+	/**
 		Define argument flags.
 
 		The key is the flag name in camel-case and the value is an object with any of:
@@ -63,16 +62,16 @@ declare namespace meow {
 		}
 		```
 		*/
-		readonly flags?: Flags;
+	readonly flags?: Flags;
 
-		/**
+	/**
 		Description to show above the help text. Default: The package.json `"description"` property.
 
 		Set it to `false` to disable it altogether.
 		*/
-		readonly description?: string | false;
+	readonly description?: string | false;
 
-		/**
+	/**
 		The help text you want shown.
 
 		The input is reindented and starting/ending newlines are trimmed which means you can use a [template literal](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/template_strings) without having to care about using the correct amount of indent.
@@ -81,53 +80,53 @@ declare namespace meow {
 
 		Set it to `false` to disable it altogether.
 		*/
-		readonly help?: string | false;
+	readonly help?: string | false;
 
-		/**
+	/**
 		Set a custom version output. Default: The package.json `"version"` property.
 
 		Set it to `false` to disable it altogether.
 		*/
-		readonly version?: string | false;
+	readonly version?: string | false;
 
-		/**
+	/**
 		Automatically show the help text when the `--help` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own help text.
 
 		This option is only considered when there is only one argument in `process.argv`.
 		*/
-		readonly autoHelp?: boolean;
+	readonly autoHelp?: boolean;
 
-		/**
+	/**
 		Automatically show the version text when the `--version` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own version text.
 
 		This option is only considered when there is only one argument in `process.argv`.
 		*/
-		readonly autoVersion?: boolean;
+	readonly autoVersion?: boolean;
 
-		/**
+	/**
 		`package.json` as an `Object`. Default: Closest `package.json` upwards.
 
 		_You most likely don't need this option._
 		*/
-		readonly pkg?: Record<string, unknown>;
+	readonly pkg?: Record<string, unknown>;
 
-		/**
+	/**
 		Custom arguments object.
 
 		@default process.argv.slice(2)
 		*/
-		readonly argv?: readonly string[];
+	readonly argv?: readonly string[];
 
-		/**
+	/**
 		Infer the argument type.
 
 		By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would infer it as a number.
 
 		@default false
 		*/
-		readonly inferType?: boolean;
+	readonly inferType?: boolean;
 
-		/**
+	/**
 		Value of `boolean` flags not defined in `argv`.
 
 		If set to `undefined`, the flags not defined in `argv` will be excluded from the result. The `default` value set in `boolean` flags take precedence over `booleanDefault`.
@@ -193,24 +192,24 @@ declare namespace meow {
 		//}
 		```
 		*/
-		readonly booleanDefault?: boolean | null | undefined;
+	readonly booleanDefault?: boolean | null | undefined;
 
-		/**
+	/**
 		Whether to use [hard-rejection](https://github.com/sindresorhus/hard-rejection) or not. Disabling this can be useful if you need to handle `process.on('unhandledRejection')` yourself.
 
 		@default true
 		*/
-		readonly hardRejection?: boolean;
+	readonly hardRejection?: boolean;
 
-		/**
+	/**
 		Whether to allow unknown flags or not.
 
 		@default true
 		*/
-		readonly allowUnknownFlags?: boolean;
-	}
+	readonly allowUnknownFlags?: boolean;
+}
 
-	type TypedFlag<Flag extends AnyFlag> =
+export type TypedFlag<Flag extends AnyFlag> =
 		Flag extends {type: 'number'}
 			? number
 			: Flag extends {type: 'string'}
@@ -219,57 +218,56 @@ declare namespace meow {
 					? boolean
 					: unknown;
 
-	type PossiblyOptionalFlag<Flag extends AnyFlag, FlagType> =
+export type PossiblyOptionalFlag<Flag extends AnyFlag, FlagType> =
 		Flag extends {isRequired: true}
 			? FlagType
 			: Flag extends {default: any}
 				? FlagType
 				: FlagType | undefined;
 
-	type TypedFlags<Flags extends AnyFlags> = {
-		[F in keyof Flags]: Flags[F] extends {isMultiple: true}
-			? PossiblyOptionalFlag<Flags[F], Array<TypedFlag<Flags[F]>>>
-			: PossiblyOptionalFlag<Flags[F], TypedFlag<Flags[F]>>
-	};
+export type TypedFlags<Flags extends AnyFlags> = {
+	[F in keyof Flags]: Flags[F] extends {isMultiple: true}
+		? PossiblyOptionalFlag<Flags[F], Array<TypedFlag<Flags[F]>>>
+		: PossiblyOptionalFlag<Flags[F], TypedFlag<Flags[F]>>
+};
 
-	interface Result<Flags extends AnyFlags> {
-		/**
+export interface Result<Flags extends AnyFlags> {
+	/**
 		Non-flag arguments.
 		*/
-		input: string[];
+	input: string[];
 
-		/**
+	/**
 		Flags converted to camelCase excluding aliases.
 		*/
-		flags: TypedFlags<Flags> & Record<string, unknown>;
+	flags: TypedFlags<Flags> & Record<string, unknown>;
 
-		/**
+	/**
 		Flags converted camelCase including aliases.
 		*/
-		unnormalizedFlags: TypedFlags<Flags> & Record<string, unknown>;
+	unnormalizedFlags: TypedFlags<Flags> & Record<string, unknown>;
 
-		/**
+	/**
 		The `package.json` object.
 		*/
-		pkg: PackageJson;
+	pkg: PackageJson;
 
-		/**
+	/**
 		The help text used with `--help`.
 		*/
-		help: string;
+	help: string;
 
-		/**
+	/**
 		Show the help text and exit with code.
 
 		@param exitCode - The exit code to use. Default: `2`.
 		*/
-		showHelp: (exitCode?: number) => void;
+	showHelp: (exitCode?: number) => void;
 
-		/**
+	/**
 		Show the version text and exit.
 		*/
-		showVersion: () => void;
-	}
+	showVersion: () => void;
 }
 /**
 @param helpMessage - Shortcut for the `help` option.
@@ -308,5 +306,7 @@ const cli = meow(`
 foo(cli.input[0], cli.flags);
 ```
 */
+
+declare function meow<Flags extends AnyFlags>(helpMessage: string | Options<Flags>, options?: Options<Flags>): Result<Flags>;
 
 export default meow;
