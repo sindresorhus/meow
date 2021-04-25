@@ -3,7 +3,7 @@ import indentString from 'indent-string';
 import execa from 'execa';
 import path from 'path';
 import {fileURLToPath} from 'url';
-import readPkg from 'read-pkg';
+import {readPackageAsync} from 'read-pkg';
 import meow from '../index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -42,7 +42,7 @@ test('support help shortcut', t => {
 });
 
 test('spawn cli and show version', async t => {
-	const pkg = await readPkg();
+	const pkg = await readPackageAsync();
 	const {stdout} = await execa(fixturePath, ['--version']);
 	t.is(stdout, pkg.version);
 });
