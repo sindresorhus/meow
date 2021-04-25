@@ -308,9 +308,5 @@ const cli = meow(`
 foo(cli.input[0], cli.flags);
 ```
 */
-// eslint-disable-next-line no-redeclare
-declare function meow<Flags extends meow.AnyFlags>(helpMessage: string, options?: meow.Options<Flags>): meow.Result<Flags>;
-// eslint-disable-next-line no-redeclare
-declare function meow<Flags extends meow.AnyFlags>(options?: meow.Options<Flags>): meow.Result<Flags>;
 
 export default meow;
