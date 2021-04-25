@@ -1,8 +1,8 @@
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import test from 'ava';
 import indentString from 'indent-string';
 import execa from 'execa';
-import path from 'path';
-import {fileURLToPath} from 'url';
 import {readPackageAsync} from 'read-pkg';
 import meow from '../index.js';
 

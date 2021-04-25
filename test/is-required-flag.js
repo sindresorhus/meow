@@ -1,7 +1,7 @@
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import test from 'ava';
 import execa from 'execa';
-import path from 'node:path';
-import {fileURLToPath} from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixtureRequiredPath = path.join(__dirname, 'fixtures', 'fixture-required.js');
