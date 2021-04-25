@@ -1,7 +1,5 @@
 import meow from '../index.js';
 
-console.log(import.meta.url);
-
 meow(`
 	Usage
 	  $ estest <input>
