@@ -9,7 +9,7 @@ Callback function to determine if a flag is required during runtime.
 @param input - Contains the non-flag arguments.
 
 @returns True if the flag is required, otherwise false.
-	*/
+*/
 export type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
 
 export interface Flag<Type extends FlagType, Default> {
@@ -61,14 +61,14 @@ export interface Options<Flags extends AnyFlags> {
 		}
 	}
 	```
-		*/
+	*/
 	readonly flags?: Flags;
 
 	/**
 	Description to show above the help text. Default: The package.json `"description"` property.
 
 	Set it to `false` to disable it altogether.
-		*/
+	*/
 	readonly description?: string | false;
 
 	/**
@@ -79,42 +79,42 @@ export interface Options<Flags extends AnyFlags> {
 	The description will be shown above your help text automatically.
 
 	Set it to `false` to disable it altogether.
-		*/
+	*/
 	readonly help?: string | false;
 
 	/**
 	Set a custom version output. Default: The package.json `"version"` property.
 
 	Set it to `false` to disable it altogether.
-		*/
+	*/
 	readonly version?: string | false;
 
 	/**
 	Automatically show the help text when the `--help` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own help text.
 
 	This option is only considered when there is only one argument in `process.argv`.
-		*/
+	*/
 	readonly autoHelp?: boolean;
 
 	/**
 	Automatically show the version text when the `--version` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own version text.
 
 	This option is only considered when there is only one argument in `process.argv`.
-		*/
+	*/
 	readonly autoVersion?: boolean;
 
 	/**
 	`package.json` as an `Object`. Default: Closest `package.json` upwards.
 
 	_You most likely don't need this option._
-		*/
+	*/
 	readonly pkg?: Record<string, unknown>;
 
 	/**
 	Custom arguments object.
 
 	@default process.argv.slice(2)
-		*/
+	*/
 	readonly argv?: readonly string[];
 
 	/**
@@ -123,7 +123,7 @@ export interface Options<Flags extends AnyFlags> {
 	By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would infer it as a number.
 
 	@default false
-		*/
+	*/
 	readonly inferType?: boolean;
 
 	/**
@@ -191,21 +191,21 @@ export interface Options<Flags extends AnyFlags> {
 	//	…
 	//}
 	```
-		*/
+	*/
 	readonly booleanDefault?: boolean | null | undefined;
 
 	/**
 	Whether to use [hard-rejection](https://github.com/sindresorhus/hard-rejection) or not. Disabling this can be useful if you need to handle `process.on('unhandledRejection')` yourself.
 
 	@default true
-		*/
+	*/
 	readonly hardRejection?: boolean;
 
 	/**
 	Whether to allow unknown flags or not.
 
 	@default true
-		*/
+	*/
 	readonly allowUnknownFlags?: boolean;
 }
 
@@ -234,39 +234,39 @@ export type TypedFlags<Flags extends AnyFlags> = {
 export interface Result<Flags extends AnyFlags> {
 	/**
 	Non-flag arguments.
-		*/
+	*/
 	input: string[];
 
 	/**
 	Flags converted to camelCase excluding aliases.
-		*/
+	*/
 	flags: TypedFlags<Flags> & Record<string, unknown>;
 
 	/**
 	Flags converted camelCase including aliases.
-		*/
+	*/
 	unnormalizedFlags: TypedFlags<Flags> & Record<string, unknown>;
 
 	/**
 	The `package.json` object.
-		*/
+	*/
 	pkg: PackageJson;
 
 	/**
 	The help text used with `--help`.
-		*/
+	*/
 	help: string;
 
 	/**
 	Show the help text and exit with code.
 
 	@param exitCode - The exit code to use. Default: `2`.
-		*/
+	*/
 	showHelp: (exitCode?: number) => void;
 
 	/**
-		Show the version text and exit.
-		*/
+	Show the version text and exit.
+	*/
 	showVersion: () => void;
 }
 /**
