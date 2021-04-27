@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-'use strict';
-const meow = require('../..');
+import meow from '../../index.js';
 
 const cli = meow({
 	description: 'Custom description',
@@ -18,9 +17,9 @@ const cli = meow({
 });
 
 if (cli.flags.camelCaseOption === 'foo') {
-	Object.keys(cli.flags).forEach(x => {
+	for (const x of Object.keys(cli.flags)) {
 		console.log(x);
-	});
+	}
 } else {
 	console.log(cli.flags.camelCaseOption);
 }

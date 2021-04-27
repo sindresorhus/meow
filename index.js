@@ -1,19 +1,13 @@
-'use strict';
-const path = require('path');
-const buildParserOptions = require('minimist-options');
-const parseArguments = require('yargs-parser');
-const camelCaseKeys = require('camelcase-keys');
-const decamelize = require('decamelize');
-const decamelizeKeys = require('decamelize-keys');
-const trimNewlines = require('trim-newlines');
-const redent = require('redent');
-const readPkgUp = require('read-pkg-up');
-const hardRejection = require('hard-rejection');
-const normalizePackageData = require('normalize-package-data');
-
-// Prevent caching of this module so module.parent is always accurate
-delete require.cache[__filename];
-const parentDir = path.dirname(module.parent && module.parent.filename ? module.parent.filename : '.');
+import buildParserOptions from 'minimist-options';
+import parseArguments from 'yargs-parser';
+import camelCaseKeys from 'camelcase-keys';
+import decamelize from 'decamelize';
+import decamelizeKeys from 'decamelize-keys';
+import trimNewlines from 'trim-newlines';
+import redent from 'redent';
+import {readPackageUpSync} from 'read-pkg-up';
+import hardRejection from 'hard-rejection';
+import normalizePackageData from 'normalize-package-data';
 
 const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
 	const flag = definedFlags[flagName];
@@ -109,8 +103,7 @@ const meow = (helpText, options) => {
 		helpText = '';
 	}
 
-	const foundPkg = readPkgUp.sync({
-		cwd: parentDir,
+	const foundPkg = readPackageUpSync({
 		normalize: false
 	});
 
@@ -231,4 +224,4 @@ const meow = (helpText, options) => {
 	};
 };
 
-module.exports = meow;
+export default meow;

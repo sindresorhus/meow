@@ -1,7 +1,6 @@
 import {expectAssignable, expectType} from 'tsd';
 import {PackageJson} from 'type-fest';
-import meow = require('.');
-import {Result} from '.';
+import meow, {Result} from './index.js';
 
 expectType<Result<never>>(meow('Help text'));
 expectType<Result<never>>(meow('Help text', {hardRejection: false}));

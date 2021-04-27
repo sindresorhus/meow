@@ -1,10 +1,12 @@
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import test from 'ava';
 import indentString from 'indent-string';
 import execa from 'execa';
-import path from 'path';
-import pkg from '../package.json';
-import meow from '..';
+import {readPackageAsync} from 'read-pkg';
+import meow from '../index.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixturePath = path.join(__dirname, 'fixtures', 'fixture.js');
 const NODE_MAJOR_VERSION = process.versions.node.split('.')[0];
 
@@ -40,6 +42,7 @@ test('support help shortcut', t => {
 });
 
 test('spawn cli and show version', async t => {
+	const pkg = await readPackageAsync();
 	const {stdout} = await execa(fixturePath, ['--version']);
 	t.is(stdout, pkg.version);
 });

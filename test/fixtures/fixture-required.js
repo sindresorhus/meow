@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-const meow = require('../..');
+import meow from '../../index.js';
 
 const cli = meow({
 	description: 'Custom description',
