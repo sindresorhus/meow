@@ -45,7 +45,7 @@ const getMissingRequiredFlags = (flags, receivedFlags, input) => {
 const reportMissingRequiredFlags = missingRequiredFlags => {
 	console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
 	for (const flag of missingRequiredFlags) {
-		console.error(`\t--${decamelize(flag.key, '-')}${flag.alias ? `, -${flag.alias}` : ''}`);
+		console.error(`\t--${decamelize(flag.key, {separator: '-'})}${flag.alias ? `, -${flag.alias}` : ''}`);
 	}
 };
 
@@ -103,12 +103,12 @@ const meow = (helpText, options) => {
 		helpText = '';
 	}
 
-	const foundPkg = readPackageUpSync({
+	const foundPackage = readPackageUpSync({
 		normalize: false
 	});
 
 	options = {
-		pkg: foundPkg ? foundPkg.packageJson : {},
+		pkg: foundPackage ? foundPackage.packageJson : {},
 		argv: process.argv.slice(2),
 		flags: {},
 		inferType: false,
@@ -154,17 +154,17 @@ const meow = (helpText, options) => {
 		parserOptions.configuration['unknown-options-as-args'] = true;
 	}
 
-	const {pkg} = options;
+	const {pkg: package_} = options;
 	const argv = parseArguments(options.argv, parserOptions);
 	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
 
-	normalizePackageData(pkg);
+	normalizePackageData(package_);
 
-	process.title = pkg.bin ? Object.keys(pkg.bin)[0] : pkg.name;
+	process.title = package_.bin ? Object.keys(package_.bin)[0] : package_.name;
 
 	let {description} = options;
 	if (!description && description !== false) {
-		({description} = pkg);
+		({description} = package_);
 	}
 
 	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
@@ -175,7 +175,7 @@ const meow = (helpText, options) => {
 	};
 
 	const showVersion = () => {
-		console.log(typeof options.version === 'string' ? options.version : pkg.version);
+		console.log(typeof options.version === 'string' ? options.version : package_.version);
 		process.exit(0);
 	};
 
@@ -217,7 +217,7 @@ const meow = (helpText, options) => {
 		input,
 		flags,
 		unnormalizedFlags,
-		pkg,
+		pkg: package_,
 		help,
 		showHelp,
 		showVersion

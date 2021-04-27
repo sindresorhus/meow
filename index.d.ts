@@ -20,12 +20,11 @@ export interface Flag<Type extends FlagType, Default> {
 	readonly isMultiple?: boolean;
 }
 
-	type StringFlag = Flag<'string', string>;
-	type BooleanFlag = Flag<'boolean', boolean>;
-	type NumberFlag = Flag<'number', number>;
-
-	type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
-	type AnyFlags = Record<string, AnyFlag>;
+type StringFlag = Flag<'string', string>;
+type BooleanFlag = Flag<'boolean', boolean>;
+type NumberFlag = Flag<'number', number>;
+type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
+type AnyFlags = Record<string, AnyFlag>;
 
 export interface Options<Flags extends AnyFlags> {
 	/**
@@ -209,7 +208,7 @@ export interface Options<Flags extends AnyFlags> {
 	readonly allowUnknownFlags?: boolean;
 }
 
-export type TypedFlag<Flag extends AnyFlag> =
+type TypedFlag<Flag extends AnyFlag> =
 		Flag extends {type: 'number'}
 			? number
 			: Flag extends {type: 'string'}
@@ -218,7 +217,7 @@ export type TypedFlag<Flag extends AnyFlag> =
 					? boolean
 					: unknown;
 
-export type PossiblyOptionalFlag<Flag extends AnyFlag, FlagType> =
+type PossiblyOptionalFlag<Flag extends AnyFlag, FlagType> =
 		Flag extends {isRequired: true}
 			? FlagType
 			: Flag extends {default: any}
@@ -306,7 +305,6 @@ const cli = meow(`
 foo(cli.input[0], cli.flags);
 ```
 */
-
 export default function meow<Flags extends AnyFlags>(helpMessage: string, options?: Options<Flags>): Result<Flags>;
 // eslint-disable-next-line no-redeclare
 export default function meow<Flags extends AnyFlags>(options?: Options<Flags>): Result<Flags>;
