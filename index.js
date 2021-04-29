@@ -1,3 +1,5 @@
+import {dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import buildParserOptions from 'minimist-options';
 import parseArguments from 'yargs-parser';
 import camelCaseKeys from 'camelcase-keys';
@@ -5,7 +7,7 @@ import decamelize from 'decamelize';
 import decamelizeKeys from 'decamelize-keys';
 import trimNewlines from 'trim-newlines';
 import redent from 'redent';
-import {readPackageUpSync} from 'read-pkg-up';
+import {readPackageSync} from 'read-pkg';
 import hardRejection from 'hard-rejection';
 import normalizePackageData from 'normalize-package-data';
 
@@ -97,18 +99,20 @@ const validateFlags = (flags, options) => {
 	}
 };
 
-const meow = (helpText, options) => {
+const meow = (helpText, options = {}) => {
 	if (typeof helpText !== 'string') {
 		options = helpText;
 		helpText = '';
 	}
 
-	const foundPackage = readPackageUpSync({
+	const foundPackage = readPackageSync({
+		cwd: options.packagePath ? dirname(fileURLToPath(options.packagePath)) : process.cwd(),
 		normalize: false
 	});
 
 	options = {
-		pkg: foundPackage ? foundPackage.packageJson : {},
+		packagePath: process.cwd(),
+		pkg: foundPackage || {},
 		argv: process.argv.slice(2),
 		flags: {},
 		inferType: false,

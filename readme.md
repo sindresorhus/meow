@@ -26,52 +26,11 @@ $ npm install meow
 $ ./foo-app.js unicorns --rainbow
 ```
 
-**CommonJS**
-
 ```js
 #!/usr/bin/env node
-'use strict';
-const meow = require('meow');
-const foo = require('.');
-
-const cli = meow(`
-	Usage
-	  $ foo <input>
-
-	Options
-	  --rainbow, -r  Include a rainbow
-
-	Examples
-	  $ foo unicorns --rainbow
-	  🌈 unicorns 🌈
-`, {
-	flags: {
-		rainbow: {
-			type: 'boolean',
-			alias: 'r'
-		}
-	}
-});
-/*
-{
-	input: ['unicorns'],
-	flags: {rainbow: true},
-	...
-}
-*/
-
-foo(cli.input[0], cli.flags);
-```
-
-**ES Modules**
-
-```js
-#!/usr/bin/env node
-import {createRequire} from 'module';
+import meow from 'meow';
 import foo from './lib/index.js';
 
-const meow = createRequire(import.meta.url)('meow');
-
 const cli = meow(`
 	Usage
 	  $ foo <input>
@@ -83,6 +42,7 @@ const cli = meow(`
 	  $ foo unicorns --rainbow
 	  🌈 unicorns 🌈
 `, {
+	packagePath: import.meta.url,
 	flags: {
 		rainbow: {
 			type: 'boolean',
@@ -125,6 +85,13 @@ Shortcut for the `help` option.
 #### options
 
 Type: `object`
+
+##### packagePath
+
+Type: `string`\
+Default: `process.cwd()`
+
+Directory to start looking for the module package.json file.
 
 ##### flags
 
@@ -253,7 +220,7 @@ __Caution: Explicitly specifying `undefined` for `booleanDefault` has different 
 Example:
 
 ```js
-const meow = require('meow');
+const meow from 'meow';
 
 const cli = meow(`
 	Usage
@@ -268,6 +235,7 @@ const cli = meow(`
 	  $ foo
 	  🌈 unicorns✨🌈
 `, {
+	packagePath: import.meta.url,
 	booleanDefault: undefined,
 	flags: {
 		rainbow: {

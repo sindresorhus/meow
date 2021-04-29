@@ -151,6 +151,7 @@ export interface Options<Flags extends AnyFlags> {
 			$ foo
 			🌈 unicorns✨🌈
 	`, {
+		packagePath: import.meta.url,
 		booleanDefault: undefined,
 		flags: {
 			rainbow: {
@@ -206,6 +207,13 @@ export interface Options<Flags extends AnyFlags> {
 	@default true
 	*/
 	readonly allowUnknownFlags?: boolean;
+
+	/**
+	Directory to start looking for the module package.json file.
+
+	@default process.cwd()
+	*/
+	readonly packagePath?: string;
 }
 
 type TypedFlag<Flag extends AnyFlag> =
