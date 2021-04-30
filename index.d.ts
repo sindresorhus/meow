@@ -20,6 +20,7 @@ export interface Flag<Type extends FlagType, Default> {
 	readonly isMultiple?: boolean;
 }
 
+type ImportMeta = {url: string};
 type StringFlag = Flag<'string', string>;
 type BooleanFlag = Flag<'boolean', boolean>;
 type NumberFlag = Flag<'number', number>;
@@ -27,6 +28,13 @@ type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
 type AnyFlags = Record<string, AnyFlag>;
 
 export interface Options<Flags extends AnyFlags> {
+	/**
+	Directory to start looking for the module package.json file.
+
+	This option is required, its value should be `import.meta`.
+	*/
+	readonly importMeta: ImportMeta;
+
 	/**
 	Define argument flags.
 
@@ -151,7 +159,7 @@ export interface Options<Flags extends AnyFlags> {
 			$ foo
 			🌈 unicorns✨🌈
 	`, {
-		packagePath: import.meta.url,
+		importMeta: import.meta,
 		booleanDefault: undefined,
 		flags: {
 			rainbow: {
@@ -207,13 +215,6 @@ export interface Options<Flags extends AnyFlags> {
 	@default true
 	*/
 	readonly allowUnknownFlags?: boolean;
-
-	/**
-	Directory to start looking for the module package.json file.
-
-	@default process.cwd()
-	*/
-	readonly packagePath?: string;
 }
 
 type TypedFlag<Flag extends AnyFlag> =
@@ -296,6 +297,7 @@ const cli = meow(`
 	  $ foo unicorns --rainbow
 	  🌈 unicorns 🌈
 `, {
+	importMeta: import.meta,
 	flags: {
 		rainbow: {
 			type: 'boolean',

@@ -7,7 +7,7 @@ import decamelize from 'decamelize';
 import decamelizeKeys from 'decamelize-keys';
 import trimNewlines from 'trim-newlines';
 import redent from 'redent';
-import {readPackageSync} from 'read-pkg';
+import {readPackageUpSync} from 'read-pkg-up';
 import hardRejection from 'hard-rejection';
 import normalizePackageData from 'normalize-package-data';
 
@@ -105,14 +105,17 @@ const meow = (helpText, options = {}) => {
 		helpText = '';
 	}
 
-	const foundPackage = readPackageSync({
-		cwd: options.packagePath ? dirname(fileURLToPath(options.packagePath)) : process.cwd(),
+	if (!(options.importMeta && options.importMeta.url)) {
+		throw new Error('`importMeta` options is required, its value should be `import.meta`');
+	}
+
+	const foundPackage = readPackageUpSync({
+		cwd: dirname(fileURLToPath(options.importMeta.url)),
 		normalize: false
 	});
 
 	options = {
-		packagePath: process.cwd(),
-		pkg: foundPackage || {},
+		pkg: foundPackage ? foundPackage.packageJson : {},
 		argv: process.argv.slice(2),
 		flags: {},
 		inferType: false,

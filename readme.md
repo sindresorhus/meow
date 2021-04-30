@@ -42,7 +42,7 @@ const cli = meow(`
 	  $ foo unicorns --rainbow
 	  🌈 unicorns 🌈
 `, {
-	packagePath: import.meta.url,
+	importMeta: import.meta,
 	flags: {
 		rainbow: {
 			type: 'boolean',
@@ -86,12 +86,13 @@ Shortcut for the `help` option.
 
 Type: `object`
 
-##### packagePath
+##### importMeta
 
-Type: `string`\
-Default: `process.cwd()`
+Type: `string`
 
 Directory to start looking for the module package.json file.
+
+This option is required, its value should be `import.meta`.
 
 ##### flags
 
@@ -235,7 +236,7 @@ const cli = meow(`
 	  $ foo
 	  🌈 unicorns✨🌈
 `, {
-	packagePath: import.meta.url,
+	importMeta: import.meta,
 	booleanDefault: undefined,
 	flags: {
 		rainbow: {
