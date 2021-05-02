@@ -17,7 +17,7 @@ test('invalid package url', t => {
 			importMeta: '/path/to/package'
 		});
 	});
-	t.is(error.message, '`importMeta` options is required, its value should be `import.meta`');
+	t.is(error.message, '`importMeta` options is required, its value must be `import.meta`');
 });
 
 test('return object', t => {

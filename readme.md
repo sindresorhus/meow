@@ -92,7 +92,7 @@ Type: `string`
 
 Directory to start looking for the module package.json file.
 
-This option is required, its value should be `import.meta`.
+This option is required, its value must be `import.meta`.
 
 ##### flags
 
