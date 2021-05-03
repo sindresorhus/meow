@@ -20,7 +20,6 @@ export interface Flag<Type extends FlagType, Default> {
 	readonly isMultiple?: boolean;
 }
 
-type ImportMeta = Record<string, unknown> & {url: string};
 type StringFlag = Flag<'string', string>;
 type BooleanFlag = Flag<'boolean', boolean>;
 type NumberFlag = Flag<'number', number>;
