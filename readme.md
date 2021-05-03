@@ -88,7 +88,7 @@ Type: `object`
 
 ##### importMeta
 
-Type: `string`
+Type: `object`
 
 Your `import.meta` used for start looking for the module package.json file.
 
