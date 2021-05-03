@@ -20,7 +20,7 @@ export interface Flag<Type extends FlagType, Default> {
 	readonly isMultiple?: boolean;
 }
 
-type ImportMeta = typeof import.meta;
+type ImportMeta = Record<string, unknown> & {url: string};
 type StringFlag = Flag<'string', string>;
 type BooleanFlag = Flag<'boolean', boolean>;
 type NumberFlag = Flag<'number', number>;
@@ -29,9 +29,9 @@ type AnyFlags = Record<string, AnyFlag>;
 
 export interface Options<Flags extends AnyFlags> {
 	/**
-	Directory to start looking for the module package.json file.
+	Your `import.meta` used for start looking for the module package.json file.
 
-	This option is required, its value must be `import.meta`.
+	Set it to `import.meta` to find the module package.json file.
 	*/
 	readonly importMeta: ImportMeta;
 

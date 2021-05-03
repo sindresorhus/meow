@@ -90,7 +90,7 @@ Type: `object`
 
 Type: `string`
 
-Directory to start looking for the module package.json file.
+Your `import.meta` used for start looking for the module package.json file.
 
 This option is required, its value must be `import.meta`.
 
