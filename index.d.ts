@@ -30,7 +30,7 @@ export interface Options<Flags extends AnyFlags> {
 	/**
 	Your `import.meta` used for start looking for the module package.json file.
 
-	Set it to `import.meta` to find the module package.json file.
+	This option is required, its value must be `import.meta`.
 	*/
 	readonly importMeta: ImportMeta;
 
