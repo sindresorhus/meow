@@ -106,7 +106,7 @@ const meow = (helpText, options = {}) => {
 	}
 
 	if (!(options.importMeta && options.importMeta.url)) {
-		throw new TypeError('`importMeta` options is required, its value must be `import.meta`');
+		throw new TypeError('The `importMeta` option is required. Its value must be `import.meta`.');
 	}
 
 	const foundPackage = readPackageUpSync({
