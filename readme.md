@@ -90,9 +90,7 @@ Type: `object`
 
 Type: `object`
 
-Your [`import.meta`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_import_meta) used for start looking for the module package.json file.
-
-This option is required, its value must be `import.meta`.
+Pass in [`import.meta`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_import_meta). This is used to find the correct package.json file.
 
 ##### flags
 
