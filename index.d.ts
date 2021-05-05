@@ -28,6 +28,11 @@ type AnyFlags = Record<string, AnyFlag>;
 
 export interface Options<Flags extends AnyFlags> {
 	/**
+	Pass in [`import.meta`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_import_meta). This is used to find the correct package.json file.
+	*/
+	readonly importMeta: ImportMeta;
+
+	/**
 	Define argument flags.
 
 	The key is the flag name in camel-case and the value is an object with any of:
@@ -151,6 +156,7 @@ export interface Options<Flags extends AnyFlags> {
 			$ foo
 			🌈 unicorns✨🌈
 	`, {
+		importMeta: import.meta,
 		booleanDefault: undefined,
 		flags: {
 			rainbow: {
@@ -288,6 +294,7 @@ const cli = meow(`
 	  $ foo unicorns --rainbow
 	  🌈 unicorns 🌈
 `, {
+	importMeta: import.meta,
 	flags: {
 		rainbow: {
 			type: 'boolean',

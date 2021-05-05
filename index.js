@@ -1,3 +1,5 @@
+import {dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import buildParserOptions from 'minimist-options';
 import parseArguments from 'yargs-parser';
 import camelCaseKeys from 'camelcase-keys';
@@ -97,13 +99,18 @@ const validateFlags = (flags, options) => {
 	}
 };
 
-const meow = (helpText, options) => {
+const meow = (helpText, options = {}) => {
 	if (typeof helpText !== 'string') {
 		options = helpText;
 		helpText = '';
 	}
 
+	if (!(options.importMeta && options.importMeta.url)) {
+		throw new TypeError('The `importMeta` option is required. Its value must be `import.meta`.');
+	}
+
 	const foundPackage = readPackageUpSync({
+		cwd: dirname(fileURLToPath(options.importMeta.url)),
 		normalize: false
 	});
 

@@ -13,6 +13,7 @@ meow(
 		  🌈 unicorns 🌈
 	`,
 	{
+		importMeta: import.meta,
 		flags: {
 			rainbow: {
 				type: 'boolean',

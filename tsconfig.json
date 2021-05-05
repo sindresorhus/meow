@@ -10,7 +10,7 @@
 		"lib": [
 			"es2018"
 		],
-		"module": "commonjs",
+		"module": "esnext",
 		"moduleResolution": "node",
 		"noImplicitAny": true,
 		"strictNullChecks": true,

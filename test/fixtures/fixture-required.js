@@ -3,6 +3,7 @@
 import meow from '../../index.js';
 
 const cli = meow({
+	importMeta: import.meta,
 	description: 'Custom description',
 	help: `
 		Usage

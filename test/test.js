@@ -8,10 +8,21 @@ import meow from '../index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixturePath = path.join(__dirname, 'fixtures', 'fixture.js');
+const importMeta = import.meta;
 const NODE_MAJOR_VERSION = process.versions.node.split('.')[0];
+
+test('invalid package url', t => {
+	const error = t.throws(() => {
+		meow({
+			importMeta: '/path/to/package'
+		});
+	});
+	t.is(error.message, 'The `importMeta` option is required. Its value must be `import.meta`.');
+});
 
 test('return object', t => {
 	const cli = meow({
+		importMeta,
 		argv: ['foo', '--foo-bar', '-u', 'cat', '--', 'unicorn', 'cake'],
 		help: `
 			Usage
@@ -37,7 +48,9 @@ test('support help shortcut', t => {
 	const cli = meow(`
 		unicorn
 		cat
-	`);
+	`, {
+		importMeta
+	});
 	t.is(cli.help, indentString('\nCLI app helper\n\nunicorn\ncat\n', 2));
 });
 
@@ -89,7 +102,9 @@ test('spawn cli and test input flag', async t => {
 
 test.serial('pkg.bin as a string should work', t => {
 	meow({
+		importMeta,
 		pkg: {
+			importMeta,
 			name: 'browser-sync',
 			bin: 'bin/browser-sync.js'
 		}
@@ -99,29 +114,38 @@ test.serial('pkg.bin as a string should work', t => {
 });
 
 test('single character flag casing should be preserved', t => {
-	t.deepEqual(meow({argv: ['-F']}).flags, {F: true});
+	t.deepEqual(meow({
+		importMeta,
+		argv: ['-F']
+	}).flags, {F: true});
 });
 
 test('flag declared in kebab-case is an error', t => {
 	const error = t.throws(() => {
-		meow({flags: {'kebab-case': 'boolean', test: 'boolean', 'another-one': 'boolean'}});
+		meow({
+			importMeta,
+			flags: {'kebab-case': 'boolean', test: 'boolean', 'another-one': 'boolean'}
+		});
 	});
 	t.is(error.message, 'Flag keys may not contain \'-\': kebab-case, another-one');
 });
 
 test('type inference', t => {
-	t.is(meow({argv: ['5']}).input[0], '5');
-	t.is(meow({argv: ['5']}, {input: 'string'}).input[0], '5');
+	t.is(meow({importMeta, argv: ['5']}).input[0], '5');
+	t.is(meow({importMeta, argv: ['5']}, {input: 'string'}).input[0], '5');
 	t.is(meow({
+		importMeta,
 		argv: ['5'],
 		inferType: true
 	}).input[0], 5);
 	t.is(meow({
+		importMeta,
 		argv: ['5'],
 		inferType: true,
 		flags: {foo: 'string'}
 	}).input[0], 5);
 	t.is(meow({
+		importMeta,
 		argv: ['5'],
 		inferType: true,
 		flags: {
@@ -129,6 +153,7 @@ test('type inference', t => {
 		}
 	}).input[0], 5);
 	t.is(meow({
+		importMeta,
 		argv: ['5'],
 		input: 'number'
 	}).input[0], 5);
@@ -136,6 +161,7 @@ test('type inference', t => {
 
 test('booleanDefault: undefined, filter out unset boolean args', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: ['--foo'],
 		booleanDefault: undefined,
 		flags: {
@@ -158,6 +184,7 @@ test('booleanDefault: undefined, filter out unset boolean args', t => {
 
 test('boolean args are false by default', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: ['--foo'],
 		flags: {
 			foo: {
@@ -180,6 +207,7 @@ test('boolean args are false by default', t => {
 
 test('enforces boolean flag type', t => {
 	const cli = meow({
+		importMeta,
 		argv: ['--cursor=false'],
 		flags: {
 			cursor: {
@@ -192,6 +220,7 @@ test('enforces boolean flag type', t => {
 
 test('accept help and options', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: ['-f'],
 		flags: {
 			foo: {
@@ -206,6 +235,7 @@ test('accept help and options', t => {
 
 test('grouped short-flags work', t => {
 	const cli = meow({
+		importMeta,
 		argv: ['-cl'],
 		flags: {
 			coco: {
@@ -228,6 +258,7 @@ test('grouped short-flags work', t => {
 
 test('grouped flags work', t => {
 	const cli = meow({
+		importMeta,
 		argv: ['-cl'],
 		flags: {
 			coco: {
@@ -249,13 +280,14 @@ test('grouped flags work', t => {
 });
 
 test('disable autoVersion/autoHelp if `cli.input.length > 0`', t => {
-	t.is(meow({argv: ['bar', '--version']}).input[0], 'bar');
-	t.is(meow({argv: ['bar', '--help']}).input[0], 'bar');
-	t.is(meow({argv: ['bar', '--version', '--help']}).input[0], 'bar');
+	t.is(meow({importMeta, argv: ['bar', '--version']}).input[0], 'bar');
+	t.is(meow({importMeta, argv: ['bar', '--help']}).input[0], 'bar');
+	t.is(meow({importMeta, argv: ['bar', '--version', '--help']}).input[0], 'bar');
 });
 
 test('supports `number` flag type', t => {
 	const cli = meow({
+		importMeta,
 		argv: ['--foo=1.3'],
 		flags: {
 			foo: {
@@ -269,6 +301,7 @@ test('supports `number` flag type', t => {
 
 test('supports `number` flag type - flag but no value', t => {
 	const cli = meow({
+		importMeta,
 		argv: ['--foo'],
 		flags: {
 			foo: {
@@ -282,6 +315,7 @@ test('supports `number` flag type - flag but no value', t => {
 
 test('supports `number` flag type - flag but no value but default', t => {
 	const cli = meow({
+		importMeta,
 		argv: ['--foo'],
 		flags: {
 			foo: {
@@ -296,6 +330,7 @@ test('supports `number` flag type - flag but no value but default', t => {
 
 test('supports `number` flag type - no flag but default', t => {
 	const cli = meow({
+		importMeta,
 		argv: [],
 		flags: {
 			foo: {
@@ -311,6 +346,7 @@ test('supports `number` flag type - no flag but default', t => {
 test('supports `number` flag type - throws on incorrect default value', t => {
 	t.throws(() => {
 		meow({
+			importMeta,
 			argv: [],
 			flags: {
 				foo: {
@@ -324,6 +360,7 @@ test('supports `number` flag type - throws on incorrect default value', t => {
 
 test('isMultiple - unset flag returns empty array', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: [],
 		flags: {
 			foo: {
@@ -338,6 +375,7 @@ test('isMultiple - unset flag returns empty array', t => {
 
 test('isMultiple - flag set once returns array', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: ['--foo=bar'],
 		flags: {
 			foo: {
@@ -352,6 +390,7 @@ test('isMultiple - flag set once returns array', t => {
 
 test('isMultiple - flag set multiple times', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: ['--foo=bar', '--foo=baz'],
 		flags: {
 			foo: {
@@ -366,6 +405,7 @@ test('isMultiple - flag set multiple times', t => {
 
 test('isMultiple - flag with space separated values', t => {
 	const {input, flags} = meow({
+		importMeta,
 		argv: ['--foo', 'bar', 'baz'],
 		flags: {
 			foo: {
@@ -381,6 +421,7 @@ test('isMultiple - flag with space separated values', t => {
 
 test('isMultiple - flag with comma separated values', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: ['--foo', 'bar,baz'],
 		flags: {
 			foo: {
@@ -396,6 +437,7 @@ test('isMultiple - flag with comma separated values', t => {
 test('single flag set more than once => throws', t => {
 	t.throws(() => {
 		meow({
+			importMeta,
 			argv: ['--foo=bar', '--foo=baz'],
 			flags: {
 				foo: {
@@ -408,6 +450,7 @@ test('single flag set more than once => throws', t => {
 
 test('isMultiple - default to type string', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: ['--foo=bar'],
 		flags: {
 			foo: {
@@ -421,6 +464,7 @@ test('isMultiple - default to type string', t => {
 
 test('isMultiple - boolean flag', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: ['--foo', '--foo=false'],
 		flags: {
 			foo: {
@@ -435,6 +479,7 @@ test('isMultiple - boolean flag', t => {
 
 test('isMultiple - boolean flag is false by default', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: [],
 		flags: {
 			foo: {
@@ -449,6 +494,7 @@ test('isMultiple - boolean flag is false by default', t => {
 
 test('isMultiple - number flag', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: ['--foo=1.3', '--foo=-1'],
 		flags: {
 			foo: {
@@ -463,6 +509,7 @@ test('isMultiple - number flag', t => {
 
 test('isMultiple - flag default values', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: [],
 		flags: {
 			string: {
@@ -490,6 +537,7 @@ test('isMultiple - flag default values', t => {
 
 test('isMultiple - multiple flag default values', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: [],
 		flags: {
 			string: {
@@ -518,6 +566,7 @@ test('isMultiple - multiple flag default values', t => {
 // Happened in production 2020-05-10: https://github.com/sindresorhus/meow/pull/143#issuecomment-626287226
 test('isMultiple - handles multi-word flag name', t => {
 	t.deepEqual(meow({
+		importMeta,
 		argv: ['--foo-bar=baz'],
 		flags: {
 			fooBar: {
@@ -533,8 +582,8 @@ test('isMultiple - handles multi-word flag name', t => {
 if (NODE_MAJOR_VERSION >= 14) {
 	test('supports es modules', async t => {
 		try {
-			const {stdout} = await execa('node', ['index.js', '--version'], {
-				cwd: path.join(__dirname, '..', 'estest')
+			const {stdout} = await execa('node', ['estest/index.js', '--version'], {
+				importMeta: path.join(__dirname, '..')
 			});
 			t.regex(stdout, /1.2.3/);
 		} catch (error) {
