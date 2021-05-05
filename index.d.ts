@@ -28,9 +28,7 @@ type AnyFlags = Record<string, AnyFlag>;
 
 export interface Options<Flags extends AnyFlags> {
 	/**
-	Your `import.meta` used for start looking for the module package.json file.
-
-	This option is required, its value must be `import.meta`.
+	Pass in `import.meta`. This is used to find the correct package.json file.
 	*/
 	readonly importMeta: ImportMeta;
 
