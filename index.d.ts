@@ -28,7 +28,7 @@ type AnyFlags = Record<string, AnyFlag>;
 
 export interface Options<Flags extends AnyFlags> {
 	/**
-	Pass in `import.meta`. This is used to find the correct package.json file.
+	Pass in [`import.meta`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_import_meta). This is used to find the correct package.json file.
 	*/
 	readonly importMeta: ImportMeta;
 
