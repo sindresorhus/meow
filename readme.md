@@ -4,6 +4,8 @@
 
 ![](meow.gif)
 
+*I would recommend reading this [guide](https://clig.dev) on how to make user-friendly command-line tools.*
+
 ## Features
 
 - Parses arguments
