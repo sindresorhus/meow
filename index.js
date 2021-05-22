@@ -58,6 +58,37 @@ const validateOptions = ({flags}) => {
 	}
 };
 
+const validateChoices = (flags, receivedFlags) => {
+	const errors = [];
+
+	for (const [flagKey, flagValue] of Object.entries(flags)) {
+		const {choices, isRequired} = flagValue;
+
+		if (!choices) {
+			return;
+		}
+
+		if (!Array.isArray(choices)) {
+			throw new TypeError('Choices should be array');
+		}
+
+		const receivedInput = receivedFlags[flagKey];
+		if (receivedInput === undefined && !isRequired) {
+			return;
+		}
+
+		const receivedInputArray = Array.isArray(receivedInput) ? receivedInput : [receivedInput];
+		const includesAll = receivedInputArray.every(i => choices.includes(i));
+		if (!includesAll) {
+			errors.push(`Choices: [${choices.join(', ')}] Received: [${receivedInputArray.join(', ')}]`);
+		}
+	}
+
+	if (errors.length > 0) {
+		throw new Error(`Choices mismatch: ${errors.join(', ')}`);
+	}
+};
+
 const reportUnknownFlags = unknownFlags => {
 	console.error([
 		`Unknown flag${unknownFlags.length > 1 ? 's' : ''}`,
@@ -209,6 +240,7 @@ const meow = (helpText, options = {}) => {
 	const unnormalizedFlags = {...flags};
 
 	validateFlags(flags, options);
+	validateChoices(options.flags, flags);
 
 	for (const flagValue of Object.values(options.flags)) {
 		delete flags[flagValue.alias];

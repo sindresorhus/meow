@@ -579,6 +579,119 @@ test('isMultiple - handles multi-word flag name', t => {
 	});
 });
 
+test('choices - success case', t => {
+	const cli = meow({
+		importMeta,
+		argv: ['--animal', 'cat', '--number=2.2'],
+		flags: {
+			animal: {
+				choices: ['dog', 'cat', 'unicorn']
+			},
+			number: {
+				choices: [1.1, 2.2, 3.3],
+				type: 'number'
+			}
+		}
+	});
+
+	t.is(cli.flags.animal, 'cat');
+	t.is(cli.flags.number, 2.2);
+});
+
+test('choices - throws if input does not match choices', t => {
+	t.throws(() => {
+		meow({
+			importMeta,
+			argv: ['--animal', 'rainbow', '--number', 5],
+			flags: {
+				animal: {
+					choices: ['dog', 'cat', 'unicorn']
+				},
+				number: {
+					choices: [1, 2, 3]
+				}
+			}
+		});
+	}, {message: 'Choices mismatch: Choices: [dog, cat, unicorn] Received: [rainbow], ' +
+	'Choices: [1, 2, 3] Received: [5]'});
+});
+
+test('choices - throws if choices is not array', t => {
+	t.throws(() => {
+		meow({
+			importMeta,
+			argv: ['--animal', 'cat'],
+			flags: {
+				animal: {
+					choices: 'cat'
+				}
+			}
+		});
+	}, {message: 'Choices should be array'});
+});
+
+test('choices - does not throw error when isRequired is false', t => {
+	t.notThrows(() => {
+		meow({
+			importMeta,
+			argv: [],
+			flags: {
+				animal: {
+					choices: ['dog', 'cat', 'unicorn'],
+					isRequired: false
+				}
+			}
+		});
+	});
+});
+
+test('choices - throw error when isRequired is true', t => {
+	t.throws(() => {
+		meow({
+			importMeta,
+			argv: [],
+			flags: {
+				animal: {
+					choices: ['dog', 'cat', 'unicorn'],
+					isRequired: true
+				}
+			}
+		});
+	}, {message: 'Choices mismatch: Choices: [dog, cat, unicorn] Received: []'});
+});
+
+test('choices - success with isMultiple', t => {
+	const cli = meow({
+		importMeta,
+		argv: ['--animal=dog', '--animal=unicorn'],
+		flags: {
+			animal: {
+				type: 'string',
+				isMultiple: true,
+				choices: ['dog', 'cat', 'unicorn']
+			}
+		}
+	});
+
+	t.deepEqual(cli.flags.animal, ['dog', 'unicorn']);
+});
+
+test('choices - throws with isMultiple', t => {
+	t.throws(() => {
+		meow({
+			importMeta,
+			argv: ['--animal=dog', '--animal=rabbit'],
+			flags: {
+				animal: {
+					type: 'string',
+					isMultiple: true,
+					choices: ['dog', 'cat', 'unicorn']
+				}
+			}
+		});
+	}, {message: 'Choices mismatch: Choices: [dog, cat, unicorn] Received: [dog, rabbit]'});
+});
+
 if (NODE_MAJOR_VERSION >= 14) {
 	test('supports es modules', async t => {
 		try {
