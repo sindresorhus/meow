@@ -51,7 +51,7 @@
 		"normalize-package-data": "^3.0.2",
 		"read-pkg-up": "^8.0.0",
 		"redent": "^4.0.0",
-		"trim-newlines": "^4.0.0",
+		"trim-newlines": "^4.0.1",
 		"type-fest": "^1.0.2",
 		"yargs-parser": "^20.2.7"
 	},
