@@ -7,31 +7,31 @@ const importMeta = import.meta;
 expectType<Result<never>>(meow('Help text'));
 expectType<Result<never>>(meow('Help text', {importMeta, hardRejection: false}));
 expectAssignable<{flags: {foo: number}}>(
-	meow({importMeta: import.meta, flags: {foo: {type: 'number', isRequired: true}}})
+	meow({importMeta: import.meta, flags: {foo: {type: 'number', isRequired: true}}}),
 );
 expectAssignable<{flags: {foo: string}}>(
-	meow({importMeta, flags: {foo: {type: 'string', isRequired: true}}})
+	meow({importMeta, flags: {foo: {type: 'string', isRequired: true}}}),
 );
 expectAssignable<{flags: {foo: boolean}}>(
-	meow({importMeta, flags: {foo: {type: 'boolean', isRequired: true}}})
+	meow({importMeta, flags: {foo: {type: 'boolean', isRequired: true}}}),
 );
 expectAssignable<{flags: {foo: number | undefined}}>(
-	meow({importMeta, flags: {foo: {type: 'number'}}})
+	meow({importMeta, flags: {foo: {type: 'number'}}}),
 );
 expectAssignable<{flags: {foo: string | undefined}}>(
-	meow({importMeta, flags: {foo: {type: 'string'}}})
+	meow({importMeta, flags: {foo: {type: 'string'}}}),
 );
 expectAssignable<{flags: {foo: boolean | undefined}}>(
-	meow({importMeta, flags: {foo: {type: 'boolean'}}})
+	meow({importMeta, flags: {foo: {type: 'boolean'}}}),
 );
 expectAssignable<{flags: {foo: number[] | undefined}}>(
-	meow({importMeta, flags: {foo: {type: 'number', isMultiple: true}}})
+	meow({importMeta, flags: {foo: {type: 'number', isMultiple: true}}}),
 );
 expectAssignable<{flags: {foo: string[] | undefined}}>(
-	meow({importMeta, flags: {foo: {type: 'string', isMultiple: true}}})
+	meow({importMeta, flags: {foo: {type: 'string', isMultiple: true}}}),
 );
 expectAssignable<{flags: {foo: boolean[] | undefined}}>(
-	meow({importMeta, flags: {foo: {type: 'boolean', isMultiple: true}}})
+	meow({importMeta, flags: {foo: {type: 'boolean', isMultiple: true}}}),
 );
 expectType<Result<never>>(meow({importMeta, description: 'foo'}));
 expectType<Result<never>>(meow({importMeta, description: false}));
@@ -55,8 +55,8 @@ const result = meow('Help text', {
 		foo: {type: 'boolean', alias: 'f'},
 		'foo-bar': {type: 'number'},
 		bar: {type: 'string', default: ''},
-		abc: {type: 'string', isMultiple: true}
-	}
+		abc: {type: 'string', isMultiple: true},
+	},
 });
 
 expectType<string[]>(result.input);
@@ -82,9 +82,9 @@ const options = {
 	flags: {
 		rainbow: {
 			type: 'boolean',
-			alias: 'r'
-		}
-	}
+			alias: 'r',
+		},
+	},
 } as const;
 
 meow('', options);

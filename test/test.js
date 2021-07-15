@@ -14,7 +14,7 @@ const NODE_MAJOR_VERSION = process.versions.node.split('.')[0];
 test('invalid package url', t => {
 	const error = t.throws(() => {
 		meow({
-			importMeta: '/path/to/package'
+			importMeta: '/path/to/package',
 		});
 	});
 	t.is(error.message, 'The `importMeta` option is required. Its value must be `import.meta`.');
@@ -31,8 +31,8 @@ test('return object', t => {
 		flags: {
 			unicorn: {alias: 'u'},
 			meow: {default: 'dog'},
-			'--': true
-		}
+			'--': true,
+		},
 	});
 
 	t.is(cli.input[0], 'foo');
@@ -49,7 +49,7 @@ test('support help shortcut', t => {
 		unicorn
 		cat
 	`, {
-		importMeta
+		importMeta,
 	});
 	t.is(cli.help, indentString('\nCLI app helper\n\nunicorn\ncat\n', 2));
 });
@@ -106,8 +106,8 @@ test.serial('pkg.bin as a string should work', t => {
 		pkg: {
 			importMeta,
 			name: 'browser-sync',
-			bin: 'bin/browser-sync.js'
-		}
+			bin: 'bin/browser-sync.js',
+		},
 	});
 
 	t.is(process.title, 'browser-sync');
@@ -116,7 +116,7 @@ test.serial('pkg.bin as a string should work', t => {
 test('single character flag casing should be preserved', t => {
 	t.deepEqual(meow({
 		importMeta,
-		argv: ['-F']
+		argv: ['-F'],
 	}).flags, {F: true});
 });
 
@@ -124,7 +124,7 @@ test('flag declared in kebab-case is an error', t => {
 	const error = t.throws(() => {
 		meow({
 			importMeta,
-			flags: {'kebab-case': 'boolean', test: 'boolean', 'another-one': 'boolean'}
+			flags: {'kebab-case': 'boolean', test: 'boolean', 'another-one': 'boolean'},
 		});
 	});
 	t.is(error.message, 'Flag keys may not contain \'-\': kebab-case, another-one');
@@ -136,26 +136,26 @@ test('type inference', t => {
 	t.is(meow({
 		importMeta,
 		argv: ['5'],
-		inferType: true
+		inferType: true,
 	}).input[0], 5);
 	t.is(meow({
 		importMeta,
 		argv: ['5'],
 		inferType: true,
-		flags: {foo: 'string'}
+		flags: {foo: 'string'},
 	}).input[0], 5);
 	t.is(meow({
 		importMeta,
 		argv: ['5'],
 		inferType: true,
 		flags: {
-			foo: 'string'
-		}
+			foo: 'string',
+		},
 	}).input[0], 5);
 	t.is(meow({
 		importMeta,
 		argv: ['5'],
-		input: 'number'
+		input: 'number',
 	}).input[0], 5);
 });
 
@@ -166,19 +166,19 @@ test('booleanDefault: undefined, filter out unset boolean args', t => {
 		booleanDefault: undefined,
 		flags: {
 			foo: {
-				type: 'boolean'
+				type: 'boolean',
 			},
 			bar: {
-				type: 'boolean'
+				type: 'boolean',
 			},
 			baz: {
 				type: 'boolean',
-				default: false
-			}
-		}
+				default: false,
+			},
+		},
 	}).flags, {
 		foo: true,
-		baz: false
+		baz: false,
 	});
 });
 
@@ -188,20 +188,20 @@ test('boolean args are false by default', t => {
 		argv: ['--foo'],
 		flags: {
 			foo: {
-				type: 'boolean'
+				type: 'boolean',
 			},
 			bar: {
 				type: 'boolean',
-				default: true
+				default: true,
 			},
 			baz: {
-				type: 'boolean'
-			}
-		}
+				type: 'boolean',
+			},
+		},
 	}).flags, {
 		foo: true,
 		bar: true,
-		baz: false
+		baz: false,
 	});
 });
 
@@ -211,9 +211,9 @@ test('enforces boolean flag type', t => {
 		argv: ['--cursor=false'],
 		flags: {
 			cursor: {
-				type: 'boolean'
-			}
-		}
+				type: 'boolean',
+			},
+		},
 	});
 	t.deepEqual(cli.flags, {cursor: false});
 });
@@ -225,11 +225,11 @@ test('accept help and options', t => {
 		flags: {
 			foo: {
 				type: 'boolean',
-				alias: 'f'
-			}
-		}
+				alias: 'f',
+			},
+		},
 	}).flags, {
-		foo: true
+		foo: true,
 	});
 });
 
@@ -240,13 +240,13 @@ test('grouped short-flags work', t => {
 		flags: {
 			coco: {
 				type: 'boolean',
-				alias: 'c'
+				alias: 'c',
 			},
 			loco: {
 				type: 'boolean',
-				alias: 'l'
-			}
-		}
+				alias: 'l',
+			},
+		},
 	});
 
 	const {unnormalizedFlags} = cli;
@@ -263,13 +263,13 @@ test('grouped flags work', t => {
 		flags: {
 			coco: {
 				type: 'boolean',
-				alias: 'c'
+				alias: 'c',
 			},
 			loco: {
 				type: 'boolean',
-				alias: 'l'
-			}
-		}
+				alias: 'l',
+			},
+		},
 	});
 
 	const {flags} = cli;
@@ -291,9 +291,9 @@ test('supports `number` flag type', t => {
 		argv: ['--foo=1.3'],
 		flags: {
 			foo: {
-				type: 'number'
-			}
-		}
+				type: 'number',
+			},
+		},
 	}).flags.foo;
 
 	t.is(cli, 1.3);
@@ -305,9 +305,9 @@ test('supports `number` flag type - flag but no value', t => {
 		argv: ['--foo'],
 		flags: {
 			foo: {
-				type: 'number'
-			}
-		}
+				type: 'number',
+			},
+		},
 	}).flags.foo;
 
 	t.is(cli, undefined);
@@ -320,9 +320,9 @@ test('supports `number` flag type - flag but no value but default', t => {
 		flags: {
 			foo: {
 				type: 'number',
-				default: 2
-			}
-		}
+				default: 2,
+			},
+		},
 	}).flags.foo;
 
 	t.is(cli, 2);
@@ -335,9 +335,9 @@ test('supports `number` flag type - no flag but default', t => {
 		flags: {
 			foo: {
 				type: 'number',
-				default: 2
-			}
-		}
+				default: 2,
+			},
+		},
 	}).flags.foo;
 
 	t.is(cli, 2);
@@ -351,9 +351,9 @@ test('supports `number` flag type - throws on incorrect default value', t => {
 			flags: {
 				foo: {
 					type: 'number',
-					default: 'x'
-				}
-			}
+					default: 'x',
+				},
+			},
 		});
 	});
 });
@@ -365,11 +365,11 @@ test('isMultiple - unset flag returns empty array', t => {
 		flags: {
 			foo: {
 				type: 'string',
-				isMultiple: true
-			}
-		}
+				isMultiple: true,
+			},
+		},
 	}).flags, {
-		foo: []
+		foo: [],
 	});
 });
 
@@ -380,11 +380,11 @@ test('isMultiple - flag set once returns array', t => {
 		flags: {
 			foo: {
 				type: 'string',
-				isMultiple: true
-			}
-		}
+				isMultiple: true,
+			},
+		},
 	}).flags, {
-		foo: ['bar']
+		foo: ['bar'],
 	});
 });
 
@@ -395,11 +395,11 @@ test('isMultiple - flag set multiple times', t => {
 		flags: {
 			foo: {
 				type: 'string',
-				isMultiple: true
-			}
-		}
+				isMultiple: true,
+			},
+		},
 	}).flags, {
-		foo: ['bar', 'baz']
+		foo: ['bar', 'baz'],
 	});
 });
 
@@ -410,9 +410,9 @@ test('isMultiple - flag with space separated values', t => {
 		flags: {
 			foo: {
 				type: 'string',
-				isMultiple: true
-			}
-		}
+				isMultiple: true,
+			},
+		},
 	});
 
 	t.deepEqual(input, ['baz']);
@@ -426,11 +426,11 @@ test('isMultiple - flag with comma separated values', t => {
 		flags: {
 			foo: {
 				type: 'string',
-				isMultiple: true
-			}
-		}
+				isMultiple: true,
+			},
+		},
 	}).flags, {
-		foo: ['bar,baz']
+		foo: ['bar,baz'],
 	});
 });
 
@@ -441,9 +441,9 @@ test('single flag set more than once => throws', t => {
 			argv: ['--foo=bar', '--foo=baz'],
 			flags: {
 				foo: {
-					type: 'string'
-				}
-			}
+					type: 'string',
+				},
+			},
 		});
 	}, {message: 'The flag --foo can only be set once.'});
 });
@@ -454,11 +454,11 @@ test('isMultiple - default to type string', t => {
 		argv: ['--foo=bar'],
 		flags: {
 			foo: {
-				isMultiple: true
-			}
-		}
+				isMultiple: true,
+			},
+		},
 	}).flags, {
-		foo: ['bar']
+		foo: ['bar'],
 	});
 });
 
@@ -469,11 +469,11 @@ test('isMultiple - boolean flag', t => {
 		flags: {
 			foo: {
 				type: 'boolean',
-				isMultiple: true
-			}
-		}
+				isMultiple: true,
+			},
+		},
 	}).flags, {
-		foo: [true, false]
+		foo: [true, false],
 	});
 });
 
@@ -484,11 +484,11 @@ test('isMultiple - boolean flag is false by default', t => {
 		flags: {
 			foo: {
 				type: 'boolean',
-				isMultiple: true
-			}
-		}
+				isMultiple: true,
+			},
+		},
 	}).flags, {
-		foo: [false]
+		foo: [false],
 	});
 });
 
@@ -499,11 +499,11 @@ test('isMultiple - number flag', t => {
 		flags: {
 			foo: {
 				type: 'number',
-				isMultiple: true
-			}
-		}
+				isMultiple: true,
+			},
+		},
 	}).flags, {
-		foo: [1.3, -1]
+		foo: [1.3, -1],
 	});
 });
 
@@ -515,23 +515,23 @@ test('isMultiple - flag default values', t => {
 			string: {
 				type: 'string',
 				isMultiple: true,
-				default: ['foo']
+				default: ['foo'],
 			},
 			boolean: {
 				type: 'boolean',
 				isMultiple: true,
-				default: [true]
+				default: [true],
 			},
 			number: {
 				type: 'number',
 				isMultiple: true,
-				default: [0.5]
-			}
-		}
+				default: [0.5],
+			},
+		},
 	}).flags, {
 		string: ['foo'],
 		boolean: [true],
-		number: [0.5]
+		number: [0.5],
 	});
 });
 
@@ -543,23 +543,23 @@ test('isMultiple - multiple flag default values', t => {
 			string: {
 				type: 'string',
 				isMultiple: true,
-				default: ['foo', 'bar']
+				default: ['foo', 'bar'],
 			},
 			boolean: {
 				type: 'boolean',
 				isMultiple: true,
-				default: [true, false]
+				default: [true, false],
 			},
 			number: {
 				type: 'number',
 				isMultiple: true,
-				default: [0.5, 1]
-			}
-		}
+				default: [0.5, 1],
+			},
+		},
 	}).flags, {
 		string: ['foo', 'bar'],
 		boolean: [true, false],
-		number: [0.5, 1]
+		number: [0.5, 1],
 	});
 });
 
@@ -571,11 +571,11 @@ test('isMultiple - handles multi-word flag name', t => {
 		flags: {
 			fooBar: {
 				type: 'string',
-				isMultiple: true
-			}
-		}
+				isMultiple: true,
+			},
+		},
 	}).flags, {
-		fooBar: ['baz']
+		fooBar: ['baz'],
 	});
 });
 
@@ -583,7 +583,7 @@ if (NODE_MAJOR_VERSION >= 14) {
 	test('supports es modules', async t => {
 		try {
 			const {stdout} = await execa('node', ['estest/index.js', '--version'], {
-				importMeta: path.join(__dirname, '..')
+				importMeta: path.join(__dirname, '..'),
 			});
 			t.regex(stdout, /1.2.3/);
 		} catch (error) {

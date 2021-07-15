@@ -13,9 +13,9 @@ const cli = meow({
 			type: 'number',
 			alias: 't',
 			isRequired: true,
-			isMultiple: true
-		}
-	}
+			isMultiple: true,
+		},
+	},
 });
 
 console.log(cli.flags.test);

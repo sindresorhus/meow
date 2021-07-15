@@ -29,7 +29,7 @@ test('spawn cli and test specifying all required flags', async t => {
 		'--number',
 		'6',
 		'--kebab-case',
-		'test'
+		'test',
 	]);
 	t.is(stdout, 'test,6');
 });

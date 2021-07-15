@@ -11,9 +11,9 @@ const cli = meow({
 	allowUnknownFlags: false,
 	flags: {
 		foo: {
-			type: 'string'
-		}
-	}
+			type: 'string',
+		},
+	},
 });
 
 console.log(cli.flags.foo);

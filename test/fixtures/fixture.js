@@ -13,8 +13,8 @@ const cli = meow({
 	flags: {
 		unicorn: {alias: 'u'},
 		meow: {default: 'dog'},
-		camelCaseOption: {default: 'foo'}
-	}
+		camelCaseOption: {default: 'foo'},
+	},
 });
 
 if (cli.flags.camelCaseOption === 'foo') {
