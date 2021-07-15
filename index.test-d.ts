@@ -1,6 +1,6 @@
-import {expectAssignable, expectType} from 'tsd';
+import {expectAssignable, expectError, expectType} from 'tsd';
 import {PackageJson} from 'type-fest';
-import meow, {Result} from './index.js';
+import meow, {Result, AnyFlag} from './index.js';
 
 const importMeta = import.meta;
 
@@ -23,6 +23,15 @@ expectAssignable<{flags: {foo: string | undefined}}>(
 );
 expectAssignable<{flags: {foo: boolean | undefined}}>(
 	meow({importMeta, flags: {foo: {type: 'boolean'}}})
+);
+expectAssignable<{flags: {foo: number[] | undefined}}>(
+	meow({importMeta, flags: {foo: {type: 'number', isMultiple: true}}})
+);
+expectAssignable<{flags: {foo: string[] | undefined}}>(
+	meow({importMeta, flags: {foo: {type: 'string', isMultiple: true}}})
+);
+expectAssignable<{flags: {foo: boolean[] | undefined}}>(
+	meow({importMeta, flags: {foo: {type: 'boolean', isMultiple: true}}})
 );
 expectType<Result<never>>(meow({importMeta, description: 'foo'}));
 expectType<Result<never>>(meow({importMeta, description: false}));
@@ -79,3 +88,19 @@ const options = {
 } as const;
 
 meow('', options);
+
+expectAssignable<AnyFlag>({type: 'string',	default: 'cat'});
+expectAssignable<AnyFlag>({type: 'number',	default: 42});
+expectAssignable<AnyFlag>({type: 'boolean', default: true});
+
+expectAssignable<AnyFlag>({type: 'string', default: undefined});
+expectAssignable<AnyFlag>({type: 'number', default: undefined});
+expectAssignable<AnyFlag>({type: 'boolean', default: undefined});
+
+expectAssignable<AnyFlag>({type: 'string', isMultiple: true, default: ['cat']});
+expectAssignable<AnyFlag>({type: 'number', isMultiple: true,	default: [42]});
+expectAssignable<AnyFlag>({type: 'boolean', isMultiple: true, default: [false]});
+
+expectError<AnyFlag>({type: 'string', isMultiple: true, default: 'cat'});
+expectError<AnyFlag>({type: 'number', isMultiple: true, default: 42});
+expectError<AnyFlag>({type: 'boolean', isMultiple: true, default: false});
