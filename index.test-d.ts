@@ -89,8 +89,8 @@ const options = {
 
 meow('', options);
 
-expectAssignable<AnyFlag>({type: 'string',	default: 'cat'});
-expectAssignable<AnyFlag>({type: 'number',	default: 42});
+expectAssignable<AnyFlag>({type: 'string', default: 'cat'});
+expectAssignable<AnyFlag>({type: 'number', default: 42});
 expectAssignable<AnyFlag>({type: 'boolean', default: true});
 
 expectAssignable<AnyFlag>({type: 'string', default: undefined});
@@ -98,7 +98,7 @@ expectAssignable<AnyFlag>({type: 'number', default: undefined});
 expectAssignable<AnyFlag>({type: 'boolean', default: undefined});
 
 expectAssignable<AnyFlag>({type: 'string', isMultiple: true, default: ['cat']});
-expectAssignable<AnyFlag>({type: 'number', isMultiple: true,	default: [42]});
+expectAssignable<AnyFlag>({type: 'number', isMultiple: true, default: [42]});
 expectAssignable<AnyFlag>({type: 'boolean', isMultiple: true, default: [false]});
 
 expectError<AnyFlag>({type: 'string', isMultiple: true, default: 'cat'});
