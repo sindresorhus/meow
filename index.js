@@ -26,7 +26,7 @@ const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
 		return isFlagRequired;
 	}
 
-	return flag.isMultiple && receivedFlags[flagName].length === 0;
+	return flag.isMultiple && receivedFlags[flagName].length === 0 && isFlagRequired;
 };
 
 const getMissingRequiredFlags = (flags, receivedFlags, input) => {
