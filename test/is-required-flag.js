@@ -7,6 +7,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixtureRequiredPath = path.join(__dirname, 'fixtures', 'fixture-required.js');
 const fixtureRequiredFunctionPath = path.join(__dirname, 'fixtures', 'fixture-required-function.js');
 const fixtureRequiredMultiplePath = path.join(__dirname, 'fixtures', 'fixture-required-multiple.js');
+const fixtureConditionalRequiredMultiplePath = path.join(
+	__dirname,
+	'fixtures',
+	'fixture-conditional-required-multiple.js',
+);
 
 test('spawn cli and test not specifying required flags', async t => {
 	try {
@@ -117,4 +122,9 @@ test('spawn cli and test isRequired with isMultiple giving no values, but flag i
 		t.regex(stderr, /Missing required flag/);
 		t.regex(stderr, /--test/);
 	}
+});
+
+test('spawn cli and test isRequire function that returns false with isMultiple given no values, but flag is not given', async t => {
+	const {stdout} = await execa(fixtureConditionalRequiredMultiplePath, []);
+	t.is(stdout, '[]');
 });
