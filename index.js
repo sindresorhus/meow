@@ -129,6 +129,13 @@ const meow = (helpText, options = {}) => {
 		...options,
 	};
 
+	if (options.autoHelp) {
+		options.flags.help = {type: 'boolean'}
+	}
+	if (options.autoVersion) {
+		options.flags.version = {type: 'boolean'}
+	}
+
 	if (options.hardRejection) {
 		hardRejection();
 	}
