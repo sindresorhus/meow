@@ -129,12 +129,17 @@ const meow = (helpText, options = {}) => {
 		...options,
 	};
 
-	if (options.autoHelp) {
+	let addedAutoHelp = false;
+	let addedAutoVersion = false;
+
+	if (options.autoHelp && !options.flags.help) {
 		options.flags.help = {type: 'boolean'};
+		addedAutoHelp = true;
 	}
 
-	if (options.autoVersion) {
+	if (options.autoVersion && !options.flags.version) {
 		options.flags.version = {type: 'boolean'};
+		addedAutoVersion = true;
 	}
 
 	if (options.hardRejection) {
@@ -220,6 +225,14 @@ const meow = (helpText, options = {}) => {
 
 	for (const flagValue of Object.values(options.flags)) {
 		delete flags[flagValue.alias];
+	}
+
+	if (addedAutoHelp && !argv.help) {
+		delete flags.help;
+	}
+
+	if (addedAutoVersion && !argv.version) {
+		delete flags.version;
 	}
 
 	const missingRequiredFlags = getMissingRequiredFlags(options.flags, flags, input);
