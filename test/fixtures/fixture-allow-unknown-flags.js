@@ -16,4 +16,12 @@ const cli = meow({
 	},
 });
 
+export const expectedHelp = `
+  Custom description
+
+  Usage
+    foo <input>
+
+`;
+
 console.log(cli.flags.foo);
