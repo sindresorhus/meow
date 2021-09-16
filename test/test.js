@@ -72,7 +72,7 @@ test('spawn cli and disabled autoVersion', async t => {
 
 test('spawn cli and not show version', async t => {
 	const {stdout} = await execa(fixturePath, ['--version=beta']);
-	t.is(stdout, 'version\nmeow\ncamelCaseOption');
+	t.is(stdout, 'meow\ncamelCaseOption');
 });
 
 test('spawn cli and show help screen', async t => {
@@ -87,7 +87,7 @@ test('spawn cli and disabled autoHelp', async t => {
 
 test('spawn cli and not show help', async t => {
 	const {stdout} = await execa(fixturePath, ['--help=all']);
-	t.is(stdout, 'help\nmeow\ncamelCaseOption');
+	t.is(stdout, 'meow\ncamelCaseOption');
 });
 
 test('spawn cli and test input', async t => {
