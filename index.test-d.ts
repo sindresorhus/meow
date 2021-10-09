@@ -56,6 +56,7 @@ const result = meow('Help text', {
 		'foo-bar': {type: 'number'},
 		bar: {type: 'string', default: ''},
 		abc: {type: 'string', isMultiple: true},
+		baz: {type: 'string', choices: ['rainbow', 'cat', 'unicorn']},
 	},
 });
 
@@ -67,11 +68,13 @@ expectType<boolean | undefined>(result.flags.foo);
 expectType<unknown>(result.flags.fooBar);
 expectType<string>(result.flags.bar);
 expectType<string[] | undefined>(result.flags.abc);
+expectType<string | undefined>(result.flags.baz);
 expectType<boolean | undefined>(result.unnormalizedFlags.foo);
 expectType<unknown>(result.unnormalizedFlags.f);
 expectType<number | undefined>(result.unnormalizedFlags['foo-bar']);
 expectType<string>(result.unnormalizedFlags.bar);
 expectType<string[] | undefined>(result.unnormalizedFlags.abc);
+expectType<string | undefined>(result.unnormalizedFlags.baz);
 
 result.showHelp();
 result.showHelp(1);
