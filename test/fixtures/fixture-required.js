@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-'use strict';
 import meow from '../../index.js';
 
 const cli = meow({
@@ -13,20 +12,20 @@ const cli = meow({
 		test: {
 			type: 'string',
 			alias: 't',
-			isRequired: true
+			isRequired: true,
 		},
 		number: {
 			type: 'number',
-			isRequired: true
+			isRequired: true,
 		},
 		kebabCase: {
 			type: 'string',
-			isRequired: true
+			isRequired: true,
 		},
 		notRequired: {
-			type: 'string'
-		}
-	}
+			type: 'string',
+		},
+	},
 });
 
 console.log(`${cli.flags.test},${cli.flags.number}`);

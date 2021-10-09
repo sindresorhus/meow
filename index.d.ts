@@ -12,17 +12,17 @@ Callback function to determine if a flag is required during runtime.
 */
 export type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
 
-export interface Flag<Type extends FlagType, Default> {
+export interface Flag<Type extends FlagType, Default, IsMultiple = false> {
 	readonly type?: Type;
 	readonly alias?: string;
 	readonly default?: Default;
 	readonly isRequired?: boolean | IsRequiredPredicate;
-	readonly isMultiple?: boolean;
+	readonly isMultiple?: IsMultiple;
 }
 
-type StringFlag = Flag<'string', string>;
-type BooleanFlag = Flag<'boolean', boolean>;
-type NumberFlag = Flag<'number', number>;
+type StringFlag = Flag<'string', string> | Flag<'string', string[], true>;
+type BooleanFlag = Flag<'boolean', boolean> | Flag<'boolean', boolean[], true>;
+type NumberFlag = Flag<'number', number> | Flag<'number', number[], true>;
 type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
 type AnyFlags = Record<string, AnyFlag>;
 
@@ -313,5 +313,4 @@ foo(cli.input[0], cli.flags);
 ```
 */
 export default function meow<Flags extends AnyFlags>(helpMessage: string, options?: Options<Flags>): Result<Flags>;
-// eslint-disable-next-line no-redeclare
 export default function meow<Flags extends AnyFlags>(options?: Options<Flags>): Result<Flags>;

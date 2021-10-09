@@ -11,17 +11,15 @@ const cli = meow({
 	flags: {
 		trigger: {
 			type: 'boolean',
-			alias: 't'
+			alias: 't',
 		},
 		withTrigger: {
 			type: 'string',
-			isRequired: (flags, _) => {
-				return flags.trigger;
-			}
+			isRequired: (flags, _) => flags.trigger,
 		},
 		allowError: {
 			type: 'boolean',
-			alias: 'a'
+			alias: 'a',
 		},
 		shouldError: {
 			type: 'boolean',
@@ -31,9 +29,9 @@ const cli = meow({
 				}
 
 				return false;
-			}
-		}
-	}
+			},
+		},
+	},
 });
 
 console.log(`${cli.flags.trigger},${cli.flags.withTrigger}`);

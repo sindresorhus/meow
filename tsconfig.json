@@ -6,11 +6,11 @@
 	"compilerOptions": {
 		"strict": true,
 		"jsx": "react",
-		"target": "es2018",
+		"target": "ES2019", // Node.js 12
 		"lib": [
-			"es2018"
+			"ES2019"
 		],
-		"module": "esnext",
+		"module": "ES2020",
 		"moduleResolution": "node",
 		"noImplicitAny": true,
 		"strictNullChecks": true,

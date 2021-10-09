@@ -26,7 +26,7 @@ const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
 		return isFlagRequired;
 	}
 
-	return flag.isMultiple && receivedFlags[flagName].length === 0;
+	return flag.isMultiple && receivedFlags[flagName].length === 0 && isFlagRequired;
 };
 
 const getMissingRequiredFlags = (flags, receivedFlags, input) => {
@@ -110,7 +110,7 @@ const validateChoices = (flags, receivedFlags) => {
 const reportUnknownFlags = unknownFlags => {
 	console.error([
 		`Unknown flag${unknownFlags.length > 1 ? 's' : ''}`,
-		...unknownFlags
+		...unknownFlags,
 	].join('\n'));
 };
 
@@ -121,9 +121,9 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 		const flag = {...flagValue};
 
 		if (
-			typeof booleanDefault !== 'undefined' &&
-			flag.type === 'boolean' &&
-			!Object.prototype.hasOwnProperty.call(flag, 'default')
+			typeof booleanDefault !== 'undefined'
+				&& flag.type === 'boolean'
+				&& !Object.prototype.hasOwnProperty.call(flag, 'default')
 		) {
 			flag.default = flag.isMultiple ? [booleanDefault] : booleanDefault;
 		}
@@ -160,7 +160,7 @@ const meow = (helpText, options = {}) => {
 
 	const foundPackage = readPackageUpSync({
 		cwd: dirname(fileURLToPath(options.importMeta.url)),
-		normalize: false
+		normalize: false,
 	});
 
 	options = {
@@ -175,7 +175,7 @@ const meow = (helpText, options = {}) => {
 		booleanDefault: false,
 		hardRejection: true,
 		allowUnknownFlags: true,
-		...options
+		...options,
 	};
 
 	if (options.hardRejection) {
@@ -185,7 +185,7 @@ const meow = (helpText, options = {}) => {
 	validateOptions(options);
 	let parserOptions = {
 		arguments: options.input,
-		...buildParserFlags(options)
+		...buildParserFlags(options),
 	};
 
 	parserOptions = decamelizeKeys(parserOptions, '-', {exclude: ['stopEarly', '--']});
@@ -198,7 +198,7 @@ const meow = (helpText, options = {}) => {
 
 	parserOptions.configuration = {
 		...parserOptions.configuration,
-		'greedy-arrays': false
+		'greedy-arrays': false,
 	};
 
 	if (parserOptions['--']) {
@@ -277,7 +277,7 @@ const meow = (helpText, options = {}) => {
 		pkg: package_,
 		help,
 		showHelp,
-		showVersion
+		showVersion,
 	};
 };
 

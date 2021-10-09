@@ -8,12 +8,14 @@ const cli = meow({
 		Usage
 		  foo <input>
   `,
-	allowUnknownFlags: false,
 	flags: {
-		foo: {
-			type: 'string',
+		test: {
+			type: 'number',
+			alias: 't',
+			isRequired: () => false,
+			isMultiple: true,
 		},
 	},
 });
 
-console.log(cli.flags.foo);
+console.log(cli.flags.test);

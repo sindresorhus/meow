@@ -1,28 +1,37 @@
-import {expectAssignable, expectType} from 'tsd';
+import {expectAssignable, expectError, expectType} from 'tsd';
 import {PackageJson} from 'type-fest';
-import meow, {Result} from './index.js';
+import meow, {Result, AnyFlag} from './index.js';
 
 const importMeta = import.meta;
 
 expectType<Result<never>>(meow('Help text'));
 expectType<Result<never>>(meow('Help text', {importMeta, hardRejection: false}));
 expectAssignable<{flags: {foo: number}}>(
-	meow({importMeta: import.meta, flags: {foo: {type: 'number', isRequired: true}}})
+	meow({importMeta: import.meta, flags: {foo: {type: 'number', isRequired: true}}}),
 );
 expectAssignable<{flags: {foo: string}}>(
-	meow({importMeta, flags: {foo: {type: 'string', isRequired: true}}})
+	meow({importMeta, flags: {foo: {type: 'string', isRequired: true}}}),
 );
 expectAssignable<{flags: {foo: boolean}}>(
-	meow({importMeta, flags: {foo: {type: 'boolean', isRequired: true}}})
+	meow({importMeta, flags: {foo: {type: 'boolean', isRequired: true}}}),
 );
 expectAssignable<{flags: {foo: number | undefined}}>(
-	meow({importMeta, flags: {foo: {type: 'number'}}})
+	meow({importMeta, flags: {foo: {type: 'number'}}}),
 );
 expectAssignable<{flags: {foo: string | undefined}}>(
-	meow({importMeta, flags: {foo: {type: 'string'}}})
+	meow({importMeta, flags: {foo: {type: 'string'}}}),
 );
 expectAssignable<{flags: {foo: boolean | undefined}}>(
-	meow({importMeta, flags: {foo: {type: 'boolean'}}})
+	meow({importMeta, flags: {foo: {type: 'boolean'}}}),
+);
+expectAssignable<{flags: {foo: number[] | undefined}}>(
+	meow({importMeta, flags: {foo: {type: 'number', isMultiple: true}}}),
+);
+expectAssignable<{flags: {foo: string[] | undefined}}>(
+	meow({importMeta, flags: {foo: {type: 'string', isMultiple: true}}}),
+);
+expectAssignable<{flags: {foo: boolean[] | undefined}}>(
+	meow({importMeta, flags: {foo: {type: 'boolean', isMultiple: true}}}),
 );
 expectType<Result<never>>(meow({importMeta, description: 'foo'}));
 expectType<Result<never>>(meow({importMeta, description: false}));
@@ -46,8 +55,8 @@ const result = meow('Help text', {
 		foo: {type: 'boolean', alias: 'f'},
 		'foo-bar': {type: 'number'},
 		bar: {type: 'string', default: ''},
-		abc: {type: 'string', isMultiple: true}
-	}
+		abc: {type: 'string', isMultiple: true},
+	},
 });
 
 expectType<string[]>(result.input);
@@ -73,9 +82,25 @@ const options = {
 	flags: {
 		rainbow: {
 			type: 'boolean',
-			alias: 'r'
-		}
-	}
+			alias: 'r',
+		},
+	},
 } as const;
 
 meow('', options);
+
+expectAssignable<AnyFlag>({type: 'string', default: 'cat'});
+expectAssignable<AnyFlag>({type: 'number', default: 42});
+expectAssignable<AnyFlag>({type: 'boolean', default: true});
+
+expectAssignable<AnyFlag>({type: 'string', default: undefined});
+expectAssignable<AnyFlag>({type: 'number', default: undefined});
+expectAssignable<AnyFlag>({type: 'boolean', default: undefined});
+
+expectAssignable<AnyFlag>({type: 'string', isMultiple: true, default: ['cat']});
+expectAssignable<AnyFlag>({type: 'number', isMultiple: true, default: [42]});
+expectAssignable<AnyFlag>({type: 'boolean', isMultiple: true, default: [false]});
+
+expectError<AnyFlag>({type: 'string', isMultiple: true, default: 'cat'});
+expectError<AnyFlag>({type: 'number', isMultiple: true, default: 42});
+expectError<AnyFlag>({type: 'boolean', isMultiple: true, default: false});

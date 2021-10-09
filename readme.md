@@ -223,7 +223,7 @@ __Caution: Explicitly specifying `undefined` for `booleanDefault` has different 
 Example:
 
 ```js
-const meow from 'meow';
+import meow from 'meow';
 
 const cli = meow(`
 	Usage

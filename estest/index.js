@@ -17,8 +17,8 @@ meow(
 		flags: {
 			rainbow: {
 				type: 'boolean',
-				alias: 'r'
-			}
-		}
-	}
+				alias: 'r',
+			},
+		},
+	},
 );
