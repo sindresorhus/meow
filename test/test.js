@@ -612,8 +612,8 @@ test('choices - throws if input does not match choices', t => {
 				}
 			}
 		});
-	}, {message: 'Choices mismatch: Choices: [dog, cat, unicorn] Received: [rainbow], ' +
-	'Choices: [1, 2, 3] Received: [5]'});
+	}, {message: 'Unknown value: `rainbow`. Value must be one of: dog, cat, unicorn. '
+	+ 'Unknown value: `5`. Value must be one of: 1, 2, 3'});
 });
 
 test('choices - throws if choices is not array', t => {
@@ -657,7 +657,7 @@ test('choices - throw error when isRequired is true', t => {
 				}
 			}
 		});
-	}, {message: 'Choices mismatch: Choices: [dog, cat, unicorn] Received: []'});
+	}, {message: 'Flag animal has no value. Value must be one of: dog, cat, unicorn'});
 });
 
 test('choices - success with isMultiple', t => {
@@ -676,7 +676,7 @@ test('choices - success with isMultiple', t => {
 	t.deepEqual(cli.flags.animal, ['dog', 'unicorn']);
 });
 
-test('choices - throws with isMultiple', t => {
+test('choices - throws with isMultiple, one unknown value', t => {
 	t.throws(() => {
 		meow({
 			importMeta,
@@ -686,10 +686,26 @@ test('choices - throws with isMultiple', t => {
 					type: 'string',
 					isMultiple: true,
 					choices: ['dog', 'cat', 'unicorn']
-				}
+				},
 			}
 		});
-	}, {message: 'Choices mismatch: Choices: [dog, cat, unicorn] Received: [dog, rabbit]'});
+	}, {message: 'Unknown value: `rabbit`. Value must be one of: dog, cat, unicorn'});
+});
+
+test('choices - throws with isMultiple, multiple unknown values', t => {
+	t.throws(() => {
+		meow({
+			importMeta,
+			argv: ['--animal=dog', '--animal=rabbit'],
+			flags: {
+				animal: {
+					type: 'string',
+					isMultiple: true,
+					choices: ['cat', 'unicorn']
+				},
+			}
+		});
+	}, {message: 'Unknown values: `dog, rabbit`. Value must be one of: cat, unicorn'});
 });
 
 if (NODE_MAJOR_VERSION >= 14) {

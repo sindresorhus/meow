@@ -58,34 +58,52 @@ const validateOptions = ({flags}) => {
 	}
 };
 
+const validateChoicesByFlag = (flagKey, flagValue, receivedInput) => {
+	const {choices, isRequired} = flagValue;
+
+	if (!choices) {
+		return;
+	}
+
+	if (!Array.isArray(choices)) {
+		throw new TypeError('Choices should be array');
+	}
+
+	if (receivedInput === undefined) {
+		if (isRequired) {
+			return `Flag ${flagKey} has no value. Value must be one of: ${choices.join(', ')}`;
+		}
+
+		return;
+	}
+
+	if (Array.isArray(receivedInput)) {
+		const unknownValues = receivedInput.filter(index => !choices.includes(index));
+		if (unknownValues.length === 1) {
+			return `Unknown value: \`${unknownValues[0]}\`. Value must be one of: ${choices.join(', ')}`;
+		}
+
+		if (unknownValues.length > 1) {
+			return `Unknown values: \`${unknownValues.join(', ')}\`. Value must be one of: ${choices.join(', ')}`;
+		}
+	} else if (!choices.includes(receivedInput)) {
+		return `Unknown value: \`${receivedInput}\`. Value must be one of: ${choices.join(', ')}`;
+	}
+};
+
 const validateChoices = (flags, receivedFlags) => {
 	const errors = [];
 
 	for (const [flagKey, flagValue] of Object.entries(flags)) {
-		const {choices, isRequired} = flagValue;
-
-		if (!choices) {
-			return;
-		}
-
-		if (!Array.isArray(choices)) {
-			throw new TypeError('Choices should be array');
-		}
-
 		const receivedInput = receivedFlags[flagKey];
-		if (receivedInput === undefined && !isRequired) {
-			return;
-		}
-
-		const receivedInputArray = Array.isArray(receivedInput) ? receivedInput : [receivedInput];
-		const includesAll = receivedInputArray.every(i => choices.includes(i));
-		if (!includesAll) {
-			errors.push(`Choices: [${choices.join(', ')}] Received: [${receivedInputArray.join(', ')}]`);
+		const errorMessage = validateChoicesByFlag(flagKey, flagValue, receivedInput);
+		if (errorMessage) {
+			errors.push(errorMessage);
 		}
 	}
 
 	if (errors.length > 0) {
-		throw new Error(`Choices mismatch: ${errors.join(', ')}`);
+		throw new Error(`${errors.join('. ')}`);
 	}
 };
 
