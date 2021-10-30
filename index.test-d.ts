@@ -107,3 +107,22 @@ expectAssignable<AnyFlag>({type: 'boolean', isMultiple: true, default: [false]})
 expectError<AnyFlag>({type: 'string', isMultiple: true, default: 'cat'});
 expectError<AnyFlag>({type: 'number', isMultiple: true, default: 42});
 expectError<AnyFlag>({type: 'boolean', isMultiple: true, default: false});
+
+expectAssignable<AnyFlag>({type: 'string', choices: ['cat', 'unicorn']});
+expectAssignable<AnyFlag>({type: 'number', choices: [1, 2]});
+expectAssignable<AnyFlag>({type: 'boolean', choices: [true, false]});
+expectAssignable<AnyFlag>({type: 'string', isMultiple: true, choices: ['cat']});
+expectAssignable<AnyFlag>({type: 'string', isMultiple: false, choices: ['cat']});
+
+expectError<AnyFlag>({type: 'string', choices: 'cat'});
+expectError<AnyFlag>({type: 'number', choices: 1});
+expectError<AnyFlag>({type: 'boolean', choices: true});
+
+expectError<AnyFlag>({type: 'string', choices: [1]});
+expectError<AnyFlag>({type: 'number', choices: ['cat']});
+expectError<AnyFlag>({type: 'boolean', choices: ['cat']});
+
+expectAssignable<AnyFlag>({choices: ['cat']});
+expectAssignable<AnyFlag>({choices: [1]});
+expectAssignable<AnyFlag>({choices: [true]});
+expectError<AnyFlag>({choices: ['cat', 1, true]});
