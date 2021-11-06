@@ -585,13 +585,13 @@ test('choices - success case', t => {
 		argv: ['--animal', 'cat', '--number=2.2'],
 		flags: {
 			animal: {
-				choices: ['dog', 'cat', 'unicorn']
+				choices: ['dog', 'cat', 'unicorn'],
 			},
 			number: {
 				choices: [1.1, 2.2, 3.3],
-				type: 'number'
-			}
-		}
+				type: 'number',
+			},
+		},
 	});
 
 	t.is(cli.flags.animal, 'cat');
@@ -605,12 +605,12 @@ test('choices - throws if input does not match choices', t => {
 			argv: ['--animal', 'rainbow', '--number', 5],
 			flags: {
 				animal: {
-					choices: ['dog', 'cat', 'unicorn']
+					choices: ['dog', 'cat', 'unicorn'],
 				},
 				number: {
-					choices: [1, 2, 3]
-				}
-			}
+					choices: [1, 2, 3],
+				},
+			},
 		});
 	}, {message: 'Unknown value: `rainbow`. Value must be one of: dog, cat, unicorn. '
 	+ 'Unknown value: `5`. Value must be one of: 1, 2, 3'});
@@ -623,9 +623,9 @@ test('choices - throws if choices is not array', t => {
 			argv: ['--animal', 'cat'],
 			flags: {
 				animal: {
-					choices: 'cat'
-				}
-			}
+					choices: 'cat',
+				},
+			},
 		});
 	}, {message: 'Choices should be array'});
 });
@@ -638,9 +638,9 @@ test('choices - does not throw error when isRequired is false', t => {
 			flags: {
 				animal: {
 					choices: ['dog', 'cat', 'unicorn'],
-					isRequired: false
-				}
-			}
+					isRequired: false,
+				},
+			},
 		});
 	});
 });
@@ -653,9 +653,9 @@ test('choices - throw error when isRequired is true', t => {
 			flags: {
 				animal: {
 					choices: ['dog', 'cat', 'unicorn'],
-					isRequired: true
-				}
-			}
+					isRequired: true,
+				},
+			},
 		});
 	}, {message: 'Flag animal has no value. Value must be one of: dog, cat, unicorn'});
 });
@@ -668,9 +668,9 @@ test('choices - success with isMultiple', t => {
 			animal: {
 				type: 'string',
 				isMultiple: true,
-				choices: ['dog', 'cat', 'unicorn']
-			}
-		}
+				choices: ['dog', 'cat', 'unicorn'],
+			},
+		},
 	});
 
 	t.deepEqual(cli.flags.animal, ['dog', 'unicorn']);
@@ -685,9 +685,9 @@ test('choices - throws with isMultiple, one unknown value', t => {
 				animal: {
 					type: 'string',
 					isMultiple: true,
-					choices: ['dog', 'cat', 'unicorn']
+					choices: ['dog', 'cat', 'unicorn'],
 				},
-			}
+			},
 		});
 	}, {message: 'Unknown value: `rabbit`. Value must be one of: dog, cat, unicorn'});
 });
@@ -701,9 +701,9 @@ test('choices - throws with isMultiple, multiple unknown values', t => {
 				animal: {
 					type: 'string',
 					isMultiple: true,
-					choices: ['cat', 'unicorn']
+					choices: ['cat', 'unicorn'],
 				},
-			}
+			},
 		});
 	}, {message: 'Unknown values: `dog, rabbit`. Value must be one of: cat, unicorn'});
 });
