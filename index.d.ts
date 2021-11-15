@@ -18,7 +18,7 @@ export interface Flag<LiteralType extends FlagType, Type, IsMultiple = false> {
 	readonly default?: Type;
 	readonly isRequired?: boolean | IsRequiredPredicate;
 	readonly isMultiple?: IsMultiple;
-	readonly choices?: Type extends any[] ? Type : Type[];
+	readonly choices?: Type extends unknown[] ? Type : Type[];
 }
 
 type StringFlag = Flag<'string', string> | Flag<'string', string[], true>;
