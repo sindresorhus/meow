@@ -588,8 +588,8 @@ test('choices - success case', t => {
 				choices: ['dog', 'cat', 'unicorn'],
 			},
 			number: {
-				choices: [1.1, 2.2, 3.3],
 				type: 'number',
+				choices: [1.1, 2.2, 3.3],
 			},
 		},
 	});
@@ -637,8 +637,8 @@ test('choices - does not throw error when isRequired is false', t => {
 			argv: [],
 			flags: {
 				animal: {
-					choices: ['dog', 'cat', 'unicorn'],
 					isRequired: false,
+					choices: ['dog', 'cat', 'unicorn'],
 				},
 			},
 		});
@@ -652,8 +652,8 @@ test('choices - throw error when isRequired is true', t => {
 			argv: [],
 			flags: {
 				animal: {
-					choices: ['dog', 'cat', 'unicorn'],
 					isRequired: true,
+					choices: ['dog', 'cat', 'unicorn'],
 				},
 			},
 		});
