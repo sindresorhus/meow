@@ -285,7 +285,7 @@ Default: `true`
 
 Whether to use [`hard-rejection`](https://github.com/sindresorhus/hard-rejection) or not. Disabling this can be useful if you need to handle `process.on('unhandledRejection')` yourself.
 
-#### allowUnknownFlags
+##### allowUnknownFlags
 
 Type `boolean`\
 Default: `true`
