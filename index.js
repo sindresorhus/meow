@@ -205,6 +205,16 @@ const meow = (helpText, options = {}) => {
 		}
 	}
 
+	// Subcommands
+	const commands = {};
+	for (const [command, meowInstance] of Object.entries(options.commands ?? {})) {
+		if (input[0] !== command) {
+			continue;
+		}
+
+		commands[command] = meowInstance(helpText, {...options, argv: process.argv.slice(3), commands: {}});
+	}
+
 	const flags = camelCaseKeys(argv, {exclude: ['--', /^\w$/]});
 	const unnormalizedFlags = {...flags};
 
@@ -222,6 +232,7 @@ const meow = (helpText, options = {}) => {
 
 	return {
 		input,
+		commands,
 		flags,
 		unnormalizedFlags,
 		pkg: package_,

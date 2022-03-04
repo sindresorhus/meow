@@ -26,6 +26,8 @@ type NumberFlag = Flag<'number', number> | Flag<'number', number[], true>;
 type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
 type AnyFlags = Record<string, AnyFlag>;
 
+type CommandType<Flags extends AnyFlags> = (helpMessage: string, options?: Options<Flags>) => typeof meow;
+
 export interface Options<Flags extends AnyFlags> {
 	/**
 	Pass in [`import.meta`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_import_meta). This is used to find the correct package.json file.
@@ -67,6 +69,30 @@ export interface Options<Flags extends AnyFlags> {
 	```
 	*/
 	readonly flags?: Flags;
+
+	/**
+  Define subcommands.
+
+  The key is the name of the subcommand and the value is a function that returns an instance of `meow`.
+
+  The following values get passed to the subcommand function:
+  - `helpText`: The help text of parent `meow` instance.
+  - `options`: The options from the parent `meow` instance.
+
+  @example
+  ```
+  commands: {
+    unicorn: (helpText, options) => meow({
+      ...options,
+      description: 'Subcommand description',
+      flags: {
+        unicorn: {alias: 'u'},
+      }
+    })
+  }
+  ```
+  */
+	readonly commands?: Record<string, CommandType<Flags>>;
 
 	/**
 	Description to show above the help text. Default: The package.json `"description"` property.
