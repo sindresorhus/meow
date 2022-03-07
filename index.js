@@ -212,7 +212,7 @@ const meow = (helpText, options = {}) => {
 			continue;
 		}
 
-		commands[command] = meowInstance(helpText, {...options, argv: process.argv.slice(3), commands: {}});
+		commands[command] = meowInstance({...options, argv: process.argv.slice(3), commands: {}, help: helpText});
 	}
 
 	const flags = camelCaseKeys(argv, {exclude: ['--', /^\w$/]});

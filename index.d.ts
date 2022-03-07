@@ -26,7 +26,7 @@ type NumberFlag = Flag<'number', number> | Flag<'number', number[], true>;
 type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
 type AnyFlags = Record<string, AnyFlag>;
 
-type CommandType<Flags extends AnyFlags> = (helpMessage: string, options?: Options<Flags>) => typeof meow;
+type CommandType<Flags extends AnyFlags> = (options: Options<Flags>) => typeof meow;
 
 export interface Options<Flags extends AnyFlags> {
 	/**
@@ -71,27 +71,50 @@ export interface Options<Flags extends AnyFlags> {
 	readonly flags?: Flags;
 
 	/**
-  Define subcommands.
+	Define subcommands. Subcommands don't actually call any commands for you, it only takes care of parsing
+	the subcommand flags, inputs, and showing the subcommand helptext.
 
-  The key is the name of the subcommand and the value is a function that returns an instance of `meow`.
+	The key is the name of the subcommand and the value is a function that returns an instance of `meow`.
 
-  The following values get passed to the subcommand function:
-  - `helpText`: The help text of parent `meow` instance.
-  - `options`: The options from the parent `meow` instance.
+	The following values get passed to the subcommand function:
+	- `options`: The options from the parent `meow` instance.
 
-  @example
-  ```
-  commands: {
-    unicorn: (helpText, options) => meow({
-      ...options,
-      description: 'Subcommand description',
-      flags: {
-        unicorn: {alias: 'u'},
-      }
-    })
-  }
-  ```
-  */
+	@example
+	```
+	const commands = {
+		subcommand = (options) => meow({
+			...options,
+			description: 'Subcommand description',
+			help: `
+				Unicorn command
+				Usage:
+					foo unicorn <input>
+			`,
+			flags: {
+				unicorn: {alias: 'u', isRequired: true},
+			},
+		});
+	};
+	const cli = meow({
+		importMeta: import.meta,
+		description: 'Custom description',
+		help: `
+			Usage
+				foo unicorn <input>
+		`,
+		commands: {
+			unicorn: commands.subcommand,
+		},
+		flags: {},
+	});
+
+	// call subcommand
+	const [command, parsedCli] = Object.entries(cli.commands ?? {})?.[0] ?? [];
+	// command => "unicorn"
+	// parsedCli => parsed options of unicorn subcommand
+	commands[command](parsedCli);
+	```
+	*/
 	readonly commands?: Record<string, CommandType<Flags>>;
 
 	/**
@@ -274,6 +297,11 @@ export interface Result<Flags extends AnyFlags> {
 	flags: TypedFlags<Flags> & Record<string, unknown>;
 
 	/**
+	Parsed subcommands
+	*/
+	subcommands: Record<string, Result<Flags>>;
+
+	/**
 	Flags converted camelCase including aliases.
 	*/
 	unnormalizedFlags: TypedFlags<Flags> & Record<string, unknown>;
@@ -311,14 +339,14 @@ import foo from './index.js';
 
 const cli = meow(`
 	Usage
-	  $ foo <input>
+		$ foo <input>
 
 	Options
-	  --rainbow, -r  Include a rainbow
+		--rainbow, -r  Include a rainbow
 
 	Examples
-	  $ foo unicorns --rainbow
-	  🌈 unicorns 🌈
+		$ foo unicorns --rainbow
+		🌈 unicorns 🌈
 `, {
 	importMeta: import.meta,
 	flags: {

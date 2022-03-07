@@ -72,6 +72,7 @@ Returns an `object` with:
 
 - `input` *(Array)* - Non-flag arguments
 - `flags` *(Object)* - Flags converted to camelCase excluding aliases
+- `commands` *(Object)* - Subcommands with values parsed with respect to subcommand's meow instance.
 - `unnormalizedFlags` *(Object)* - Flags converted to camelCase including aliases
 - `pkg` *(Object)* - The `package.json` object
 - `help` *(string)* - The help text used with `--help`
@@ -133,6 +134,54 @@ flags: {
 		}
 	}
 }
+```
+
+##### commands
+
+Type: `object`
+
+Define subcommands. Subcommands don't actually call any commands for you, it only takes care of parsing the subcommand flags, inputs, and showing the subcommand helptext.
+
+The key is the name of the subcommand and the value is a function that returns an instance of `meow`.
+
+The following values get passed to the subcommand function:
+	- `options`: The options from the parent `meow` instance.
+
+Example:
+
+```js
+const commands = {
+	subcommand = (options) => meow({
+		...options,
+		description: 'Subcommand description',
+		help: `
+			Unicorn command
+			Usage:
+				foo unicorn <input>
+		`,
+		flags: {
+			unicorn: {alias: 'u', isRequired: true},
+		},
+	});
+};
+const cli = meow({
+	importMeta: import.meta,
+	description: 'Custom description',
+	help: `
+		Usage
+			foo unicorn <input>
+	`,
+	commands: {
+		unicorn: commands.subcommand,
+	},
+	flags: {},
+});
+
+// call subcommand
+const [command, parsedCli] = Object.entries(cli.commands ?? {})?.[0] ?? [];
+// command => "unicorn"
+// parsedCli => parsed meow instance of unicorn subcommand
+commands[command](parsedCli);
 ```
 
 ##### description

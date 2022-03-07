@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 import meow from '../../index.js';
 
-const subcommand = (helpText, options = {}) => meow({
+const subcommand = options => meow({
 	...options,
 	description: 'Subcommand description',
 	help: `
-    Unicorn command
-    Usage:
-      foo unicorn <input>
-  `,
+		Unicorn command
+		Usage:
+			foo unicorn <input>
+	`,
 	flags: {
 		unicorn: {alias: 'u', isRequired: true},
 	},
@@ -19,8 +19,8 @@ const cli = meow({
 	description: 'Custom description',
 	help: `
 		Usage
-		  foo unicorn <input>
-  `,
+			foo unicorn <input>
+	`,
 	commands: {
 		unicorn: subcommand,
 	},
