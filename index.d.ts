@@ -115,7 +115,7 @@ export interface Options<Flags extends AnyFlags> {
 	commands[command](parsedCli);
 	```
 	*/
-	readonly commands?: Record<string, CommandType<Flags>>;
+	readonly commands?: Record<string, CommandType<AnyFlags>>;
 
 	/**
 	Description to show above the help text. Default: The package.json `"description"` property.
@@ -299,7 +299,7 @@ export interface Result<Flags extends AnyFlags> {
 	/**
 	Parsed subcommands
 	*/
-	subcommands: Record<string, Result<Flags>>;
+	commands: Record<string, Result<AnyFlags>>;
 
 	/**
 	Flags converted camelCase including aliases.
