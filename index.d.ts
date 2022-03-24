@@ -197,7 +197,7 @@ export interface Options<Flags extends AnyFlags> {
 	//}
 	```
 	*/
-	readonly booleanDefault?: boolean | null | undefined;
+	readonly booleanDefault?: boolean | undefined;
 
 	/**
 	Whether to use [hard-rejection](https://github.com/sindresorhus/hard-rejection) or not. Disabling this can be useful if you need to handle `process.on('unhandledRejection')` yourself.

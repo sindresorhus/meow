@@ -1,3 +1,4 @@
+import process from 'node:process';
 import {dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import buildParserOptions from 'minimist-options';
@@ -99,6 +100,7 @@ const validateFlags = (flags, options) => {
 	}
 };
 
+/* eslint complexity: ["error", 25] */
 const meow = (helpText, options = {}) => {
 	if (typeof helpText !== 'string') {
 		options = helpText;
