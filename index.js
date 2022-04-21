@@ -100,7 +100,7 @@ const validateFlags = (flags, options) => {
 	}
 };
 
-/* eslint complexity: ["error", 25] */
+/* eslint complexity: off */
 const meow = (helpText, options = {}) => {
 	if (typeof helpText !== 'string') {
 		options = helpText;
@@ -169,8 +169,7 @@ const meow = (helpText, options = {}) => {
 
 	normalizePackageData(package_);
 
-	// eslint-disable-next-line node/prefer-global/process
-	global.process.title = package_.bin ? Object.keys(package_.bin)[0] : package_.name;
+	process.title = package_.bin ? Object.keys(package_.bin)[0] : package_.name;
 
 	let {description} = options;
 	if (!description && description !== false) {
