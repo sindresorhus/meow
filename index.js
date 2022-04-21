@@ -1,4 +1,5 @@
 import {dirname} from 'node:path';
+import process from 'node:process';
 import {fileURLToPath} from 'node:url';
 import buildParserOptions from 'minimist-options';
 import parseArguments from 'yargs-parser';
@@ -99,6 +100,7 @@ const validateFlags = (flags, options) => {
 	}
 };
 
+/* eslint complexity: off */
 const meow = (helpText, options = {}) => {
 	if (typeof helpText !== 'string') {
 		options = helpText;
