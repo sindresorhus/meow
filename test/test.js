@@ -1,9 +1,10 @@
 import path from 'node:path';
+import process from 'node:process';
 import {fileURLToPath} from 'node:url';
 import test from 'ava';
 import indentString from 'indent-string';
-import execa from 'execa';
-import {readPackageAsync} from 'read-pkg';
+import {execa} from 'execa';
+import {readPackage} from 'read-pkg';
 import meow from '../index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -55,7 +56,7 @@ test('support help shortcut', t => {
 });
 
 test('spawn cli and show version', async t => {
-	const pkg = await readPackageAsync();
+	const pkg = await readPackage();
 	const {stdout} = await execa(fixturePath, ['--version']);
 	t.is(stdout, pkg.version);
 });

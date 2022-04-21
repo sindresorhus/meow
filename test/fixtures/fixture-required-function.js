@@ -23,13 +23,9 @@ const cli = meow({
 		},
 		shouldError: {
 			type: 'boolean',
-			isRequired: (flags, _) => {
-				if (flags.allowError) {
-					return 'should error';
-				}
-
-				return false;
-			},
+			isRequired: (flags, _) =>
+				flags.allowError ? 'should error' : false
+			,
 		},
 	},
 });

@@ -197,6 +197,7 @@ export interface Options<Flags extends AnyFlags> {
 	//}
 	```
 	*/
+	// eslint-disable-next-line @typescript-eslint/ban-types
 	readonly booleanDefault?: boolean | null | undefined;
 
 	/**

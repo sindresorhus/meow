@@ -1,4 +1,5 @@
 import {dirname} from 'node:path';
+import process from 'node:process';
 import {fileURLToPath} from 'node:url';
 import buildParserOptions from 'minimist-options';
 import parseArguments from 'yargs-parser';
@@ -99,6 +100,7 @@ const validateFlags = (flags, options) => {
 	}
 };
 
+/* eslint complexity: ["error", 25] */
 const meow = (helpText, options = {}) => {
 	if (typeof helpText !== 'string') {
 		options = helpText;
@@ -167,7 +169,8 @@ const meow = (helpText, options = {}) => {
 
 	normalizePackageData(package_);
 
-	process.title = package_.bin ? Object.keys(package_.bin)[0] : package_.name;
+	// eslint-disable-next-line node/prefer-global/process
+	global.process.title = package_.bin ? Object.keys(package_.bin)[0] : package_.name;
 
 	let {description} = options;
 	if (!description && description !== false) {
