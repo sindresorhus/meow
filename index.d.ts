@@ -213,6 +213,13 @@ export interface Options<Flags extends AnyFlags> {
 	@default true
 	*/
 	readonly allowUnknownFlags?: boolean;
+
+	/**
+	Prefer nested flags to be parsed first.
+
+	@default false
+	 */
+	readonly preferNestedFlags?: boolean;
 }
 
 type TypedFlag<Flag extends AnyFlag> =

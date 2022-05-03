@@ -292,6 +292,13 @@ Default: `true`
 
 Whether to allow unknown flags or not.
 
+##### preferNestedFlags
+
+Type `boolean`\
+Default: `false`
+
+This option makes sense if your CLI may be invoked inside another one. For example, `npx -p foo -p bar bar-cli -- --opts-for='bar-cli'`.
+
 ## Promises
 
 Meow will make unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail. Meaning you don't have to manually `.catch()` promises used in your CLI.

@@ -116,9 +116,11 @@ const meow = (helpText, options = {}) => {
 		normalize: false,
 	});
 
+	const argvStart = options.preferNestedFlags && process.argv.includes('--') ? process.argv.indexOf('--') + 1 : 2;
+
 	options = {
 		pkg: foundPackage ? foundPackage.packageJson : {},
-		argv: process.argv.slice(2),
+		argv: process.argv.slice(argvStart),
 		flags: {},
 		inferType: false,
 		input: 'string',
@@ -128,6 +130,7 @@ const meow = (helpText, options = {}) => {
 		booleanDefault: false,
 		hardRejection: true,
 		allowUnknownFlags: true,
+		preferNestedFlags: false,
 		...options,
 	};
 
