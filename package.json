@@ -43,17 +43,17 @@
 	],
 	"dependencies": {
 		"@types/minimist": "^1.2.2",
-		"camelcase-keys": "^7.0.0",
-		"decamelize": "^5.0.0",
+		"camelcase-keys": "^7.0.2",
+		"decamelize": "^6.0.0",
 		"decamelize-keys": "^1.1.0",
 		"hard-rejection": "^2.1.0",
 		"minimist-options": "4.1.0",
-		"normalize-package-data": "^3.0.2",
-		"read-pkg-up": "^8.0.0",
+		"normalize-package-data": "^4.0.0",
+		"read-pkg-up": "^9.1.0",
 		"redent": "^4.0.0",
 		"trim-newlines": "^4.0.2",
-		"type-fest": "^1.2.2",
-		"yargs-parser": "^20.2.9"
+		"type-fest": "^2.12.2",
+		"yargs-parser": "^21.0.1"
 	},
 	"devDependencies": {
 		"ava": "^3.15.0",
