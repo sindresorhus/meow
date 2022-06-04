@@ -100,6 +100,10 @@ const validateFlags = (flags, options) => {
 	}
 };
 
+const getHelp = (description, help) =>
+	(description ? `\n  ${description}\n` : '') +
+	(help ? `\n${trimNewlines(help)}\n` : '\n')
+
 /* eslint complexity: off */
 const meow = (helpText, options = {}) => {
 	if (typeof helpText !== 'string') {
@@ -128,11 +132,42 @@ const meow = (helpText, options = {}) => {
 		booleanDefault: false,
 		hardRejection: true,
 		allowUnknownFlags: true,
+		allowParentFlags: true,
 		...options,
 	};
 
 	if (options.hardRejection) {
 		hardRejection();
+	}
+
+	// Subcommand return value
+	const command = {
+		args: [],
+    options: {},
+	};
+
+	let currentCommands = options.commands;
+
+	for (const arg of parseArguments(options.argv)._) {
+		if (!currentCommands[arg]) break;
+
+		command.args.push(arg);
+		command.options = currentCommands[arg];
+
+		options = {
+			...options,
+			...command.options,
+			flags: {
+				...(options.allowParentFlags ? options.flags : {}),
+				...command.options.flags,
+			},
+			// Never override the parent options.commands
+			commands: options.commands,
+		};
+
+		if (!command.options.commands) break;
+		
+		currentCommands = command.options.commands
 	}
 
 	validateOptions(options);
@@ -176,7 +211,20 @@ const meow = (helpText, options = {}) => {
 		({description} = package_);
 	}
 
-	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
+
+	help = getHelp(description, help);
+
+	currentCommands = options.commands;
+
+	for (const arg of command.args) {
+		const commandOptions = currentCommands[arg];
+
+		if (commandOptions.description || commandOptions.help) {
+			help = getHelp(commandOptions.description, commandOptions.help);
+		}
+
+		currentCommands = commandOptions.commands;
+	}
 
 	const showHelp = code => {
 		console.log(help);
@@ -188,12 +236,17 @@ const meow = (helpText, options = {}) => {
 		process.exit(0);
 	};
 
-	if (argv._.length === 0 && options.argv.length === 1) {
-		if (argv.version === true && options.autoVersion) {
-			showVersion();
-		} else if (argv.help === true && options.autoHelp) {
-			showHelp(0);
-		}
+	if (
+		argv._.length === 0 &&
+		options.argv.length === 1 &&
+		argv.version === true &&
+		options.autoVersion
+	) {
+		showVersion();
+	}
+
+	if (argv.help === true && options.autoHelp) {
+		showHelp(0);
 	}
 
 	const input = argv._;
@@ -224,6 +277,7 @@ const meow = (helpText, options = {}) => {
 
 	return {
 		input,
+		command,
 		flags,
 		unnormalizedFlags,
 		pkg: package_,
