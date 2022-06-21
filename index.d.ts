@@ -268,7 +268,7 @@ export interface Result<Flags extends AnyFlags> {
 
 	@param exitCode - The exit code to use. Default: `2`.
 	*/
-	showHelp: (exitCode?: number) => void;
+	showHelp: (exitCode?: number) => never;
 
 	/**
 	Show the version text and exit.
