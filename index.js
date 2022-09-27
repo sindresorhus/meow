@@ -147,6 +147,17 @@ const meow = (helpText, options = {}) => {
 		delete parserOptions.arguments;
 	}
 
+	// Add --help and --version to known flags if autoHelp or autoVersion are set
+	if (!options.allowUnknownFlags) {
+		if (options.autoHelp) {
+			parserOptions.help = {type: 'boolean'};
+		}
+
+		if (options.autoVersion) {
+			parserOptions.version = {type: 'boolean'};
+		}
+	}
+
 	parserOptions = buildParserOptions(parserOptions);
 
 	parserOptions.configuration = {

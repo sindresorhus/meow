@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import process from 'node:process';
 import meow from '../../index.js';
 
 const cli = meow({
@@ -8,10 +9,19 @@ const cli = meow({
 		Usage
 		  foo <input>
   `,
+	autoVersion: !process.argv.includes('--no-auto-version'),
+	autoHelp: !process.argv.includes('--no-auto-help'),
 	allowUnknownFlags: false,
 	flags: {
 		foo: {
 			type: 'string',
+		},
+		// For testing we need those as known flags
+		noAutoHelp: {
+			type: 'boolean',
+		},
+		noAutoVersion: {
+			type: 'boolean',
 		},
 	},
 });
