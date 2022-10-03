@@ -149,11 +149,11 @@ const meow = (helpText, options = {}) => {
 
 	// Add --help and --version to known flags if autoHelp or autoVersion are set
 	if (!options.allowUnknownFlags) {
-		if (options.autoHelp) {
+		if (options.autoHelp && !parserOptions.help) {
 			parserOptions.help = {type: 'boolean'};
 		}
 
-		if (options.autoVersion) {
+		if (options.autoVersion && !parserOptions.version) {
 			parserOptions.version = {type: 'boolean'};
 		}
 	}
