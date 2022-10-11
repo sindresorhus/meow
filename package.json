@@ -11,9 +11,12 @@
 		"url": "https://sindresorhus.com"
 	},
 	"type": "module",
-	"exports": "./index.js",
+	"exports": {
+		"types": "./index.d.ts",
+		"default": "./index.js"
+	},
 	"engines": {
-		"node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+		"node": ">=14.16"
 	},
 	"scripts": {
 		"test": "xo && ava && tsd"
@@ -43,25 +46,25 @@
 	],
 	"dependencies": {
 		"@types/minimist": "^1.2.2",
-		"camelcase-keys": "^7.0.0",
-		"decamelize": "^5.0.0",
+		"camelcase-keys": "^8.0.2",
+		"decamelize": "^6.0.0",
 		"decamelize-keys": "^1.1.0",
 		"hard-rejection": "^2.1.0",
 		"minimist-options": "4.1.0",
-		"normalize-package-data": "^3.0.2",
-		"read-pkg-up": "^8.0.0",
+		"normalize-package-data": "^4.0.1",
+		"read-pkg-up": "^9.1.0",
 		"redent": "^4.0.0",
 		"trim-newlines": "^4.0.2",
 		"type-fest": "^3.1.0",
-		"yargs-parser": "^20.2.9"
+		"yargs-parser": "^21.1.1"
 	},
 	"devDependencies": {
-		"ava": "^3.15.0",
+		"ava": "^4.3.3",
 		"execa": "^6.1.0",
 		"indent-string": "^5.0.0",
 		"read-pkg": "^7.1.0",
-		"tsd": "^0.20.0",
-		"xo": "^0.48.0"
+		"tsd": "^0.24.1",
+		"xo": "^0.52.4"
 	},
 	"xo": {
 		"rules": {

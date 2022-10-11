@@ -82,7 +82,7 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 
 		if (flag.isMultiple) {
 			flag.type = flag.type ? `${flag.type}-array` : 'array';
-			flag.default = flag.default || [];
+			flag.default = flag.default ?? [];
 			delete flag.isMultiple;
 		}
 
@@ -107,7 +107,7 @@ const meow = (helpText, options = {}) => {
 		helpText = '';
 	}
 
-	if (!(options.importMeta && options.importMeta.url)) {
+	if (!options.importMeta?.url) {
 		throw new TypeError('The `importMeta` option is required. Its value must be `import.meta`.');
 	}
 
@@ -176,7 +176,7 @@ const meow = (helpText, options = {}) => {
 
 	const {pkg: package_} = options;
 	const argv = parseArguments(options.argv, parserOptions);
-	let help = redent(trimNewlines((options.help || '').replace(/\t+\n*$/, '')), 2);
+	let help = redent(trimNewlines((options.help ?? '').replace(/\t+\n*$/, '')), 2);
 
 	normalizePackageData(package_);
 

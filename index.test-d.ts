@@ -1,6 +1,6 @@
 import {expectAssignable, expectError, expectType} from 'tsd';
-import {PackageJson} from 'type-fest';
-import meow, {Result, AnyFlag} from './index.js';
+import type {PackageJson} from 'type-fest';
+import meow, {type Result, type AnyFlag} from './index.js';
 
 const importMeta = import.meta;
 

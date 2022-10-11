@@ -1,4 +1,4 @@
-import {
+import type {
 	CamelCasedProperties,
 	PackageJson,
 } from 'type-fest';
@@ -15,13 +15,13 @@ Callback function to determine if a flag is required during runtime.
 */
 export type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
 
-export interface Flag<Type extends FlagType, Default, IsMultiple = false> {
+export type Flag<Type extends FlagType, Default, IsMultiple = false> = {
 	readonly type?: Type;
 	readonly alias?: string;
 	readonly default?: Default;
 	readonly isRequired?: boolean | IsRequiredPredicate;
 	readonly isMultiple?: IsMultiple;
-}
+};
 
 type StringFlag = Flag<'string', string> | Flag<'string', string[], true>;
 type BooleanFlag = Flag<'boolean', boolean> | Flag<'boolean', boolean[], true>;
@@ -29,7 +29,7 @@ type NumberFlag = Flag<'number', number> | Flag<'number', number[], true>;
 type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
 type AnyFlags = Record<string, AnyFlag>;
 
-export interface Options<Flags extends AnyFlags> {
+export type Options<Flags extends AnyFlags> = {
 	/**
 	Pass in [`import.meta`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_import_meta). This is used to find the correct package.json file.
 	*/
@@ -216,7 +216,7 @@ export interface Options<Flags extends AnyFlags> {
 	@default true
 	*/
 	readonly allowUnknownFlags?: boolean;
-}
+};
 
 type TypedFlag<Flag extends AnyFlag> =
 		Flag extends {type: 'number'}
@@ -240,7 +240,7 @@ export type TypedFlags<Flags extends AnyFlags> = {
 		: PossiblyOptionalFlag<Flags[F], TypedFlag<Flags[F]>>
 };
 
-export interface Result<Flags extends AnyFlags> {
+export type Result<Flags extends AnyFlags> = {
 	/**
 	Non-flag arguments.
 	*/
@@ -277,7 +277,7 @@ export interface Result<Flags extends AnyFlags> {
 	Show the version text and exit.
 	*/
 	showVersion: () => void;
-}
+};
 /**
 @param helpMessage - Shortcut for the `help` option.
 

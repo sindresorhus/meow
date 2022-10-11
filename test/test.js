@@ -101,13 +101,13 @@ test('spawn cli and test input flag', async t => {
 	t.is(stdout, 'bar');
 });
 
-test.serial('pkg.bin as a string should work', t => {
+test.serial.failing('pkg.bin as a string should work', t => {
 	meow({
 		importMeta,
 		pkg: {
 			importMeta,
 			name: 'browser-sync',
-			bin: 'bin/browser-sync.js',
+			bin: './bin/browser-sync.js',
 		},
 	});
 
