@@ -64,7 +64,7 @@ expectType<PackageJson>(result.pkg);
 expectType<string>(result.help);
 
 expectType<boolean | undefined>(result.flags.foo);
-expectType<unknown>(result.flags.fooBar);
+expectType<number | undefined>(result.flags.fooBar);
 expectType<string>(result.flags.bar);
 expectType<string[] | undefined>(result.flags.abc);
 expectType<boolean | undefined>(result.unnormalizedFlags.foo);

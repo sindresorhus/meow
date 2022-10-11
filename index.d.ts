@@ -1,4 +1,7 @@
-import {PackageJson} from 'type-fest';
+import {
+	CamelCasedProperties,
+	PackageJson,
+} from 'type-fest';
 
 export type FlagType = 'string' | 'boolean' | 'number';
 
@@ -246,7 +249,7 @@ export interface Result<Flags extends AnyFlags> {
 	/**
 	Flags converted to camelCase excluding aliases.
 	*/
-	flags: TypedFlags<Flags> & Record<string, unknown>;
+	flags: CamelCasedProperties<TypedFlags<Flags>> & Record<string, unknown>;
 
 	/**
 	Flags converted camelCase including aliases.
