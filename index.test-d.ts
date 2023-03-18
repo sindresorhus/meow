@@ -52,7 +52,7 @@ expectType<Result<never>>(meow({importMeta, hardRejection: false}));
 const result = meow('Help text', {
 	importMeta,
 	flags: {
-		foo: {type: 'boolean', alias: 'f'},
+		foo: {type: 'boolean', shortFlag: 'f'},
 		'foo-bar': {type: 'number'},
 		bar: {type: 'string', default: ''},
 		abc: {type: 'string', isMultiple: true},
@@ -82,7 +82,7 @@ const options = {
 	flags: {
 		rainbow: {
 			type: 'boolean',
-			alias: 'r',
+			shortFlag: 'r',
 		},
 	},
 } as const;
