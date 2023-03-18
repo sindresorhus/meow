@@ -48,7 +48,7 @@ const getMissingRequiredFlags = (flags, receivedFlags, input) => {
 const reportMissingRequiredFlags = missingRequiredFlags => {
 	console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
 	for (const flag of missingRequiredFlags) {
-		console.error(`\t--${decamelize(flag.key, {separator: '-'})}${flag.alias ? `, -${flag.alias}` : ''}`);
+		console.error(`\t--${decamelize(flag.key, {separator: '-'})}${flag.shortFlag ? `, -${flag.shortFlag}` : ''}`);
 	}
 };
 
@@ -71,6 +71,12 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 
 	for (const [flagKey, flagValue] of Object.entries(flags)) {
 		const flag = {...flagValue};
+
+		// `buildParserOptions` expects `flag.alias`
+		if (flag.shortFlag) {
+			flag.alias = flag.shortFlag;
+			delete flag.shortFlag;
+		}
 
 		if (
 			typeof booleanDefault !== 'undefined'
@@ -224,7 +230,7 @@ const meow = (helpText, options = {}) => {
 	validateFlags(flags, options);
 
 	for (const flagValue of Object.values(options.flags)) {
-		delete flags[flagValue.alias];
+		delete flags[flagValue.shortFlag];
 	}
 
 	const missingRequiredFlags = getMissingRequiredFlags(options.flags, flags, input);
