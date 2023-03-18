@@ -15,8 +15,8 @@ Callback function to determine if a flag is required during runtime.
 */
 export type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
 
-export type Flag<LiteralType extends FlagType, Type, IsMultiple = false> = {
-	readonly type?: LiteralType;
+export type Flag<PrimitiveType extends FlagType, Type, IsMultiple = false> = {
+	readonly type?: PrimitiveType;
 	readonly alias?: string;
 	readonly default?: Type;
 	readonly isRequired?: boolean | IsRequiredPredicate;
