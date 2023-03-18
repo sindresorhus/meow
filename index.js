@@ -59,6 +59,55 @@ const validateOptions = ({flags}) => {
 	}
 };
 
+const validateChoicesByFlag = (flagKey, flagValue, receivedInput) => {
+	const {choices, isRequired} = flagValue;
+
+	if (!choices) {
+		return;
+	}
+
+	if (!Array.isArray(choices)) {
+		throw new TypeError('Choices should be array');
+	}
+
+	if (receivedInput === undefined) {
+		if (isRequired) {
+			return `Flag ${flagKey} has no value. Value must be one of: ${choices.join(', ')}`;
+		}
+
+		return;
+	}
+
+	if (Array.isArray(receivedInput)) {
+		const unknownValues = receivedInput.filter(index => !choices.includes(index));
+		if (unknownValues.length === 1) {
+			return `Unknown value: \`${unknownValues[0]}\`. Value must be one of: ${choices.join(', ')}`;
+		}
+
+		if (unknownValues.length > 1) {
+			return `Unknown values: \`${unknownValues.join(', ')}\`. Value must be one of: ${choices.join(', ')}`;
+		}
+	} else if (!choices.includes(receivedInput)) {
+		return `Unknown value: \`${receivedInput}\`. Value must be one of: ${choices.join(', ')}`;
+	}
+};
+
+const validateChoices = (flags, receivedFlags) => {
+	const errors = [];
+
+	for (const [flagKey, flagValue] of Object.entries(flags)) {
+		const receivedInput = receivedFlags[flagKey];
+		const errorMessage = validateChoicesByFlag(flagKey, flagValue, receivedInput);
+		if (errorMessage) {
+			errors.push(errorMessage);
+		}
+	}
+
+	if (errors.length > 0) {
+		throw new Error(`${errors.join('. ')}`);
+	}
+};
+
 const reportUnknownFlags = unknownFlags => {
 	console.error([
 		`Unknown flag${unknownFlags.length > 1 ? 's' : ''}`,
@@ -222,6 +271,7 @@ const meow = (helpText, options = {}) => {
 	const unnormalizedFlags = {...flags};
 
 	validateFlags(flags, options);
+	validateChoices(options.flags, flags);
 
 	for (const flagValue of Object.values(options.flags)) {
 		delete flags[flagValue.alias];
