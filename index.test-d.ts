@@ -53,7 +53,7 @@ const result = meow('Help text', {
 	importMeta,
 	flags: {
 		foo: {type: 'boolean', alias: 'f'},
-		'foo-bar': {type: 'number'},
+		'foo-bar': {type: 'number', aliases: ['foobar', 'fooBar']},
 		bar: {type: 'string', default: ''},
 		abc: {type: 'string', isMultiple: true},
 	},
@@ -70,6 +70,8 @@ expectType<string[] | undefined>(result.flags.abc);
 expectType<boolean | undefined>(result.unnormalizedFlags.foo);
 expectType<unknown>(result.unnormalizedFlags.f);
 expectType<number | undefined>(result.unnormalizedFlags['foo-bar']);
+expectType<unknown>(result.unnormalizedFlags.foobar);
+expectType<unknown>(result.unnormalizedFlags.fooBar);
 expectType<string>(result.unnormalizedFlags.bar);
 expectType<string[] | undefined>(result.unnormalizedFlags.abc);
 
