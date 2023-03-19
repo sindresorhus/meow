@@ -633,14 +633,14 @@ test('aliases - accepts multiple', t => {
 	});
 });
 
-test('aliases - works with short flag alias', t => {
+test('aliases - works with short flag', t => {
 	t.deepEqual(meow({
 		importMeta,
 		argv: ['--foo=baz1', '--bar=baz2', '-f=baz3'],
 		flags: {
 			fooBar: {
 				type: 'string',
-				alias: 'f',
+				shortFlag: 'f',
 				aliases: ['foo', 'bar'],
 				isMultiple: true,
 			},
