@@ -17,7 +17,7 @@ meow(
 		flags: {
 			rainbow: {
 				type: 'boolean',
-				alias: 'r',
+				shortFlag: 'r',
 			},
 		},
 	},
