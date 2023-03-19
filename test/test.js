@@ -633,6 +633,21 @@ test('aliases - accepts multiple', t => {
 	});
 });
 
+test('aliases - can be a short flag', t => {
+	t.deepEqual(meow({
+		importMeta,
+		argv: ['--f=baz'],
+		flags: {
+			fooBar: {
+				type: 'string',
+				aliases: ['f'],
+			},
+		},
+	}).flags, {
+		fooBar: 'baz',
+	});
+});
+
 test('aliases - works with short flag', t => {
 	t.deepEqual(meow({
 		importMeta,
