@@ -580,6 +580,28 @@ test('isMultiple - handles multi-word flag name', t => {
 	});
 });
 
+test('suggests renaming alias to shortFlag', t => {
+	t.throws(() => {
+		meow({
+			importMeta,
+			flags: {
+				foo: {
+					type: 'string',
+					alias: 'f',
+				},
+				bar: {
+					type: 'string',
+					alias: 'b',
+				},
+				baz: {
+					type: 'string',
+					shortFlag: 'z',
+				},
+			},
+		});
+	}, {message: 'The option `alias` has been renamed to `shortFlag`. The following flags need to be updated: `foo`, `bar`'});
+});
+
 if (NODE_MAJOR_VERSION >= 14) {
 	test('supports es modules', async t => {
 		try {

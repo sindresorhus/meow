@@ -57,6 +57,11 @@ const validateOptions = ({flags}) => {
 	if (invalidFlags.length > 0) {
 		throw new Error(`Flag keys may not contain '-': ${invalidFlags.join(', ')}`);
 	}
+
+	const flagsWithAlias = Object.keys(flags).filter(flagKey => flags[flagKey].alias !== undefined);
+	if (flagsWithAlias.length > 0) {
+		throw new Error(`The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`${flagsWithAlias.join('`, `')}\``);
+	}
 };
 
 const reportUnknownFlags = unknownFlags => {
