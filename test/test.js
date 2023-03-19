@@ -3,6 +3,7 @@ import process from 'node:process';
 import {fileURLToPath} from 'node:url';
 import test from 'ava';
 import indentString from 'indent-string';
+import {stripIndent} from 'common-tags';
 import {execa} from 'execa';
 import {readPackage} from 'read-pkg';
 import meow from '../index.js';
@@ -613,8 +614,12 @@ test('choices - throws if input does not match choices', t => {
 				},
 			},
 		});
-	}, {message: 'Unknown value: `rainbow`. Value must be one of: dog, cat, unicorn. '
-	+ 'Unknown value: `5`. Value must be one of: 1, 2, 3'});
+	}, {
+		message: stripIndent`
+			Unknown value for flag \`animal\`: \`rainbow\`. Value must be one of: [dog, cat, unicorn].
+			Unknown value for flag \`number\`: \`5\`. Value must be one of: [1, 2, 3]
+		`,
+	});
 });
 
 test('choices - throws if choices is not array', t => {
@@ -628,7 +633,7 @@ test('choices - throws if choices is not array', t => {
 				},
 			},
 		});
-	}, {message: 'Choices should be array'});
+	}, {message: 'Flag choices must be an array: flag `animal`: cat'});
 });
 
 test('choices - does not throw error when isRequired is false', t => {
@@ -658,7 +663,7 @@ test('choices - throw error when isRequired is true', t => {
 				},
 			},
 		});
-	}, {message: 'Flag animal has no value. Value must be one of: dog, cat, unicorn'});
+	}, {message: 'Flag `animal` has no value. Value must be one of: [dog, cat, unicorn]'});
 });
 
 test('choices - success with isMultiple', t => {
@@ -690,10 +695,10 @@ test('choices - throws with isMultiple, one unknown value', t => {
 				},
 			},
 		});
-	}, {message: 'Unknown value: `rabbit`. Value must be one of: dog, cat, unicorn'});
+	}, {message: 'Unknown value for flag `animal`: `rabbit`. Value must be one of: [dog, cat, unicorn]'});
 });
 
-test('choices - throws with isMultiple, multiple unknown values', t => {
+test('choices - throws with isMultiple, multiple unknown value', t => {
 	t.throws(() => {
 		meow({
 			importMeta,
@@ -706,7 +711,7 @@ test('choices - throws with isMultiple, multiple unknown values', t => {
 				},
 			},
 		});
-	}, {message: 'Unknown values: `dog, rabbit`. Value must be one of: cat, unicorn'});
+	}, {message: 'Unknown values for flag `animal`: `dog, rabbit`. Value must be one of: [cat, unicorn]'});
 });
 
 if (NODE_MAJOR_VERSION >= 14) {

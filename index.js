@@ -57,6 +57,13 @@ const validateOptions = ({flags}) => {
 	if (invalidFlags.length > 0) {
 		throw new Error(`Flag keys may not contain '-': ${invalidFlags.join(', ')}`);
 	}
+
+	// TODO: test for multiple, format string/number/boolean
+	const invalidChoices = Object.entries(flags).filter(([_, {choices}]) => choices && !Array.isArray(choices));
+	if (invalidChoices.length > 0) {
+		const formattedChoices = invalidChoices.map(([flagKey, {choices}]) => `flag \`${flagKey}\`: ${choices}`).join(', ');
+		throw new TypeError(`Flag choices must be an array: ${formattedChoices}`);
+	}
 };
 
 const validateChoicesByFlag = (flagKey, flagValue, receivedInput) => {
@@ -66,13 +73,11 @@ const validateChoicesByFlag = (flagKey, flagValue, receivedInput) => {
 		return;
 	}
 
-	if (!Array.isArray(choices)) {
-		throw new TypeError('Choices should be array');
-	}
+	const valueMustBeOneOf = `Value must be one of: [${choices.join(', ')}]`;
 
-	if (receivedInput === undefined) {
+	if (!receivedInput) {
 		if (isRequired) {
-			return `Flag ${flagKey} has no value. Value must be one of: ${choices.join(', ')}`;
+			return `Flag \`${flagKey}\` has no value. ${valueMustBeOneOf}`;
 		}
 
 		return;
@@ -80,15 +85,14 @@ const validateChoicesByFlag = (flagKey, flagValue, receivedInput) => {
 
 	if (Array.isArray(receivedInput)) {
 		const unknownValues = receivedInput.filter(index => !choices.includes(index));
-		if (unknownValues.length === 1) {
-			return `Unknown value: \`${unknownValues[0]}\`. Value must be one of: ${choices.join(', ')}`;
-		}
 
-		if (unknownValues.length > 1) {
-			return `Unknown values: \`${unknownValues.join(', ')}\`. Value must be one of: ${choices.join(', ')}`;
+		if (unknownValues.length > 0) {
+			const valuesText = unknownValues.length > 1 ? 'values' : 'value';
+
+			return `Unknown ${valuesText} for flag \`${flagKey}\`: \`${unknownValues.join(', ')}\`. ${valueMustBeOneOf}`;
 		}
 	} else if (!choices.includes(receivedInput)) {
-		return `Unknown value: \`${receivedInput}\`. Value must be one of: ${choices.join(', ')}`;
+		return `Unknown value for flag \`${flagKey}\`: \`${receivedInput}\`. ${valueMustBeOneOf}`;
 	}
 };
 
@@ -98,13 +102,14 @@ const validateChoices = (flags, receivedFlags) => {
 	for (const [flagKey, flagValue] of Object.entries(flags)) {
 		const receivedInput = receivedFlags[flagKey];
 		const errorMessage = validateChoicesByFlag(flagKey, flagValue, receivedInput);
+
 		if (errorMessage) {
 			errors.push(errorMessage);
 		}
 	}
 
 	if (errors.length > 0) {
-		throw new Error(`${errors.join('. ')}`);
+		throw new Error(`${errors.join('.\n')}`);
 	}
 };
 
