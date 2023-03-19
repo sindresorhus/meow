@@ -30,7 +30,7 @@ test('return object', t => {
 			  foo <input>
 		`,
 		flags: {
-			unicorn: {alias: 'u'},
+			unicorn: {shortFlag: 'u'},
 			meow: {default: 'dog'},
 			'--': true,
 		},
@@ -226,7 +226,7 @@ test('accept help and options', t => {
 		flags: {
 			foo: {
 				type: 'boolean',
-				alias: 'f',
+				shortFlag: 'f',
 			},
 		},
 	}).flags, {
@@ -241,11 +241,11 @@ test('grouped short-flags work', t => {
 		flags: {
 			coco: {
 				type: 'boolean',
-				alias: 'c',
+				shortFlag: 'c',
 			},
 			loco: {
 				type: 'boolean',
-				alias: 'l',
+				shortFlag: 'l',
 			},
 		},
 	});
@@ -264,11 +264,11 @@ test('grouped flags work', t => {
 		flags: {
 			coco: {
 				type: 'boolean',
-				alias: 'c',
+				shortFlag: 'c',
 			},
 			loco: {
 				type: 'boolean',
-				alias: 'l',
+				shortFlag: 'l',
 			},
 		},
 	});
@@ -578,6 +578,28 @@ test('isMultiple - handles multi-word flag name', t => {
 	}).flags, {
 		fooBar: ['baz'],
 	});
+});
+
+test('suggests renaming alias to shortFlag', t => {
+	t.throws(() => {
+		meow({
+			importMeta,
+			flags: {
+				foo: {
+					type: 'string',
+					alias: 'f',
+				},
+				bar: {
+					type: 'string',
+					alias: 'b',
+				},
+				baz: {
+					type: 'string',
+					shortFlag: 'z',
+				},
+			},
+		});
+	}, {message: 'The option `alias` has been renamed to `shortFlag`. The following flags need to be updated: `foo`, `bar`'});
 });
 
 if (NODE_MAJOR_VERSION >= 14) {

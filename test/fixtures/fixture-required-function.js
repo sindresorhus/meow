@@ -11,7 +11,7 @@ const cli = meow({
 	flags: {
 		trigger: {
 			type: 'boolean',
-			alias: 't',
+			shortFlag: 't',
 		},
 		withTrigger: {
 			type: 'string',
@@ -19,7 +19,7 @@ const cli = meow({
 		},
 		allowError: {
 			type: 'boolean',
-			alias: 'a',
+			shortFlag: 'a',
 		},
 		shouldError: {
 			type: 'boolean',

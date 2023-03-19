@@ -11,7 +11,7 @@ const cli = meow({
 	flags: {
 		test: {
 			type: 'string',
-			alias: 't',
+			shortFlag: 't',
 			isRequired: true,
 		},
 		number: {
