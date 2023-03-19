@@ -17,7 +17,7 @@ export type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly st
 
 export type Flag<Type extends FlagType, Default, IsMultiple = false> = {
 	readonly type?: Type;
-	readonly alias?: string;
+	readonly shortFlag?: string;
 	readonly default?: Default;
 	readonly isRequired?: boolean | IsRequiredPredicate;
 	readonly isMultiple?: IsMultiple;
@@ -42,7 +42,7 @@ export type Options<Flags extends AnyFlags> = {
 	The key is the flag name in camel-case and the value is an object with any of:
 
 	- `type`: Type of value. (Possible values: `string` `boolean` `number`)
-	- `alias`: Usually used to define a short flag alias.
+	- `shortFlag`: A short flag alias.
 	- `default`: Default value when the flag is not specified.
 	- `isRequired`: Determine if the flag is required.
 		If it's only known at runtime whether the flag is required or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
@@ -57,7 +57,7 @@ export type Options<Flags extends AnyFlags> = {
 	flags: {
 		unicorn: {
 			type: 'string',
-			alias: 'u',
+			shortFlag: 'u',
 			default: ['rainbow', 'cat'],
 			isMultiple: true,
 			isRequired: (flags, input) => {
@@ -168,16 +168,16 @@ export type Options<Flags extends AnyFlags> = {
 			rainbow: {
 				type: 'boolean',
 				default: true,
-				alias: 'r'
+				shortFlag: 'r'
 			},
 				unicorn: {
 				type: 'boolean',
 				default: false,
-				alias: 'u'
+				shortFlag: 'u'
 			},
 			cake: {
 				type: 'boolean',
-				alias: 'c'
+				shortFlag: 'c'
 			},
 			sparkles: {
 				type: 'boolean',
@@ -305,7 +305,7 @@ const cli = meow(`
 	flags: {
 		rainbow: {
 			type: 'boolean',
-			alias: 'r'
+			shortFlag: 'r'
 		}
 	}
 });
