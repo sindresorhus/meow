@@ -665,6 +665,24 @@ test('aliases - works with short flag', t => {
 	});
 });
 
+test('aliases - unnormalized flags', t => {
+	t.deepEqual(meow({
+		importMeta,
+		argv: ['--foo=baz'],
+		flags: {
+			fooBar: {
+				type: 'string',
+				aliases: ['foo'],
+				shortFlag: 'f',
+			},
+		},
+	}).unnormalizedFlags, {
+		fooBar: 'baz',
+		foo: 'baz',
+		f: 'baz',
+	});
+});
+
 if (NODE_MAJOR_VERSION >= 14) {
 	test('supports es modules', async t => {
 		try {
