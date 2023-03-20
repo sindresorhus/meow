@@ -21,6 +21,7 @@ export type Flag<Type extends FlagType, Default, IsMultiple = false> = {
 	readonly default?: Default;
 	readonly isRequired?: boolean | IsRequiredPredicate;
 	readonly isMultiple?: IsMultiple;
+	readonly aliases?: string[];
 };
 
 type StringFlag = Flag<'string', string> | Flag<'string', string[], true>;
@@ -47,6 +48,7 @@ export type Options<Flags extends AnyFlags> = {
 		If it's only known at runtime whether the flag is required or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
 	- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 		Multiple values are provided by specifying the flag multiple times, for example, `$ foo -u rainbow -u cat`. Space- or comma-separated values are *not* supported.
+	- `aliases`: Other names for the flag.
 
 	Note that flags are always defined using a camel-case key (`myKey`), but will match arguments in kebab-case (`--my-key`).
 
@@ -64,7 +66,8 @@ export type Options<Flags extends AnyFlags> = {
 				}
 
 				return false;
-			}
+			},
+			aliases: ['unicorns']
 		}
 	}
 	```

@@ -97,6 +97,15 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 			delete flag.isMultiple;
 		}
 
+		if (Array.isArray(flag.aliases)) {
+			if (flag.alias) {
+				flag.aliases.push(flag.alias);
+			}
+
+			flag.alias = flag.aliases;
+			delete flag.aliases;
+		}
+
 		parserFlags[flagKey] = flag;
 	}
 
@@ -235,6 +244,12 @@ const meow = (helpText, options = {}) => {
 	validateFlags(flags, options);
 
 	for (const flagValue of Object.values(options.flags)) {
+		if (Array.isArray(flagValue.aliases)) {
+			for (const alias of flagValue.aliases) {
+				delete flags[alias];
+			}
+		}
+
 		delete flags[flagValue.shortFlag];
 	}
 
