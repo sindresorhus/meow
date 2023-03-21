@@ -63,7 +63,6 @@ const validateOptions = ({flags}) => {
 		throw new Error(`The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`${flagsWithAlias.join('`, `')}\``);
 	}
 
-	// TODO: test for multiple, format string/number/boolean
 	const invalidChoices = Object.entries(flags).filter(([_, {choices}]) => choices && !Array.isArray(choices));
 	if (invalidChoices.length > 0) {
 		const formattedChoices = invalidChoices.map(([flagKey, {choices}]) => `flag \`${flagKey}\`: ${choices}`).join(', ');
@@ -114,7 +113,7 @@ const validateChoices = (flags, receivedFlags) => {
 	}
 
 	if (errors.length > 0) {
-		throw new Error(`${errors.join('.\n')}`);
+		throw new Error(`${errors.join('\n')}`);
 	}
 };
 
