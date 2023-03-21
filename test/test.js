@@ -839,6 +839,31 @@ test('choices - throws with multiple flags', t => {
 	`});
 });
 
+test('options - multiple validation errors', t => {
+	t.throws(() => {
+		meow({
+			importMeta,
+			flags: {
+				animal: {
+					type: 'string',
+					choices: 'cat',
+				},
+				plant: {
+					type: 'string',
+					alias: 'p',
+				},
+				'some-thing': {
+					type: 'string',
+				},
+			},
+		});
+	}, {message: stripIndent`
+		Flag keys may not contain '-': some-thing
+		The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`plant\`
+		Flag choices must be an array: flag \`animal\`: cat
+	`});
+});
+
 if (NODE_MAJOR_VERSION >= 14) {
 	test('supports es modules', async t => {
 		try {

@@ -53,20 +53,37 @@ const reportMissingRequiredFlags = missingRequiredFlags => {
 };
 
 const validateOptions = ({flags}) => {
-	const invalidFlags = Object.keys(flags).filter(flagKey => flagKey.includes('-') && flagKey !== '--');
-	if (invalidFlags.length > 0) {
-		throw new Error(`Flag keys may not contain '-': ${invalidFlags.join(', ')}`);
+	const keys = Object.keys(flags);
+	const entries = Object.entries(flags);
+
+	const invalidOptions = {
+		flagsWithDash: {
+			values: keys.filter(flagKey => flagKey.includes('-') && flagKey !== '--'),
+			message: values => `Flag keys may not contain '-': ${values.join(', ')}`,
+		},
+		flagsWithAlias: {
+			values: keys.filter(flagKey => flags[flagKey].alias !== undefined),
+			message: values => `The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`${values.join('`, `')}\``,
+		},
+		flagsWithNonArrayChoices: {
+			values: entries.filter(([_, {choices}]) => choices && !Array.isArray(choices)),
+			message(values) {
+				const formattedChoices = values.map(([flagKey, {choices}]) => `flag \`${flagKey}\`: ${choices}`).join(', ');
+				return `Flag choices must be an array: ${formattedChoices}`;
+			},
+		},
+	};
+
+	const errorMessages = [];
+
+	for (const {values, message} of Object.values(invalidOptions)) {
+		if (values.length > 0) {
+			errorMessages.push(message(values));
+		}
 	}
 
-	const flagsWithAlias = Object.keys(flags).filter(flagKey => flags[flagKey].alias !== undefined);
-	if (flagsWithAlias.length > 0) {
-		throw new Error(`The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`${flagsWithAlias.join('`, `')}\``);
-	}
-
-	const invalidChoices = Object.entries(flags).filter(([_, {choices}]) => choices && !Array.isArray(choices));
-	if (invalidChoices.length > 0) {
-		const formattedChoices = invalidChoices.map(([flagKey, {choices}]) => `flag \`${flagKey}\`: ${choices}`).join(', ');
-		throw new TypeError(`Flag choices must be an array: ${formattedChoices}`);
+	if (errorMessages.length > 0) {
+		throw new Error(errorMessages.join('\n'));
 	}
 };
 
