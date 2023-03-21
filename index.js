@@ -48,7 +48,7 @@ const getMissingRequiredFlags = (flags, receivedFlags, input) => {
 const reportMissingRequiredFlags = missingRequiredFlags => {
 	console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
 	for (const flag of missingRequiredFlags) {
-		console.error(`\t--${decamelize(flag.key, {separator: '-'})}${flag.alias ? `, -${flag.alias}` : ''}`);
+		console.error(`\t--${decamelize(flag.key, {separator: '-'})}${flag.shortFlag ? `, -${flag.shortFlag}` : ''}`);
 	}
 };
 
@@ -56,6 +56,11 @@ const validateOptions = ({flags}) => {
 	const invalidFlags = Object.keys(flags).filter(flagKey => flagKey.includes('-') && flagKey !== '--');
 	if (invalidFlags.length > 0) {
 		throw new Error(`Flag keys may not contain '-': ${invalidFlags.join(', ')}`);
+	}
+
+	const flagsWithAlias = Object.keys(flags).filter(flagKey => flags[flagKey].alias !== undefined);
+	if (flagsWithAlias.length > 0) {
+		throw new Error(`The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`${flagsWithAlias.join('`, `')}\``);
 	}
 
 	// TODO: test for multiple, format string/number/boolean
@@ -126,6 +131,12 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 	for (const [flagKey, flagValue] of Object.entries(flags)) {
 		const flag = {...flagValue};
 
+		// `buildParserOptions` expects `flag.alias`
+		if (flag.shortFlag) {
+			flag.alias = flag.shortFlag;
+			delete flag.shortFlag;
+		}
+
 		if (
 			typeof booleanDefault !== 'undefined'
 				&& flag.type === 'boolean'
@@ -138,6 +149,15 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 			flag.type = flag.type ? `${flag.type}-array` : 'array';
 			flag.default = flag.default ?? [];
 			delete flag.isMultiple;
+		}
+
+		if (Array.isArray(flag.aliases)) {
+			if (flag.alias) {
+				flag.aliases.push(flag.alias);
+			}
+
+			flag.alias = flag.aliases;
+			delete flag.aliases;
 		}
 
 		parserFlags[flagKey] = flag;
@@ -279,7 +299,13 @@ const meow = (helpText, options = {}) => {
 	validateChoices(options.flags, flags);
 
 	for (const flagValue of Object.values(options.flags)) {
-		delete flags[flagValue.alias];
+		if (Array.isArray(flagValue.aliases)) {
+			for (const alias of flagValue.aliases) {
+				delete flags[alias];
+			}
+		}
+
+		delete flags[flagValue.shortFlag];
 	}
 
 	const missingRequiredFlags = getMissingRequiredFlags(options.flags, flags, input);

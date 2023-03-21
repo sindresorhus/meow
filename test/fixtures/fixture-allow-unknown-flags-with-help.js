@@ -11,11 +11,11 @@ const cli = meow({
 	allowUnknownFlags: false,
 	flags: {
 		help: {
-			alias: 'h',
+			shortFlag: 'h',
 			type: 'boolean',
 		},
 		version: {
-			alias: 'v',
+			shortFlag: 'v',
 			type: 'boolean',
 		},
 	},

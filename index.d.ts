@@ -17,10 +17,11 @@ export type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly st
 
 export type Flag<PrimitiveType extends FlagType, Type, IsMultiple = false> = {
 	readonly type?: PrimitiveType;
-	readonly alias?: string;
+	readonly shortFlag?: string;
 	readonly default?: Type;
 	readonly isRequired?: boolean | IsRequiredPredicate;
 	readonly isMultiple?: IsMultiple;
+	readonly aliases?: string[];
 	readonly choices?: Type extends unknown[] ? Type : Type[];
 };
 
@@ -42,12 +43,13 @@ export type Options<Flags extends AnyFlags> = {
 	The key is the flag name in camel-case and the value is an object with any of:
 
 	- `type`: Type of value. (Possible values: `string` `boolean` `number`)
-	- `alias`: Usually used to define a short flag alias.
+	- `shortFlag`: A short flag alias.
 	- `default`: Default value when the flag is not specified.
 	- `isRequired`: Determine if the flag is required.
 		If it's only known at runtime whether the flag is required or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
 	- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
 		Multiple values are provided by specifying the flag multiple times, for example, `$ foo -u rainbow -u cat`. Space- or comma-separated values are *not* supported.
+	- `aliases`: Other names for the flag.
 	- `choices`: Limit valid values to a predefined set of choices.
 
 	Note that flags are always defined using a camel-case key (`myKey`), but will match arguments in kebab-case (`--my-key`).
@@ -57,7 +59,7 @@ export type Options<Flags extends AnyFlags> = {
 	flags: {
 		unicorn: {
 			type: 'string',
-			alias: 'u',
+			shortFlag: 'u',
 			default: ['rainbow', 'cat'],
 			isMultiple: true,
 			choices: ['rainbow', 'cat', 'unicorn'],
@@ -67,7 +69,8 @@ export type Options<Flags extends AnyFlags> = {
 				}
 
 				return false;
-			}
+			},
+			aliases: ['unicorns']
 		}
 	}
 	```
@@ -168,16 +171,16 @@ export type Options<Flags extends AnyFlags> = {
 			rainbow: {
 				type: 'boolean',
 				default: true,
-				alias: 'r'
+				shortFlag: 'r'
 			},
 				unicorn: {
 				type: 'boolean',
 				default: false,
-				alias: 'u'
+				shortFlag: 'u'
 			},
 			cake: {
 				type: 'boolean',
-				alias: 'c'
+				shortFlag: 'c'
 			},
 			sparkles: {
 				type: 'boolean',
@@ -305,7 +308,7 @@ const cli = meow(`
 	flags: {
 		rainbow: {
 			type: 'boolean',
-			alias: 'r'
+			shortFlag: 'r'
 		}
 	}
 });

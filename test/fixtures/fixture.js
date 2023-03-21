@@ -12,7 +12,7 @@ const cli = meow({
 	autoVersion: !process.argv.includes('--no-auto-version'),
 	autoHelp: !process.argv.includes('--no-auto-help'),
 	flags: {
-		unicorn: {alias: 'u'},
+		unicorn: {shortFlag: 'u'},
 		meow: {default: 'dog'},
 		camelCaseOption: {default: 'foo'},
 	},

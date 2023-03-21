@@ -52,8 +52,8 @@ expectType<Result<never>>(meow({importMeta, hardRejection: false}));
 const result = meow('Help text', {
 	importMeta,
 	flags: {
-		foo: {type: 'boolean', alias: 'f'},
-		'foo-bar': {type: 'number'},
+		foo: {type: 'boolean', shortFlag: 'f'},
+		'foo-bar': {type: 'number', aliases: ['foobar', 'fooBar']},
 		bar: {type: 'string', default: ''},
 		abc: {type: 'string', isMultiple: true},
 		baz: {type: 'string', choices: ['rainbow', 'cat', 'unicorn']},
@@ -72,6 +72,8 @@ expectType<string | undefined>(result.flags.baz);
 expectType<boolean | undefined>(result.unnormalizedFlags.foo);
 expectType<unknown>(result.unnormalizedFlags.f);
 expectType<number | undefined>(result.unnormalizedFlags['foo-bar']);
+expectType<unknown>(result.unnormalizedFlags.foobar);
+expectType<unknown>(result.unnormalizedFlags.fooBar);
 expectType<string>(result.unnormalizedFlags.bar);
 expectType<string[] | undefined>(result.unnormalizedFlags.abc);
 expectType<string | undefined>(result.unnormalizedFlags.baz);
@@ -85,7 +87,7 @@ const options = {
 	flags: {
 		rainbow: {
 			type: 'boolean',
-			alias: 'r',
+			shortFlag: 'r',
 		},
 	},
 } as const;
