@@ -132,6 +132,11 @@ const validateChoices = (flags, receivedFlags) => {
 	if (errors.length > 0) {
 		throw new Error(`${errors.join('\n')}`);
 	}
+
+	const flagsWithAlias = Object.keys(flags).filter(flagKey => flags[flagKey].alias !== undefined);
+	if (flagsWithAlias.length > 0) {
+		throw new Error(`The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`${flagsWithAlias.join('`, `')}\``);
+	}
 };
 
 const reportUnknownFlags = unknownFlags => {
