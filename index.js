@@ -59,24 +59,28 @@ const joinFlagKeys = (flagKeys, prefix = '--') => `\`${prefix}${flagKeys.join(`\
 const validateOptions = options => {
 	const invalidOptionFilters = {
 		flags: {
-			flagsWithDashes: {
+			keyContainsDashes: {
 				filter: ([flagKey]) => flagKey.includes('-') && flagKey !== '--',
 				message: flagKeys => `Flag keys may not contain '-'. Invalid flags: ${joinFlagKeys(flagKeys, '')}`,
 			},
-			flagsWithAlias: {
+			aliasIsSet: {
 				filter: ([, flag]) => flag.alias !== undefined,
 				message: flagKeys => `The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: ${joinFlagKeys(flagKeys)}`,
 			},
-			flagsWithNonArrayChoices: {
+			choicesNotAnArray: {
 				filter: ([, flag]) => flag.choices !== undefined && !Array.isArray(flag.choices),
 				message: flagKeys => `The option \`choices\` must be an array. Invalid flags: ${joinFlagKeys(flagKeys)}`,
 			},
-			flagsWithChoicesOfDifferentTypes: {
+			choicesNotMatchFlagType: {
 				filter: ([, flag]) => flag.type && Array.isArray(flag.choices) && flag.choices.some(choice => typeof choice !== flag.type),
 				message(flagKeys) {
 					const flagKeysAndTypes = flagKeys.map(flagKey => `(\`${decamelizeFlagKey(flagKey)}\`, type: '${options.flags[flagKey].type}')`);
 					return `Each value of the option \`choices\` must be of the same type as its flag. Invalid flags: ${flagKeysAndTypes.join(', ')}`;
 				},
+			},
+			defaultNotInChoices: {
+				filter: ([, flag]) => flag.default && Array.isArray(flag.choices) && [flag.default].flat().every(value => flag.choices.includes(value)),
+				message: flagKeys => `Each value of the option \`default\` must exist within the option \`choices\`. Invalid flags: ${joinFlagKeys(flagKeys)}`,
 			},
 		},
 	};
