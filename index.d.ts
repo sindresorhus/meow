@@ -16,13 +16,93 @@ Callback function to determine if a flag is required during runtime.
 export type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
 
 export type Flag<PrimitiveType extends FlagType, Type, IsMultiple = false> = {
+	/**
+	Type of value. (Possible values: `string` `boolean` `number`)
+	*/
 	readonly type?: PrimitiveType;
-	readonly shortFlag?: string;
-	readonly default?: Type;
-	readonly isRequired?: boolean | IsRequiredPredicate;
-	readonly isMultiple?: IsMultiple;
-	readonly aliases?: string[];
+
+	/**
+	Limit valid values to a predefined set of choices.
+
+	@example
+	```
+	unicorn: {
+		isMultiple: true,
+		choices: ['rainbow', 'cat', 'unicorn']
+	}
+	```
+	*/
 	readonly choices?: Type extends unknown[] ? Type : Type[];
+
+	/**
+	Default value when the flag is not specified.
+
+	@example
+	```
+	unicorn: {
+		type: 'boolean',
+		default: true
+	}
+	```
+	*/
+	readonly default?: Type;
+
+	/**
+	A short flag alias.
+
+	@example
+	```
+	unicorn: {
+		shortFlag: 'u'
+	}
+	```
+	*/
+	readonly shortFlag?: string;
+
+	/**
+	Other names for the flag.
+
+	@example
+	```
+	unicorn: {
+		aliases: ['unicorns', 'uni']
+	}
+	```
+	*/
+	readonly aliases?: string[];
+
+	/**
+	Indicates a flag can be set multiple times. Values are turned into an array.
+
+	Multiple values are provided by specifying the flag multiple times, for example, `$ foo -u rainbow -u cat`. Space- or comma-separated values [currently *not* supported](https://github.com/sindresorhus/meow/issues/164).
+
+	@default false
+	*/
+	readonly isMultiple?: IsMultiple;
+
+	/**
+	Determine if the flag is required.
+
+	If it's only known at runtime whether the flag is required or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
+
+	- The first argument is the **flags** object, which contains the flags converted to camel-case excluding aliases.
+	- The second argument is the **input** string array, which contains the non-flag arguments.
+	- The function should return a `boolean`, true if the flag is required, otherwise false.
+
+	@default false
+
+	@example
+	```
+	isRequired: (flags, input) => {
+		if (flags.otherFlag) {
+			return true;
+		}
+
+		return false;
+	}
+	```
+	*/
+	readonly isRequired?: boolean | IsRequiredPredicate;
 };
 
 type StringFlag = Flag<'string', string> | Flag<'string', string[], true>;
@@ -43,14 +123,17 @@ export type Options<Flags extends AnyFlags> = {
 	The key is the flag name in camel-case and the value is an object with any of:
 
 	- `type`: Type of value. (Possible values: `string` `boolean` `number`)
-	- `shortFlag`: A short flag alias.
-	- `default`: Default value when the flag is not specified.
-	- `isRequired`: Determine if the flag is required.
-		If it's only known at runtime whether the flag is required or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
-	- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
-		Multiple values are provided by specifying the flag multiple times, for example, `$ foo -u rainbow -u cat`. Space- or comma-separated values are *not* supported.
-	- `aliases`: Other names for the flag.
 	- `choices`: Limit valid values to a predefined set of choices.
+	- `default`: Default value when the flag is not specified.
+	- `shortFlag`: A short flag alias.
+	- `aliases`: Other names for the flag.
+	- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
+		- Multiple values are provided by specifying the flag multiple times, for example, `$ foo -u rainbow -u cat`. Space- or comma-separated values [currently *not* supported](https://github.com/sindresorhus/meow/issues/164).
+	- `isRequired`: Determine if the flag is required. (Default: false)
+		- If it's only known at runtime whether the flag is required or not, you can pass a `Function` instead of a `boolean`, which based on the given flags and other non-flag arguments, should decide if the flag is required. Two arguments are passed to the function:
+		- The first argument is the **flags** object, which contains the flags converted to camel-case excluding aliases.
+		- The second argument is the **input** string array, which contains the non-flag arguments.
+		- The function should return a `boolean`, true if the flag is required, otherwise false.
 
 	Note that flags are always defined using a camel-case key (`myKey`), but will match arguments in kebab-case (`--my-key`).
 
@@ -59,18 +142,18 @@ export type Options<Flags extends AnyFlags> = {
 	flags: {
 		unicorn: {
 			type: 'string',
-			shortFlag: 'u',
-			default: ['rainbow', 'cat'],
-			isMultiple: true,
 			choices: ['rainbow', 'cat', 'unicorn'],
+			default: ['rainbow', 'cat'],
+			shortFlag: 'u',
+			aliases: ['unicorns']
+			isMultiple: true,
 			isRequired: (flags, input) => {
 				if (flags.otherFlag) {
 					return true;
 				}
 
 				return false;
-			},
-			aliases: ['unicorns']
+			}
 		}
 	}
 	```
