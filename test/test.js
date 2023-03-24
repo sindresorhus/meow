@@ -719,8 +719,8 @@ test('choices - throws if input does not match choices', t => {
 		});
 	}, {
 		message: stripIndent`
-			Unknown value for flag \`animal\`: \`rainbow\`. Value must be one of: [dog, cat, unicorn]
-			Unknown value for flag \`number\`: \`5\`. Value must be one of: [1, 2, 3]
+			Unknown value for flag \`--animal\`: \`rainbow\`. Value must be one of: [\`dog\`, \`cat\`, \`unicorn\`]
+			Unknown value for flag \`--number\`: \`5\`. Value must be one of: [\`1\`, \`2\`, \`3\`]
 		`,
 	});
 });
@@ -766,7 +766,7 @@ test('choices - throw error when isRequired is true', t => {
 				},
 			},
 		});
-	}, {message: 'Flag `animal` has no value. Value must be one of: [dog, cat, unicorn]'});
+	}, {message: 'Flag `--animal` has no value. Value must be one of: [`dog`, `cat`, `unicorn`]'});
 });
 
 test('choices - success with isMultiple', t => {
@@ -798,7 +798,7 @@ test('choices - throws with isMultiple, one unknown value', t => {
 				},
 			},
 		});
-	}, {message: 'Unknown value for flag `animal`: `rabbit`. Value must be one of: [dog, cat, unicorn]'});
+	}, {message: 'Unknown value for flag `--animal`: `rabbit`. Value must be one of: [`dog`, `cat`, `unicorn`]'});
 });
 
 test('choices - throws with isMultiple, multiple unknown value', t => {
@@ -814,7 +814,7 @@ test('choices - throws with isMultiple, multiple unknown value', t => {
 				},
 			},
 		});
-	}, {message: 'Unknown values for flag `animal`: `dog, rabbit`. Value must be one of: [cat, unicorn]'});
+	}, {message: 'Unknown values for flag `--animal`: `dog`, `rabbit`. Value must be one of: [`cat`, `unicorn`]'});
 });
 
 test('choices - throws with multiple flags', t => {
@@ -834,8 +834,8 @@ test('choices - throws with multiple flags', t => {
 			},
 		});
 	}, {message: stripIndent`
-		Unknown value for flag \`animal\`: \`dog\`. Value must be one of: [cat, unicorn]
-		Unknown value for flag \`plant\`: \`succulent\`. Value must be one of: [tree, flower]
+		Unknown value for flag \`--animal\`: \`dog\`. Value must be one of: [\`cat\`, \`unicorn\`]
+		Unknown value for flag \`--plant\`: \`succulent\`. Value must be one of: [\`tree\`, \`flower\`]
 	`});
 });
 

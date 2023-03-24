@@ -45,10 +45,12 @@ const getMissingRequiredFlags = (flags, receivedFlags, input) => {
 	return missingRequiredFlags;
 };
 
+const decamelizeFlagKey = flagKey => `--${decamelize(flagKey, {separator: '-'})}`;
+
 const reportMissingRequiredFlags = missingRequiredFlags => {
 	console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
 	for (const flag of missingRequiredFlags) {
-		console.error(`\t--${decamelize(flag.key, {separator: '-'})}${flag.shortFlag ? `, -${flag.shortFlag}` : ''}`);
+		console.error(`\t${decamelizeFlagKey(flag.key)}${flag.shortFlag ? `, -${flag.shortFlag}` : ''}`);
 	}
 };
 
@@ -99,11 +101,11 @@ const validateChoicesByFlag = (flagKey, flagValue, receivedInput) => {
 		return;
 	}
 
-	const valueMustBeOneOf = `Value must be one of: [${choices.join(', ')}]`;
+	const valueMustBeOneOf = `Value must be one of: [\`${choices.join('`, `')}\`]`;
 
 	if (!receivedInput) {
 		if (isRequired) {
-			return `Flag \`${flagKey}\` has no value. ${valueMustBeOneOf}`;
+			return `Flag \`${decamelizeFlagKey(flagKey)}\` has no value. ${valueMustBeOneOf}`;
 		}
 
 		return;
@@ -115,10 +117,10 @@ const validateChoicesByFlag = (flagKey, flagValue, receivedInput) => {
 		if (unknownValues.length > 0) {
 			const valuesText = unknownValues.length > 1 ? 'values' : 'value';
 
-			return `Unknown ${valuesText} for flag \`${flagKey}\`: \`${unknownValues.join(', ')}\`. ${valueMustBeOneOf}`;
+			return `Unknown ${valuesText} for flag \`${decamelizeFlagKey(flagKey)}\`: \`${unknownValues.join('`, `')}\`. ${valueMustBeOneOf}`;
 		}
 	} else if (!choices.includes(receivedInput)) {
-		return `Unknown value for flag \`${flagKey}\`: \`${receivedInput}\`. ${valueMustBeOneOf}`;
+		return `Unknown value for flag \`${decamelizeFlagKey(flagKey)}\`: \`${receivedInput}\`. ${valueMustBeOneOf}`;
 	}
 };
 
@@ -136,11 +138,6 @@ const validateChoices = (flags, receivedFlags) => {
 
 	if (errors.length > 0) {
 		throw new Error(`${errors.join('\n')}`);
-	}
-
-	const flagsWithAlias = Object.keys(flags).filter(flagKey => flags[flagKey].alias !== undefined);
-	if (flagsWithAlias.length > 0) {
-		throw new Error(`The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`${flagsWithAlias.join('`, `')}\``);
 	}
 };
 
