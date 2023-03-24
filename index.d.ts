@@ -40,7 +40,7 @@ export type Flag<PrimitiveType extends FlagType, Type, IsMultiple = false> = {
 	```
 	unicorn: {
 		type: 'boolean',
-		default: true,
+		default: true
 	}
 	```
 	*/
@@ -94,7 +94,7 @@ export type Flag<PrimitiveType extends FlagType, Type, IsMultiple = false> = {
 	```
 	unicorn: {
 		isMultiple: true,
-		choices: ['rainbow', 'cat', 'unicorn'],
+		choices: ['rainbow', 'cat', 'unicorn']
 	}
 	```
 	*/
