@@ -86,6 +86,18 @@ export type Flag<PrimitiveType extends FlagType, Type, IsMultiple = false> = {
 	```
 	*/
 	readonly aliases?: string[];
+
+	/**
+	Limit valid values to a predefined set of choices.
+
+	@example
+	```
+	unicorn: {
+		isMultiple: true,
+		choices: ['rainbow', 'cat', 'unicorn'],
+	}
+	```
+	*/
 	readonly choices?: Type extends unknown[] ? Type : Type[];
 };
 
