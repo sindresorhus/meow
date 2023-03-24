@@ -81,7 +81,7 @@ export type Flag<Type extends FlagType, Default, IsMultiple = false> = {
 	@example
 	```
 	unicorn: {
-		aliases: ['unicorns', 'u']
+		aliases: ['unicorns', 'uni']
 	}
 	```
 	*/
