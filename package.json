@@ -60,6 +60,7 @@
 	},
 	"devDependencies": {
 		"ava": "^4.3.3",
+		"common-tags": "^1.8.2",
 		"execa": "^6.1.0",
 		"indent-string": "^5.0.0",
 		"read-pkg": "^7.1.0",
