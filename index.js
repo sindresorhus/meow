@@ -71,6 +71,13 @@ const validateOptions = options => {
 				filter: ([, flag]) => flag.choices !== undefined && !Array.isArray(flag.choices),
 				message: flagKeys => `The option \`choices\` must be an array. Invalid flags: ${joinFlagKeys(flagKeys)}`,
 			},
+			flagsWithChoicesOfDifferentTypes: {
+				filter: ([, flag]) => flag.type && Array.isArray(flag.choices) && flag.choices.some(choice => typeof choice !== flag.type),
+				message(flagKeys) {
+					const flagKeysAndTypes = flagKeys.map(flagKey => `(\`${decamelizeFlagKey(flagKey)}\`, type: '${options.flags[flagKey].type}')`);
+					return `Each value of the option \`choices\` must be of the same type as its flag. Invalid flags: ${flagKeysAndTypes.join(', ')}`;
+				},
+			},
 		},
 	};
 

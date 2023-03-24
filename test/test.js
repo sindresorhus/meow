@@ -839,7 +839,7 @@ test('choices - throws with multiple flags', t => {
 	`});
 });
 
-test.failing('choices - choices must be of the same type', t => {
+test('choices - choices must be of the same type', t => {
 	t.throws(() => {
 		meow({
 			importMeta,
@@ -848,9 +848,13 @@ test.failing('choices - choices must be of the same type', t => {
 					type: 'number',
 					choices: [1, '2'],
 				},
+				boolean: {
+					type: 'boolean',
+					choices: [true, 'false'],
+				},
 			},
 		});
-	});
+	}, {message: 'Each value of the option `choices` must be of the same type as its flag. Invalid flags: (`--number`, type: \'number\'), (`--boolean`, type: \'boolean\')'});
 });
 
 test('options - multiple validation errors', t => {
