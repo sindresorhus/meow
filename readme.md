@@ -103,17 +103,17 @@ Define argument flags.
 The key is the flag name in camel-case and the value is an object with any of:
 
 - `type`: Type of value. (Possible values: `string` `boolean` `number`)
-- `shortFlag`: A short flag alias.
+- `choices`: Limit valid values to a predefined set of choices.
 - `default`: Default value when the flag is not specified.
+- `shortFlag`: A short flag alias.
+- `aliases`: Other names for the flag.
+- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
+	- Multiple values are provided by specifying the flag multiple times, for example, `$ foo -u rainbow -u cat`. Space- or comma-separated values are [currently *not* supported](https://github.com/sindresorhus/meow/issues/164).
 - `isRequired`: Determine if the flag is required. (Default: false)
 	- If it's only known at runtime whether the flag is required or not, you can pass a `Function` instead of a `boolean`, which based on the given flags and other non-flag arguments, should decide if the flag is required. Two arguments are passed to the function:
 	- The first argument is the **flags** object, which contains the flags converted to camel-case excluding aliases.
 	- The second argument is the **input** string array, which contains the non-flag arguments.
 	- The function should return a `boolean`, true if the flag is required, otherwise false.
-- `isMultiple`: Indicates a flag can be set multiple times. Values are turned into an array. (Default: false)
-	- Multiple values are provided by specifying the flag multiple times, for example, `$ foo -u rainbow -u cat`. Space- or comma-separated values are [currently *not* supported](https://github.com/sindresorhus/meow/issues/164).
-- `aliases`: Other names for the flag.
-- `choices`: Limit valid values to a predefined set of choices.
 
 Note that flags are always defined using a camel-case key (`myKey`), but will match arguments in kebab-case (`--my-key`).
 
@@ -123,18 +123,18 @@ Example:
 flags: {
 	unicorn: {
 		type: 'string',
-		shortFlag: 'u',
-		default: ['rainbow', 'cat'],
-		isMultiple: true,
 		choices: ['rainbow', 'cat', 'unicorn'],
+		default: ['rainbow', 'cat'],
+		shortFlag: 'u',
+		aliases: ['unicorns'],
+		isMultiple: true,
 		isRequired: (flags, input) => {
 			if (flags.otherFlag) {
 				return true;
 			}
 
 			return false;
-		},
-		aliases: ['unicorns']
+		}
 	}
 }
 ```
