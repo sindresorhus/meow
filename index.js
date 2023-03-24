@@ -52,33 +52,38 @@ const reportMissingRequiredFlags = missingRequiredFlags => {
 	}
 };
 
-const validateOptions = ({flags}) => {
-	const keys = Object.keys(flags);
-	const entries = Object.entries(flags);
+const joinFlagKeys = (flagKeys, prefix = '--') => `\`${prefix}${flagKeys.join(`\`, \`${prefix}`)}\``;
 
-	const invalidOptions = {
-		flagsWithDash: {
-			values: keys.filter(flagKey => flagKey.includes('-') && flagKey !== '--'),
-			message: values => `Flag keys may not contain '-': ${values.join(', ')}`,
-		},
-		flagsWithAlias: {
-			values: keys.filter(flagKey => flags[flagKey].alias !== undefined),
-			message: values => `The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`${values.join('`, `')}\``,
-		},
-		flagsWithNonArrayChoices: {
-			values: entries.filter(([_, {choices}]) => choices && !Array.isArray(choices)),
-			message(values) {
-				const formattedChoices = values.map(([flagKey, {choices}]) => `flag \`${flagKey}\`: ${choices}`).join(', ');
-				return `Flag choices must be an array: ${formattedChoices}`;
+const validateOptions = options => {
+	const invalidOptionFilters = {
+		flags: {
+			flagsWithDashes: {
+				filter: ([flagKey]) => flagKey.includes('-') && flagKey !== '--',
+				message: flagKeys => `Flag keys may not contain '-'. Invalid flags: ${joinFlagKeys(flagKeys, '')}`,
+			},
+			flagsWithAlias: {
+				filter: ([, flag]) => flag.alias !== undefined,
+				message: flagKeys => `The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: ${joinFlagKeys(flagKeys)}`,
+			},
+			flagsWithNonArrayChoices: {
+				filter: ([, flag]) => flag.choices !== undefined && !Array.isArray(flag.choices),
+				message: flagKeys => `The option \`choices\` must be an array. Invalid flags: ${joinFlagKeys(flagKeys)}`,
 			},
 		},
 	};
 
 	const errorMessages = [];
 
-	for (const {values, message} of Object.values(invalidOptions)) {
-		if (values.length > 0) {
-			errorMessages.push(message(values));
+	for (const [optionKey, filters] of Object.entries(invalidOptionFilters)) {
+		const optionEntries = Object.entries(options[optionKey]);
+
+		for (const {filter, message} of Object.values(filters)) {
+			const invalidOptions = optionEntries.filter(option => filter(option));
+			const invalidOptionKeys = invalidOptions.map(([key]) => key);
+
+			if (invalidOptions.length > 0) {
+				errorMessages.push(message(invalidOptionKeys));
+			}
 		}
 	}
 

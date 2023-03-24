@@ -129,7 +129,7 @@ test('flag declared in kebab-case is an error', t => {
 			flags: {'kebab-case': 'boolean', test: 'boolean', 'another-one': 'boolean'},
 		});
 	});
-	t.is(error.message, 'Flag keys may not contain \'-\': kebab-case, another-one');
+	t.is(error.message, 'Flag keys may not contain \'-\'. Invalid flags: `kebab-case`, `another-one`');
 });
 
 test('type inference', t => {
@@ -600,7 +600,7 @@ test('suggests renaming alias to shortFlag', t => {
 				},
 			},
 		});
-	}, {message: 'The option `alias` has been renamed to `shortFlag`. The following flags need to be updated: `foo`, `bar`'});
+	}, {message: 'The option `alias` has been renamed to `shortFlag`. The following flags need to be updated: `--foo`, `--bar`'});
 });
 
 test('aliases - accepts one', t => {
@@ -736,7 +736,7 @@ test('choices - throws if choices is not array', t => {
 				},
 			},
 		});
-	}, {message: 'Flag choices must be an array: flag `animal`: cat'});
+	}, {message: 'The option `choices` must be an array. Invalid flags: `--animal`'});
 });
 
 test('choices - does not throw error when isRequired is false', t => {
@@ -872,9 +872,9 @@ test('options - multiple validation errors', t => {
 			},
 		});
 	}, {message: stripIndent`
-		Flag keys may not contain '-': some-thing
-		The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`plant\`
-		Flag choices must be an array: flag \`animal\`: cat
+		Flag keys may not contain '-'. Invalid flags: \`some-thing\`
+		The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`--plant\`
+		The option \`choices\` must be an array. Invalid flags: \`--animal\`
 	`});
 });
 
