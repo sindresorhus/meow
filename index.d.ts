@@ -16,11 +16,75 @@ Callback function to determine if a flag is required during runtime.
 export type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
 
 export type Flag<Type extends FlagType, Default, IsMultiple = false> = {
+	/**
+	Type of value. (Possible values: `string` `boolean` `number`)
+	*/
 	readonly type?: Type;
+
+	/**
+	A short flag alias.
+
+	@example
+	```
+	unicorn: {
+		shortFlag: 'u'
+	}
+	```
+	*/
 	readonly shortFlag?: string;
+
+	/**
+	Default value when the flag is not specified.
+
+	@example
+	```
+	unicorn: {
+		type: 'boolean',
+		default: true,
+	}
+	```
+	*/
 	readonly default?: Default;
+
+	/**
+	Determine if the flag is required.
+
+	If it's only known at runtime whether the flag is required or not you can pass a Function instead of a boolean, which based on the given flags and other non-flag arguments should decide if the flag is required.
+
+	@default false
+
+	@example
+	```
+	isRequired: (flags, input) => {
+		if (flags.otherFlag) {
+			return true;
+		}
+
+		return false;
+	}
+	```
+	*/
 	readonly isRequired?: boolean | IsRequiredPredicate;
+
+	/**
+	Indicates a flag can be set multiple times. Values are turned into an array.
+
+	Multiple values are provided by specifying the flag multiple times, for example, `$ foo -u rainbow -u cat`. Space- or comma-separated values are *not* supported.
+
+	@default false
+	*/
 	readonly isMultiple?: IsMultiple;
+
+	/**
+	Other names for the flag.
+
+	@example
+	```
+	unicorn: {
+		aliases: ['unicorns', 'u']
+	}
+	```
+	*/
 	readonly aliases?: string[];
 };
 
