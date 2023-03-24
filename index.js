@@ -45,22 +45,106 @@ const getMissingRequiredFlags = (flags, receivedFlags, input) => {
 	return missingRequiredFlags;
 };
 
+const decamelizeFlagKey = flagKey => `--${decamelize(flagKey, {separator: '-'})}`;
+
 const reportMissingRequiredFlags = missingRequiredFlags => {
 	console.error(`Missing required flag${missingRequiredFlags.length > 1 ? 's' : ''}`);
 	for (const flag of missingRequiredFlags) {
-		console.error(`\t--${decamelize(flag.key, {separator: '-'})}${flag.shortFlag ? `, -${flag.shortFlag}` : ''}`);
+		console.error(`\t${decamelizeFlagKey(flag.key)}${flag.shortFlag ? `, -${flag.shortFlag}` : ''}`);
 	}
 };
 
-const validateOptions = ({flags}) => {
-	const invalidFlags = Object.keys(flags).filter(flagKey => flagKey.includes('-') && flagKey !== '--');
-	if (invalidFlags.length > 0) {
-		throw new Error(`Flag keys may not contain '-': ${invalidFlags.join(', ')}`);
+const joinFlagKeys = (flagKeys, prefix = '--') => `\`${prefix}${flagKeys.join(`\`, \`${prefix}`)}\``;
+
+const validateOptions = options => {
+	const invalidOptionFilters = {
+		flags: {
+			flagsWithDashes: {
+				filter: ([flagKey]) => flagKey.includes('-') && flagKey !== '--',
+				message: flagKeys => `Flag keys may not contain '-'. Invalid flags: ${joinFlagKeys(flagKeys, '')}`,
+			},
+			flagsWithAlias: {
+				filter: ([, flag]) => flag.alias !== undefined,
+				message: flagKeys => `The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: ${joinFlagKeys(flagKeys)}`,
+			},
+			flagsWithNonArrayChoices: {
+				filter: ([, flag]) => flag.choices !== undefined && !Array.isArray(flag.choices),
+				message: flagKeys => `The option \`choices\` must be an array. Invalid flags: ${joinFlagKeys(flagKeys)}`,
+			},
+			flagsWithChoicesOfDifferentTypes: {
+				filter: ([, flag]) => flag.type && Array.isArray(flag.choices) && flag.choices.some(choice => typeof choice !== flag.type),
+				message(flagKeys) {
+					const flagKeysAndTypes = flagKeys.map(flagKey => `(\`${decamelizeFlagKey(flagKey)}\`, type: '${options.flags[flagKey].type}')`);
+					return `Each value of the option \`choices\` must be of the same type as its flag. Invalid flags: ${flagKeysAndTypes.join(', ')}`;
+				},
+			},
+		},
+	};
+
+	const errorMessages = [];
+
+	for (const [optionKey, filters] of Object.entries(invalidOptionFilters)) {
+		const optionEntries = Object.entries(options[optionKey]);
+
+		for (const {filter, message} of Object.values(filters)) {
+			const invalidOptions = optionEntries.filter(option => filter(option));
+			const invalidOptionKeys = invalidOptions.map(([key]) => key);
+
+			if (invalidOptions.length > 0) {
+				errorMessages.push(message(invalidOptionKeys));
+			}
+		}
 	}
 
-	const flagsWithAlias = Object.keys(flags).filter(flagKey => flags[flagKey].alias !== undefined);
-	if (flagsWithAlias.length > 0) {
-		throw new Error(`The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`${flagsWithAlias.join('`, `')}\``);
+	if (errorMessages.length > 0) {
+		throw new Error(errorMessages.join('\n'));
+	}
+};
+
+const validateChoicesByFlag = (flagKey, flagValue, receivedInput) => {
+	const {choices, isRequired} = flagValue;
+
+	if (!choices) {
+		return;
+	}
+
+	const valueMustBeOneOf = `Value must be one of: [\`${choices.join('`, `')}\`]`;
+
+	if (!receivedInput) {
+		if (isRequired) {
+			return `Flag \`${decamelizeFlagKey(flagKey)}\` has no value. ${valueMustBeOneOf}`;
+		}
+
+		return;
+	}
+
+	if (Array.isArray(receivedInput)) {
+		const unknownValues = receivedInput.filter(index => !choices.includes(index));
+
+		if (unknownValues.length > 0) {
+			const valuesText = unknownValues.length > 1 ? 'values' : 'value';
+
+			return `Unknown ${valuesText} for flag \`${decamelizeFlagKey(flagKey)}\`: \`${unknownValues.join('`, `')}\`. ${valueMustBeOneOf}`;
+		}
+	} else if (!choices.includes(receivedInput)) {
+		return `Unknown value for flag \`${decamelizeFlagKey(flagKey)}\`: \`${receivedInput}\`. ${valueMustBeOneOf}`;
+	}
+};
+
+const validateChoices = (flags, receivedFlags) => {
+	const errors = [];
+
+	for (const [flagKey, flagValue] of Object.entries(flags)) {
+		const receivedInput = receivedFlags[flagKey];
+		const errorMessage = validateChoicesByFlag(flagKey, flagValue, receivedInput);
+
+		if (errorMessage) {
+			errors.push(errorMessage);
+		}
+	}
+
+	if (errors.length > 0) {
+		throw new Error(`${errors.join('\n')}`);
 	}
 };
 
@@ -242,6 +326,7 @@ const meow = (helpText, options = {}) => {
 	const unnormalizedFlags = {...flags};
 
 	validateFlags(flags, options);
+	validateChoices(options.flags, flags);
 
 	for (const flagValue of Object.values(options.flags)) {
 		if (Array.isArray(flagValue.aliases)) {
