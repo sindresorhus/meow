@@ -284,7 +284,11 @@ const meow = (helpText, options = {}) => {
 
 	const {pkg: package_} = options;
 	const argv = parseArguments(options.argv, parserOptions);
-	let help = redent(trimNewlines((options.help ?? '').replace(/\t+\n*$/, '')), 2);
+	let help = trimNewlines((options.help || '').replace(/\t+\n*$/, ''));
+
+	if (help.includes('\n')) {
+		help = redent(help, 2);
+	}
 
 	normalizePackageData(package_);
 
@@ -295,7 +299,12 @@ const meow = (helpText, options = {}) => {
 		({description} = package_);
 	}
 
-	help = (description ? `\n  ${description}\n` : '') + (help ? `\n${help}\n` : '\n');
+	// Change to `&&=` when targeting Node 15+
+	if (description) {
+		description = help ? `\n  ${description}\n` : `\n${description}`;
+	}
+
+	help = (description || '') + (help ? `\n${help}\n` : '\n');
 
 	const showHelp = code => {
 		console.log(help);
