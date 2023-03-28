@@ -6,7 +6,7 @@ import parseArguments from 'yargs-parser';
 import camelCaseKeys from 'camelcase-keys';
 import decamelize from 'decamelize';
 import decamelizeKeys from 'decamelize-keys';
-import trimNewlines from 'trim-newlines';
+import {trimNewlines} from 'trim-newlines';
 import redent from 'redent';
 import {readPackageUpSync} from 'read-pkg-up';
 import hardRejection from 'hard-rejection';
@@ -249,7 +249,7 @@ const meow = (helpText, options = {}) => {
 		...buildParserFlags(options),
 	};
 
-	parserOptions = decamelizeKeys(parserOptions, '-', {exclude: ['stopEarly', '--']});
+	parserOptions = decamelizeKeys(parserOptions, {separator: '-', exclude: ['stopEarly', '--']});
 
 	if (options.inferType) {
 		delete parserOptions.arguments;
