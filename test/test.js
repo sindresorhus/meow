@@ -6,7 +6,7 @@ import indentString from 'indent-string';
 import {stripIndent} from 'common-tags';
 import {execa} from 'execa';
 import {readPackage} from 'read-pkg';
-import meow from '../index.js';
+import meow from '../source/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixturePath = path.join(__dirname, 'fixtures', 'fixture.js');

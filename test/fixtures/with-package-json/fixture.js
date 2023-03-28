@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import process from 'node:process';
-import meow from '../../../index.js';
+import meow from '../../../source/index.js';
 
 meow({
 	importMeta: import.meta,
