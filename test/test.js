@@ -117,7 +117,7 @@ test('setting pkg.bin should work', t => {
 	});
 
 	t.is(cli.pkg.name, 'browser-sync');
-	t.is(cli.pkg.version, undefined);
+	t.is(cli.pkg.version, '');
 	t.is(cli.version, undefined);
 });
 
