@@ -897,6 +897,26 @@ test('options - multiple validation errors', t => {
 	`});
 });
 
+test('single line help messages are not indented', t => {
+	const cli = meow({
+		importMeta,
+		description: false,
+		help: 'single line',
+	});
+
+	t.is(cli.help, '\nsingle line\n');
+});
+
+test('descriptions with no help are not indented', t => {
+	const cli = meow({
+		importMeta,
+		help: false,
+		description: 'single line',
+	});
+
+	t.is(cli.help, '\nsingle line\n');
+});
+
 if (NODE_MAJOR_VERSION >= 14) {
 	test('supports es modules', async t => {
 		try {
