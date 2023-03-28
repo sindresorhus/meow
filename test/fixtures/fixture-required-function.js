@@ -7,7 +7,7 @@ const cli = meow({
 	help: `
 		Usage
 		  foo <input>
-  `,
+  	`,
 	flags: {
 		trigger: {
 			type: 'boolean',

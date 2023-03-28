@@ -7,7 +7,7 @@ const cli = meow({
 	help: `
 		Usage
 		  foo <input>
-  `,
+  	`,
 	allowUnknownFlags: false,
 	flags: {
 		help: {
