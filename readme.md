@@ -190,6 +190,8 @@ Default: Closest package.json upwards
 
 package.json as an `object`.
 
+Note: setting this stops `meow` from finding a package.json.
+
 *You most likely don't need this option.*
 
 ##### argv
