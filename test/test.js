@@ -102,17 +102,23 @@ test('spawn cli and test input flag', async t => {
 	t.is(stdout, 'bar');
 });
 
-test.serial.failing('pkg.bin as a string should work', t => {
-	meow({
+test('spawn cli and test process title', async t => {
+	const {stdout} = await execa(path.join(__dirname, 'fixtures/with-package-json/fixture.js'));
+	t.is(stdout, 'foo');
+});
+
+test('setting pkg.bin should work', t => {
+	const cli = meow({
 		importMeta,
 		pkg: {
-			importMeta,
 			name: 'browser-sync',
 			bin: './bin/browser-sync.js',
 		},
 	});
 
-	t.is(process.title, 'browser-sync');
+	t.is(cli.pkg.name, 'browser-sync');
+	t.is(cli.pkg.version, undefined);
+	t.is(cli.version, undefined);
 });
 
 test('single character flag casing should be preserved', t => {
