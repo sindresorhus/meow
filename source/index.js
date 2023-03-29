@@ -25,11 +25,7 @@ const buildResult = (options, parserOptions) => {
 		({description} = package_);
 	}
 
-	// Change to `&&=` when targeting Node 15+
-	if (description) {
-		description = help ? `\n  ${description}\n` : `\n${description}`;
-	}
-
+	description &&= help ? `\n  ${description}\n` : `\n${description}`;
 	help = (description || '') + (help ? `\n${help}\n` : '\n');
 
 	const showHelp = code => {
