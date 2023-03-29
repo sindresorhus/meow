@@ -43,10 +43,8 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 };
 
 export const buildParserOptions = options => {
-	let parserOptions = {
-		arguments: options.input,
-		...buildParserFlags(options),
-	};
+	let parserOptions = buildParserFlags(options);
+	parserOptions.arguments = options.input;
 
 	parserOptions = decamelizeKeys(parserOptions, {separator: '-', exclude: ['stopEarly', '--']});
 
