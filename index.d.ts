@@ -404,7 +404,7 @@ const cli = meow(`
 //	...
 //}
 
-foo(cli.input[0], cli.flags);
+foo(cli.input.at(0), cli.flags);
 ```
 */
 export default function meow<Flags extends AnyFlags>(helpMessage: string, options?: Options<Flags>): Result<Flags>;

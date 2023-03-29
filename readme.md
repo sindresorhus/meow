@@ -60,7 +60,7 @@ const cli = meow(`
 }
 */
 
-foo(cli.input[0], cli.flags);
+foo(cli.input.at(0), cli.flags);
 ```
 
 ## API
