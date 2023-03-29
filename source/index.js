@@ -9,7 +9,6 @@ import {buildOptions} from './options.js';
 import {buildParserOptions} from './parser.js';
 import {validate, checkUnknownFlags, checkMissingRequiredFlags} from './validate.js';
 
-/* eslint complexity: off */
 const buildResult = (options, parserOptions) => {
 	const {pkg: package_} = options;
 	const argv = parseArguments(options.argv, parserOptions);
