@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import process from 'node:process';
-import meow from '../../source/index.js';
+import meow from '../../../source/index.js';
 
 const cli = meow({
 	importMeta: import.meta,
