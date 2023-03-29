@@ -91,7 +91,7 @@ const meow = (helpText, options = {}) => {
 	const parserOptions = buildParserOptions(parsedOptions);
 	const result = buildResult(parsedOptions, parserOptions);
 
-	process.title = result.pkg.bin ? Object.keys(result.pkg.bin)[0] : result.pkg.name;
+	process.title = result.pkg.bin ? Object.keys(result.pkg.bin).at(0) : result.pkg.name;
 
 	return result;
 };
