@@ -202,7 +202,7 @@ export type Options<Flags extends AnyFlags> = {
 	/**
 	`package.json` as an `Object`. Default: Closest `package.json` upwards.
 
-	Note: setting this stops `meow` from finding a package.json.
+	Note: Setting this stops `meow` from finding a package.json.
 
 	_You most likely don't need this option._
 	*/
