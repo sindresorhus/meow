@@ -12,11 +12,11 @@ const validateOptions = options => {
 				message: flagKeys => `Flag keys may not contain '-'. Invalid flags: ${joinFlagKeys(flagKeys, '')}`,
 			},
 			aliasIsSet: {
-				filter: ([, flag]) => flag.alias !== undefined,
+				filter: ([, flag]) => Object.hasOwn(flag, 'alias'),
 				message: flagKeys => `The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: ${joinFlagKeys(flagKeys)}`,
 			},
 			choicesNotAnArray: {
-				filter: ([, flag]) => flag.choices !== undefined && !Array.isArray(flag.choices),
+				filter: ([, flag]) => Object.hasOwn(flag, 'choices') && !Array.isArray(flag.choices),
 				message: flagKeys => `The option \`choices\` must be an array. Invalid flags: ${joinFlagKeys(flagKeys)}`,
 			},
 			choicesNotMatchFlagType: {

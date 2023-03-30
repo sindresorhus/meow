@@ -8,7 +8,7 @@ import meow from '../source/index.js';
 import {spawnFixture, __dirname} from './_utils.js';
 
 const importMeta = import.meta;
-const NODE_MAJOR_VERSION = process.versions.node.split('.')[0];
+const NODE_MAJOR_VERSION = process.versions.node.split('.').at(0);
 
 test('return object', t => {
 	const cli = meow({
@@ -25,7 +25,7 @@ test('return object', t => {
 		},
 	});
 
-	t.is(cli.input[0], 'foo');
+	t.is(cli.input.at(0), 'foo');
 	t.true(cli.flags.fooBar);
 	t.is(cli.flags.meow, 'dog');
 	t.is(cli.flags.unicorn, 'cat');
@@ -92,19 +92,19 @@ test('single character flag casing should be preserved', t => {
 });
 
 test('type inference', t => {
-	t.is(meow({importMeta, argv: ['5']}).input[0], '5');
-	t.is(meow({importMeta, argv: ['5']}, {input: 'string'}).input[0], '5');
+	t.is(meow({importMeta, argv: ['5']}).input.at(0), '5');
+	t.is(meow({importMeta, argv: ['5']}, {input: 'string'}).input.at(0), '5');
 	t.is(meow({
 		importMeta,
 		argv: ['5'],
 		inferType: true,
-	}).input[0], 5);
+	}).input.at(0), 5);
 	t.is(meow({
 		importMeta,
 		argv: ['5'],
 		inferType: true,
 		flags: {foo: 'string'},
-	}).input[0], 5);
+	}).input.at(0), 5);
 	t.is(meow({
 		importMeta,
 		argv: ['5'],
@@ -112,12 +112,12 @@ test('type inference', t => {
 		flags: {
 			foo: 'string',
 		},
-	}).input[0], 5);
+	}).input.at(0), 5);
 	t.is(meow({
 		importMeta,
 		argv: ['5'],
 		input: 'number',
-	}).input[0], 5);
+	}).input.at(0), 5);
 });
 
 test('booleanDefault: undefined, filter out unset boolean args', t => {
@@ -241,9 +241,9 @@ test('grouped flags work', t => {
 });
 
 test('disable autoVersion/autoHelp if `cli.input.length > 0`', t => {
-	t.is(meow({importMeta, argv: ['bar', '--version']}).input[0], 'bar');
-	t.is(meow({importMeta, argv: ['bar', '--help']}).input[0], 'bar');
-	t.is(meow({importMeta, argv: ['bar', '--version', '--help']}).input[0], 'bar');
+	t.is(meow({importMeta, argv: ['bar', '--version']}).input.at(0), 'bar');
+	t.is(meow({importMeta, argv: ['bar', '--help']}).input.at(0), 'bar');
+	t.is(meow({importMeta, argv: ['bar', '--version', '--help']}).input.at(0), 'bar');
 });
 
 test('supports `number` flag type', t => {

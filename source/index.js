@@ -12,10 +12,16 @@ import {validate, checkUnknownFlags, checkMissingRequiredFlags} from './validate
 const buildResult = (options, parserOptions) => {
 	const {pkg: package_} = options;
 	const argv = parseArguments(options.argv, parserOptions);
-	let help = trimNewlines((options.help || '').replace(/\t+\n*$/, ''));
+	let help = '';
 
-	if (help.includes('\n')) {
-		help = redent(help, 2);
+	if (options.help) {
+		help = trimNewlines((options.help || '').replace(/\t+\n*$/, ''));
+
+		if (help.includes('\n')) {
+			help = redent(help, 2);
+		}
+
+		help = `\n${help}`;
 	}
 
 	normalizePackageData(package_);
@@ -25,12 +31,8 @@ const buildResult = (options, parserOptions) => {
 		({description} = package_);
 	}
 
-	// Change to `&&=` when targeting Node 15+
-	if (description) {
-		description = help ? `\n  ${description}\n` : `\n${description}`;
-	}
-
-	help = (description || '') + (help ? `\n${help}\n` : '\n');
+	description &&= help ? `\n  ${description}\n` : `\n${description}`;
+	help = `${description || ''}${help}\n`;
 
 	const showHelp = code => {
 		console.log(help);
@@ -95,7 +97,7 @@ const meow = (helpText, options = {}) => {
 	const parserOptions = buildParserOptions(parsedOptions);
 	const result = buildResult(parsedOptions, parserOptions);
 
-	process.title = result.pkg.bin ? Object.keys(result.pkg.bin)[0] : result.pkg.name;
+	process.title = result.pkg.bin ? Object.keys(result.pkg.bin).at(0) : result.pkg.name;
 
 	return result;
 };

@@ -16,7 +16,7 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 		if (
 			typeof booleanDefault !== 'undefined'
 				&& flag.type === 'boolean'
-				&& !Object.prototype.hasOwnProperty.call(flag, 'default')
+				&& !Object.hasOwn(flag, 'default')
 		) {
 			flag.default = flag.isMultiple ? [booleanDefault] : booleanDefault;
 		}
