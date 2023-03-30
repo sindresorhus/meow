@@ -181,7 +181,7 @@ Default: `true`
 
 Automatically show the version text when the `--version` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own version text.
 
- This option is only considered when there is only one argument in `process.argv`.
+This option is only considered when there is only one argument in `process.argv`.
 
 ##### pkg
 
@@ -189,6 +189,8 @@ Type: `object`\
 Default: Closest package.json upwards
 
 package.json as an `object`.
+
+Note: Setting this stops `meow` from finding a package.json.
 
 *You most likely don't need this option.*
 

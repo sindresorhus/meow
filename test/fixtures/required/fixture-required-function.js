@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import meow from '../../index.js';
+import meow from '../../../source/index.js';
 
 const cli = meow({
 	importMeta: import.meta,
@@ -7,7 +7,7 @@ const cli = meow({
 	help: `
 		Usage
 		  foo <input>
-  `,
+  	`,
 	flags: {
 		trigger: {
 			type: 'boolean',

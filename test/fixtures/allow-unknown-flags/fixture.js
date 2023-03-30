@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import process from 'node:process';
-import meow from '../../index.js';
+import meow from '../../../source/index.js';
 
 const cli = meow({
 	importMeta: import.meta,
@@ -8,7 +8,7 @@ const cli = meow({
 	help: `
 		Usage
 		  foo <input>
-  `,
+  	`,
 	autoVersion: !process.argv.includes('--no-auto-version'),
 	autoHelp: !process.argv.includes('--no-auto-help'),
 	allowUnknownFlags: false,

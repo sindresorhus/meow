@@ -1,4 +1,4 @@
-import meow from '../index.js';
+import meow from '../source/index.js';
 
 meow(
 	`
