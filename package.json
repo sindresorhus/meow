@@ -13,7 +13,7 @@
 	"type": "module",
 	"exports": {
 		"types": "./index.d.ts",
-		"default": "./index.js"
+		"default": "./source/index.js"
 	},
 	"engines": {
 		"node": ">=14.16"
@@ -22,7 +22,7 @@
 		"test": "xo && ava && tsd"
 	},
 	"files": [
-		"index.js",
+		"source",
 		"index.d.ts"
 	],
 	"keywords": [
