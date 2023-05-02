@@ -18,14 +18,14 @@
 
 ## Install
 
-```
-$ npm install meow
+```sh
+npm install meow
 ```
 
 ## Usage
 
-```
-$ ./foo-app.js unicorns --rainbow
+```sh
+./foo-app.js unicorns --rainbow
 ```
 
 ```js
@@ -310,18 +310,4 @@ See [`get-stdin`](https://github.com/sindresorhus/get-stdin) if you want to acce
 
 See [`conf`](https://github.com/sindresorhus/conf) if you need to persist some data.
 
-See [`update-notifier`](https://github.com/yeoman/update-notifier) if you want update notifications.
-
 [More useful CLI utilities…](https://github.com/sindresorhus/awesome-nodejs#command-line-utilities)
-
----
-
-<div align="center">
-	<b>
-		<a href="https://tidelift.com/subscription/pkg/npm-meow?utm_source=npm-meow&utm_medium=referral&utm_campaign=readme">Get professional support for this package with a Tidelift subscription</a>
-	</b>
-	<br>
-	<sub>
-		Tidelift helps make open source sustainable for maintainers while giving companies<br>assurances about security, maintenance, and licensing for their dependencies.
-	</sub>
-</div>

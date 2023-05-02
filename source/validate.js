@@ -87,7 +87,7 @@ const isFlagMissing = (flagName, definedFlags, receivedFlags, input) => {
 		}
 	}
 
-	if (typeof receivedFlags[flagName] === 'undefined') {
+	if (receivedFlags[flagName] === undefined) {
 		return isFlagRequired;
 	}
 
@@ -103,7 +103,7 @@ const reportMissingRequiredFlags = missingRequiredFlags => {
 
 export const checkMissingRequiredFlags = (flags, receivedFlags, input) => {
 	const missingRequiredFlags = [];
-	if (typeof flags === 'undefined') {
+	if (flags === undefined) {
 		return [];
 	}
 
