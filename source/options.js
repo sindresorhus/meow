@@ -27,7 +27,7 @@ const validateOptions = options => {
 				},
 			},
 			defaultNotInChoices: {
-				filter: ([, flag]) => flag.default && Array.isArray(flag.choices) && [flag.default].flat().every(value => flag.choices.includes(value)),
+				filter: ([, flag]) => flag.default && Array.isArray(flag.choices) && ![flag.default].flat().every(value => flag.choices.includes(value)),
 				message: flagKeys => `Each value of the option \`default\` must exist within the option \`choices\`. Invalid flags: ${joinFlagKeys(flagKeys)}`,
 			},
 		},

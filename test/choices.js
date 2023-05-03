@@ -177,8 +177,8 @@ test('choices - choices must be of the same type', t => {
 	}, {message: 'Each value of the option `choices` must be of the same type as its flag. Invalid flags: (`--number`, type: \'number\'), (`--boolean`, type: \'boolean\')'});
 });
 
-test('choices - default must only include valid choices', t => {
-	t.throws(() => {
+test('choices - success when each value of default exist within the option choices', t => {
+	t.notThrows(() => {
 		meow({
 			importMeta,
 			flags: {
@@ -187,7 +187,44 @@ test('choices - default must only include valid choices', t => {
 					choices: [1, 2, 3],
 					default: 1,
 				},
+				string: {
+					type: 'string',
+					choices: ['dog', 'cat', 'unicorn'],
+					default: 'dog',
+				},
+				multiString: {
+					type: 'string',
+					choices: ['dog', 'cat', 'unicorn'],
+					default: ['dog', 'cat'],
+					isMultiple: true,
+				},
 			},
 		});
-	}, {message: 'Each value of the option `default` must exist within the option `choices`. Invalid flags: `--number`'});
+	});
+});
+
+test('choices - throws when default does not only include valid choices', t => {
+	t.throws(() => {
+		meow({
+			importMeta,
+			flags: {
+				number: {
+					type: 'number',
+					choices: [1, 2, 3],
+					default: 8,
+				},
+				string: {
+					type: 'string',
+					choices: ['dog', 'cat'],
+					default: 'unicorn',
+				},
+				multiString: {
+					type: 'string',
+					choices: ['dog', 'cat'],
+					default: ['dog', 'unicorn'],
+					isMultiple: true,
+				},
+			},
+		});
+	}, {message: 'Each value of the option `default` must exist within the option `choices`. Invalid flags: `--number`, `--string`, `--multiString`'});
 });
