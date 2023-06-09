@@ -44,3 +44,24 @@ test('descriptions with no help are not indented', t => {
 		description: 'single line',
 	}).help, '\nsingle line\n');
 });
+
+test('support help shortcut with no indentation', t => {
+	t.is(meow(`
+		unicorn
+		cat
+	`, {
+		indent: 0,
+		importMeta,
+	}).help, indentString('\nCLI app helper\n\nunicorn\ncat\n', 0));
+});
+
+test('no description and no indentation', t => {
+	t.is(meow(`
+		unicorn
+		cat
+	`, {
+		indent: 0,
+		description: false,
+		importMeta,
+	}).help, indentString('\nunicorn\ncat\n', 0));
+});

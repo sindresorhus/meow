@@ -307,6 +307,13 @@ export type Options<Flags extends AnyFlags> = {
 	@default true
 	*/
 	readonly allowUnknownFlags?: boolean;
+
+	/**
+	Indentation to use on helpText.
+
+	@default true
+	*/
+	readonly indent?: number;
 };
 
 type TypedFlag<Flag extends AnyFlag> =

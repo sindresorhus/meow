@@ -299,6 +299,13 @@ Default: `true`
 
 Whether to allow unknown flags or not.
 
+##### indent
+
+Type `number`\
+Default: `2`
+
+Indentation to use on helpText.
+
 ## Promises
 
 Meow will make unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail. Meaning you don't have to manually `.catch()` promises used in your CLI.
