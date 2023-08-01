@@ -1,6 +1,6 @@
 {
 	"name": "meow",
-	"version": "11.0.0",
+	"version": "12.0.1",
 	"description": "CLI app helper",
 	"license": "MIT",
 	"repository": "sindresorhus/meow",
@@ -58,7 +58,7 @@
 		"read-pkg-up": "^9.1.0",
 		"redent": "^4.0.0",
 		"trim-newlines": "^5.0.0",
-		"type-fest": "^3.7.1",
+		"type-fest": "^3.9.0",
 		"yargs-parser": "^21.1.1"
 	},
 	"devDependencies": {
@@ -69,14 +69,15 @@
 		"common-tags": "^1.8.2",
 		"execa": "^7.1.1",
 		"indent-string": "^5.0.0",
-		"read-pkg": "^7.1.0",
+		"read-pkg": "^8.0.0",
 		"rollup": "^3.20.2",
-		"tsd": "^0.28.0",
-		"xo": "^0.53.1"
+		"tsd": "^0.28.1",
+		"xo": "^0.54.2"
 	},
 	"xo": {
 		"rules": {
-			"unicorn/no-process-exit": "off"
+			"unicorn/no-process-exit": "off",
+			"unicorn/error-message": "off"
 		}
 	},
 	"ava": {

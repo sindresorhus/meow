@@ -14,7 +14,7 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 		}
 
 		if (
-			typeof booleanDefault !== 'undefined'
+			booleanDefault !== undefined
 				&& flag.type === 'boolean'
 				&& !Object.hasOwn(flag, 'default')
 		) {
