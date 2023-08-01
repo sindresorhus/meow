@@ -20,12 +20,12 @@
 		"node": ">=16.10"
 	},
 	"scripts": {
-		"prepublish": "npm run build",
+		"prepack": "npm run build",
 		"build": "rollup -c",
 		"test": "xo && ava && tsd"
 	},
 	"files": [
-		"source",
+		"dist",
 		"index.d.ts"
 	],
 	"keywords": [
@@ -62,17 +62,20 @@
 		"yargs-parser": "^21.1.1"
 	},
 	"devDependencies": {
-		"@rollup/plugin-commonjs": "^24.0.1",
+		"@rollup/plugin-commonjs": "^25.0.3",
 		"@rollup/plugin-json": "^6.0.0",
-		"@rollup/plugin-node-resolve": "^15.0.1",
-		"ava": "^5.2.0",
+		"@rollup/plugin-node-resolve": "^15.1.0",
+		"@rollup/plugin-terser": "^0.4.3",
+		"ava": "^5.3.1",
 		"common-tags": "^1.8.2",
-		"execa": "^7.1.1",
+		"execa": "^7.2.0",
 		"indent-string": "^5.0.0",
 		"read-pkg": "^8.0.0",
-		"rollup": "^3.20.2",
+		"rollup": "^3.27.0",
+		"rollup-plugin-filesize": "^10.0.0",
+		"rollup-plugin-license": "^3.0.1",
 		"tsd": "^0.28.1",
-		"xo": "^0.54.2"
+		"xo": "^0.55.0"
 	},
 	"xo": {
 		"rules": {
