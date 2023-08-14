@@ -2,7 +2,7 @@ import json from '@rollup/plugin-json';
 import commonjs from '@rollup/plugin-commonjs';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import license from 'rollup-plugin-license';
-import filesize from 'rollup-plugin-filesize';
+import strip from 'strip-comments';
 import {defineConfig} from 'rollup';
 
 const outDir = 'build';
@@ -27,6 +27,12 @@ export default defineConfig({
 				return 'dependencies';
 			}
 		},
+		plugins: [{
+			name: 'strip-dependency-comments',
+			renderChunk(code, chunk) {
+				return chunk.name === 'dependencies' ? strip(code) : null;
+			},
+		}],
 	},
 	preserveEntrySignatures: 'allow-extension',
 	plugins: [
@@ -40,6 +46,5 @@ export default defineConfig({
 				output: `${outDir}/licenses.md`,
 			},
 		}),
-		filesize(),
 	],
 });
