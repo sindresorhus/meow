@@ -2,35 +2,42 @@ import json from '@rollup/plugin-json';
 import commonjs from '@rollup/plugin-commonjs';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import license from 'rollup-plugin-license';
-import terser from '@rollup/plugin-terser';
 import filesize from 'rollup-plugin-filesize';
 import {defineConfig} from 'rollup';
 
+const outDir = 'build';
+
 export default defineConfig({
-	input: 'source/index.js',
+	input: [
+		'source/index.js',
+		'source/options.js',
+		'source/parser.js',
+		'source/utils.js',
+		'source/validate.js',
+	],
 	output: {
-		file: 'dist/index.js',
-		// https://rollupjs.org/configuration-options/#output-interop
+		dir: outDir,
 		interop: 'esModule',
-		// https://rollupjs.org/configuration-options/#output-generatedcode
 		generatedCode: {
 			preset: 'es2015',
 		},
+		chunkFileNames: '[name].js',
+		manualChunks(id) {
+			if (id.includes('node_modules')) {
+				return 'dependencies';
+			}
+		},
 	},
+	preserveEntrySignatures: 'allow-extension',
 	plugins: [
-		json(),
-		commonjs(),
 		nodeResolve(),
+		commonjs({
+			include: 'node_modules/**',
+		}),
+		json(),
 		license({
 			thirdParty: {
-				output: 'dist/dependencies.md',
-			},
-		}),
-		terser({
-			module: true,
-			toplevel: true,
-			format: {
-				comments: false,
+				output: `${outDir}/licenses.md`,
 			},
 		}),
 		filesize(),
