@@ -52,20 +52,20 @@
 		"hard-rejection": "^2.1.0",
 		"minimist-options": "4.1.0",
 		"normalize-package-data": "^5.0.0",
-		"read-pkg-up": "^9.1.0",
+		"read-pkg-up": "^10.0.0",
 		"redent": "^4.0.0",
 		"trim-newlines": "^5.0.0",
-		"type-fest": "^3.9.0",
+		"type-fest": "^4.2.0",
 		"yargs-parser": "^21.1.1"
 	},
 	"devDependencies": {
-		"ava": "^5.2.0",
+		"ava": "^5.3.1",
 		"common-tags": "^1.8.2",
-		"execa": "^7.1.1",
+		"execa": "^7.2.0",
 		"indent-string": "^5.0.0",
 		"read-pkg": "^8.0.0",
 		"tsd": "^0.28.1",
-		"xo": "^0.54.2"
+		"xo": "^0.56.0"
 	},
 	"xo": {
 		"rules": {
