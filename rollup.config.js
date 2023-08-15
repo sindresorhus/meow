@@ -27,6 +27,7 @@ export default defineConfig({
 				return 'dependencies';
 			}
 		},
+		hoistTransitiveImports: false,
 		// TODO: strip deletes `https://...`
 		// plugins: [{
 		// 	name: 'strip-dependency-comments',
@@ -35,7 +36,9 @@ export default defineConfig({
 		// 	},
 		// }],
 	},
-	preserveEntrySignatures: 'allow-extension',
+	treeshake: {
+		moduleSideEffects: 'no-external',
+	},
 	plugins: [
 		nodeResolve(),
 		commonjs({
