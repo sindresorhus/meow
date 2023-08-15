@@ -21,7 +21,7 @@
 	},
 	"scripts": {
 		"prepare": "npm run build",
-		"build": "rollup -c",
+		"build": "rollup --config",
 		"test": "xo && ava && tsd"
 	},
 	"files": [

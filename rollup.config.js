@@ -5,7 +5,7 @@ import license from 'rollup-plugin-license';
 import strip from 'strip-comments';
 import {defineConfig} from 'rollup';
 
-const outDir = 'build';
+const outputDirectory = 'build';
 
 export default defineConfig({
 	input: [
@@ -16,7 +16,7 @@ export default defineConfig({
 		'source/validate.js',
 	],
 	output: {
-		dir: outDir,
+		dir: outputDirectory,
 		interop: 'esModule',
 		generatedCode: {
 			preset: 'es2015',
@@ -43,7 +43,7 @@ export default defineConfig({
 		json(),
 		license({
 			thirdParty: {
-				output: `${outDir}/licenses.md`,
+				output: `${outputDirectory}/licenses.md`,
 			},
 		}),
 	],
