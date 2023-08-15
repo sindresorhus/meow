@@ -22,8 +22,7 @@
 	"scripts": {
 		"prepare": "npm run build",
 		"build": "rollup --config",
-		"test": "xo && ava && tsd && npm run test:build",
-		"test:build": "npm run build && ava test/build.js"
+		"test": "xo && tsd && npm run build && ava"
 	},
 	"files": [
 		"build",
@@ -100,8 +99,7 @@
 	},
 	"ava": {
 		"files": [
-			"test/*",
-			"!test/build.js"
+			"test/*"
 		]
 	}
 }

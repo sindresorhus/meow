@@ -1,4 +1,3 @@
-/* eslint-disable ava/no-ignored-test-files */
 import test from 'ava';
 import {readPackage} from 'read-pkg';
 import meow from '../build/index.js';
