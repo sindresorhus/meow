@@ -1,28 +1,24 @@
-import json from '@rollup/plugin-json';
-import commonjs from '@rollup/plugin-commonjs';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
 import license from 'rollup-plugin-license';
+import {globby} from 'globby';
 import {createTag, replaceResultTransformer} from 'common-tags';
 import {delete_comments as deleteComments} from 'delete_comments';
 import {defineConfig} from 'rollup';
 
+/** Matches empty lines: https://stackoverflow.com/q/16369642/10292952 */
+const emptyLineRegex = /^\s*[\r\n]/gm;
+
 const stripComments = createTag(
 	{onEndResult: deleteComments},
-	// Remove empty lines
-	// https://stackoverflow.com/q/16369642/10292952
-	replaceResultTransformer(/^\s*[\r\n]/gm, ''),
+	replaceResultTransformer(emptyLineRegex, ''),
 );
 
 const outputDirectory = 'build';
 
 export default defineConfig({
-	input: [
-		'source/index.js',
-		'source/options.js',
-		'source/parser.js',
-		'source/utils.js',
-		'source/validate.js',
-	],
+	input: await globby('source/**/*.js'),
 	output: {
 		dir: outputDirectory,
 		interop: 'esModule',

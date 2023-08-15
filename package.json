@@ -73,6 +73,7 @@
 		"decamelize-keys": "^2.0.1",
 		"delete_comments": "^0.0.2",
 		"execa": "^7.2.0",
+		"globby": "^13.2.2",
 		"hard-rejection": "^2.1.0",
 		"indent-string": "^5.0.0",
 		"minimist-options": "4.1.0",
