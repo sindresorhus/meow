@@ -2,7 +2,7 @@ import json from '@rollup/plugin-json';
 import commonjs from '@rollup/plugin-commonjs';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import license from 'rollup-plugin-license';
-import strip from 'strip-comments';
+/// import strip from 'strip-comments';
 import {defineConfig} from 'rollup';
 
 const outputDirectory = 'build';
@@ -27,12 +27,13 @@ export default defineConfig({
 				return 'dependencies';
 			}
 		},
-		plugins: [{
-			name: 'strip-dependency-comments',
-			renderChunk(code, chunk) {
-				return chunk.name === 'dependencies' ? strip(code) : null;
-			},
-		}],
+		// TODO: strip deletes `https://...`
+		// plugins: [{
+		// 	name: 'strip-dependency-comments',
+		// 	renderChunk(code, chunk) {
+		// 		return chunk.name === 'dependencies' ? strip(code) : null;
+		// 	},
+		// }],
 	},
 	preserveEntrySignatures: 'allow-extension',
 	plugins: [
