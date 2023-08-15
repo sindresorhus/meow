@@ -1,6 +1,7 @@
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {execa} from 'execa';
+import {createTag, stripIndentTransformer, trimResultTransformer} from 'common-tags';
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -15,3 +16,9 @@ export const spawnFixture = async (fixture = 'fixture.js', args = []) => {
 
 	return execa(getFixture(fixture), args);
 };
+
+// Use old behavior prior to zspecza/common-tags#165
+export const stripIndent = createTag(
+	stripIndentTransformer(),
+	trimResultTransformer(),
+);
