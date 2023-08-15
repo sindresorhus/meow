@@ -77,15 +77,15 @@
 		"minimist-options": "4.1.0",
 		"normalize-package-data": "^5.0.0",
 		"read-pkg": "^8.0.0",
-		"read-pkg-up": "^9.1.0",
+		"read-pkg-up": "^10.0.0",
 		"redent": "^4.0.0",
 		"rollup": "^3.27.0",
 		"rollup-plugin-license": "^3.0.1",
 		"strip-comments": "^2.0.1",
 		"trim-newlines": "^5.0.0",
 		"tsd": "^0.28.1",
-		"type-fest": "^3.9.0",
-		"xo": "^0.55.0",
+		"type-fest": "^4.2.0",
+		"xo": "^0.56.0",
 		"yargs-parser": "^21.1.1"
 	},
 	"xo": {
