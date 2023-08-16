@@ -1,6 +1,6 @@
 import test from 'ava';
-import {stripIndent} from 'common-tags';
 import meow from '../source/index.js';
+import {stripIndent} from './_utils.js';
 
 const importMeta = import.meta;
 
