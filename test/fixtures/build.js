@@ -18,8 +18,8 @@ const cli = meow(`
 });
 
 if (cli.flags.camelCaseOption === 'foo') {
-	for (const x of Object.keys(cli.flags)) {
-		console.log(x);
+	for (const flagKey of Object.keys(cli.flags)) {
+		console.log(flagKey);
 	}
 } else {
 	console.log(cli.flags.camelCaseOption);
