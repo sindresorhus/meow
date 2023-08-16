@@ -11,8 +11,12 @@ test('main', t => {
 		importMeta: import.meta,
 		argv: 'foo --foo-bar --u cat -- unicorn cake'.split(' '),
 		flags: {
-			unicorn: {shortFlag: 'u'},
-			meow: {default: 'dog'},
+			unicorn: {
+				shortFlag: 'u',
+			},
+			meow: {
+				default: 'dog',
+			},
 			'--': true,
 		},
 	});
@@ -23,7 +27,10 @@ test('main', t => {
 			fooBar: true,
 			meow: 'dog',
 			unicorn: 'cat',
-			'--': ['unicorn', 'cake'],
+			'--': [
+				'unicorn',
+				'cake',
+			],
 		},
 		pkg: {
 			name: 'meow',
