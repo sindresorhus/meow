@@ -12,7 +12,7 @@
 	},
 	"type": "module",
 	"exports": {
-		"types": "./index.d.ts",
+		"types": "./build/index.d.ts",
 		"default": "./build/index.js"
 	},
 	"sideEffects": false,
@@ -22,11 +22,10 @@
 	"scripts": {
 		"prepare": "npm run build",
 		"build": "rollup --config",
-		"test": "xo && tsd && npm run build && ava"
+		"test": "xo && npm run build && ava && tsd -t build/index.d.ts"
 	},
 	"files": [
-		"build",
-		"index.d.ts"
+		"build"
 	],
 	"keywords": [
 		"cli",
@@ -82,10 +81,12 @@
 		"read-pkg-up": "^10.0.0",
 		"redent": "^4.0.0",
 		"rollup": "^3.27.0",
+		"rollup-plugin-dts": "^6.0.0",
 		"rollup-plugin-license": "^3.0.1",
 		"trim-newlines": "^5.0.0",
 		"tsd": "^0.28.1",
 		"type-fest": "^4.2.0",
+		"typescript": "~5.1.6",
 		"xo": "^0.56.0",
 		"yargs-parser": "^21.1.1"
 	},

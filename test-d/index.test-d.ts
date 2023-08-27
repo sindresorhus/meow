@@ -1,6 +1,8 @@
 import {expectAssignable, expectError, expectType} from 'tsd';
 import type {PackageJson} from 'type-fest';
-import meow, {type Result, type AnyFlag} from './index.js';
+import meow, {type Result} from '../source/index.js';
+
+type AnyFlag = NonNullable<NonNullable<Parameters<typeof meow>[0]>['flags']>[string];
 
 const importMeta = import.meta;
 
