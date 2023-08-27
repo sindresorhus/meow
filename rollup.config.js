@@ -2,6 +2,7 @@ import {nodeResolve} from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import license from 'rollup-plugin-license';
+import {dts} from 'rollup-plugin-dts';
 import {globby} from 'globby';
 import {createTag, replaceResultTransformer} from 'common-tags';
 import {delete_comments as deleteComments} from 'delete_comments';
@@ -17,7 +18,7 @@ const stripComments = createTag(
 
 const outputDirectory = 'build';
 
-export default defineConfig({
+const config = defineConfig({
 	input: await globby('source/**/*.js'),
 	output: {
 		dir: outputDirectory,
@@ -55,3 +56,19 @@ export default defineConfig({
 		}),
 	],
 });
+
+const dtsConfig = defineConfig({
+	input: './source/index.d.ts',
+	output: {
+		file: `./${outputDirectory}/index.d.ts`,
+		format: 'es',
+	},
+	plugins: [
+		dts({
+			respectExternal: true,
+		}),
+	],
+});
+
+// eslint-disable-next-line import/no-anonymous-default-export
+export default [config, dtsConfig];

@@ -1,7 +1,7 @@
 {
-	"files": [
-		"index.d.ts",
-		"index.test-d.ts",
+	"include": [
+		"source/index.d.ts",
+		"test-d",
 	],
 	"compilerOptions": {
 		"strict": true,
