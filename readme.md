@@ -299,7 +299,7 @@ Default: `true`
 
 Whether to allow unknown flags or not.
 
-##### indent
+##### helpIndent
 
 Type `number`\
 Default: `2`

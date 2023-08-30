@@ -18,7 +18,7 @@ const buildResult = (options, parserOptions) => {
 		help = trimNewlines((options.help || '').replace(/\t+\n*$/, ''));
 
 		if (help.includes('\n')) {
-			help = redent(help, options.indent);
+			help = redent(help, options.helpIndent);
 		}
 
 		help = `\n${help}`;
@@ -31,7 +31,7 @@ const buildResult = (options, parserOptions) => {
 		({description} = package_);
 	}
 
-	description &&= help ? redent(`\n${description}\n`, options.indent) : `\n${description}`;
+	description &&= help ? redent(`\n${description}\n`, options.helpIndent) : `\n${description}`;
 	help = `${description || ''}${help}\n`;
 
 	const showHelp = code => {

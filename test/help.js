@@ -50,7 +50,7 @@ test('support help shortcut with no indentation', t => {
 		unicorn
 		cat
 	`, {
-		indent: 0,
+		helpIndent: 0,
 		importMeta,
 	}).help, indentString('\nCLI app helper\n\nunicorn\ncat\n', 0));
 });
@@ -60,7 +60,7 @@ test('no description and no indentation', t => {
 		unicorn
 		cat
 	`, {
-		indent: 0,
+		helpIndent: 0,
 		description: false,
 		importMeta,
 	}).help, indentString('\nunicorn\ncat\n', 0));

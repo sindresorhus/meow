@@ -313,7 +313,7 @@ export type Options<Flags extends AnyFlags> = {
 
 	@default true
 	*/
-	readonly indent?: number;
+	readonly helpIndent?: number;
 };
 
 type TypedFlag<Flag extends AnyFlag> =

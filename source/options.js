@@ -81,7 +81,7 @@ export const buildOptions = (helpText, options) => {
 		hardRejection: true,
 		allowUnknownFlags: true,
 		allowParentFlags: true,
-		indent: 2,
+		helpIndent: 2,
 		...options,
 	};
 
