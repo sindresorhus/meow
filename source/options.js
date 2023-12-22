@@ -1,7 +1,7 @@
 import process from 'node:process';
 import {dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {readPackageUpSync} from 'read-pkg-up';
+import {readPackageUpSync} from 'read-package-up';
 import {decamelizeFlagKey, joinFlagKeys} from './utils.js';
 
 const validateOptions = options => {

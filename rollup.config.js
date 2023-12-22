@@ -44,7 +44,7 @@ const config = defineConfig({
 		moduleSideEffects: 'no-external',
 	},
 	plugins: [
-		nodeResolve(),
+		nodeResolve({exportConditions: ['node']}),
 		commonjs({
 			include: 'node_modules/**',
 		}),
