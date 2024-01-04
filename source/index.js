@@ -3,7 +3,6 @@ import parseArguments from 'yargs-parser';
 import camelCaseKeys from 'camelcase-keys';
 import {trimNewlines} from 'trim-newlines';
 import redent from 'redent';
-import hardRejection from 'hard-rejection';
 import normalizePackageData from 'normalize-package-data';
 import {buildOptions} from './options.js';
 import {buildParserOptions} from './parser.js';
@@ -89,11 +88,6 @@ const buildResult = (options, parserOptions) => {
 
 const meow = (helpText, options = {}) => {
 	const parsedOptions = buildOptions(helpText, options);
-
-	if (parsedOptions.hardRejection) {
-		hardRejection();
-	}
-
 	const parserOptions = buildParserOptions(parsedOptions);
 	const result = buildResult(parsedOptions, parserOptions);
 

@@ -78,7 +78,6 @@ export const buildOptions = (helpText, options) => {
 		autoHelp: true,
 		autoVersion: true,
 		booleanDefault: false,
-		hardRejection: true,
 		allowUnknownFlags: true,
 		allowParentFlags: true,
 		...options,
