@@ -309,9 +309,9 @@ export type Options<Flags extends AnyFlags> = {
 	readonly allowUnknownFlags?: boolean;
 
 	/**
-	Indentation to use on helpText.
+	This controls how much the help text is indented when passing the help flag. A value of 0 will disable indentation.
 
-	@default true
+	@default 2
 	*/
 	readonly helpIndent?: number;
 };

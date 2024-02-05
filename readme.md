@@ -304,7 +304,7 @@ Whether to allow unknown flags or not.
 Type `number`\
 Default: `2`
 
-Indentation to use on helpText.
+This controls how much the help text is indented when passing the help flag. A value of 0 will disable indentation.
 
 ## Promises
 
