@@ -80,6 +80,7 @@ export const buildOptions = (helpText, options) => {
 		booleanDefault: false,
 		allowUnknownFlags: true,
 		allowParentFlags: true,
+		helpIndent: 2,
 		...options,
 	};
 
