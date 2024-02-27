@@ -1,6 +1,5 @@
 import test from 'ava';
 import indentString from 'indent-string';
-import {readPackage} from 'read-pkg';
 import meow from '../source/index.js';
 import {spawnFixture, __dirname} from './_utils.js';
 
@@ -28,27 +27,6 @@ test('return object', t => {
 	t.deepEqual(cli.flags['--'], ['unicorn', 'cake']);
 	t.is(cli.pkg.name, 'meow');
 	t.is(cli.help, indentString('\nCLI app helper\n\nUsage\n  foo <input>\n', 2));
-});
-
-test('spawn cli and show version', async t => {
-	const package_ = await readPackage();
-	const {stdout} = await spawnFixture(['--version']);
-	t.is(stdout, package_.version);
-});
-
-test('spawn cli and disabled autoVersion and autoHelp', async t => {
-	const {stdout} = await spawnFixture(['--version', '--help']);
-	t.is(stdout, 'version\nhelp\nmeow\ncamelCaseOption');
-});
-
-test('spawn cli and disabled autoVersion', async t => {
-	const {stdout} = await spawnFixture(['--version', '--no-auto-version']);
-	t.is(stdout, 'version\nautoVersion\nmeow\ncamelCaseOption');
-});
-
-test('spawn cli and not show version', async t => {
-	const {stdout} = await spawnFixture(['--version=beta']);
-	t.is(stdout, 'version\nmeow\ncamelCaseOption');
 });
 
 test('spawn cli and test input', async t => {

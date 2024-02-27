@@ -7,7 +7,7 @@ const importMeta = import.meta;
 /**
 A convenience-wrapper around `t.throws` with `meow`.
 
-@param {import('../index').Options} options `meow` options with `importMeta` set
+@param {import('../source/index.js').Options} options `meow` options with `importMeta` set
 @param {string} message The thrown error message. Strips indentation, so template literals can be used.
 */
 const meowThrows = test.macro((t, options, {message}) => {
@@ -20,10 +20,6 @@ const meowThrows = test.macro((t, options, {message}) => {
 
 	t.throws(() => meow(options), {message});
 });
-
-test('invalid package url', meowThrows, {
-	importMeta: '/path/to/package',
-}, {message: 'The `importMeta` option is required. Its value must be `import.meta`.'});
 
 test('supports `number` flag type - throws on incorrect default value', meowThrows, {
 	argv: [],

@@ -1,67 +1,113 @@
 import test from 'ava';
 import indentString from 'indent-string';
-import meow from '../source/index.js';
-import {spawnFixture} from './_utils.js';
+import {stripIndent} from 'common-tags';
+import meow from '../../source/index.js';
+import {spawnFixture, stripIndentTrim} from '../_utils.js';
 
 const importMeta = import.meta;
 
-test('support help shortcut', t => {
-	t.is(meow(`
+const verifyHelp = test.macro(async (t, {cli: cliArguments, args, expected}) => {
+	const assertions = await t.try(async tt => {
+		if (args) {
+			const {stdout} = await spawnFixture(args.split(' '));
+
+			tt.log('help text:\n', stdout);
+			tt.is(stdout, expected);
+		} else {
+			const cli = Array.isArray(cliArguments)
+				? meow(cliArguments.at(0), {importMeta, ...cliArguments.at(1)})
+				: meow({importMeta, ...cliArguments});
+
+			tt.log('help text:\n', cli.help);
+			tt.is(cli.help, expected);
+		}
+	});
+
+	assertions.commit({retainLogs: !assertions.passed});
+});
+
+test('support help shortcut', verifyHelp, {
+	cli: [`
 		unicorn
 		cat
-	`, {
-		importMeta,
-	}).help, indentString('\nCLI app helper\n\nunicorn\ncat\n', 2));
+	`],
+	expected: indentString('\nCLI app helper\n\nunicorn\ncat\n', 2),
 });
 
-test('spawn cli and show help screen', async t => {
-	const {stdout} = await spawnFixture(['--help']);
-	t.is(stdout, indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2));
+test('spawn cli and show help screen', verifyHelp, {
+	args: '--help',
+	expected: indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2),
 });
 
-test('spawn cli and disabled autoHelp', async t => {
-	const {stdout} = await spawnFixture(['--help', '--no-auto-help']);
-	t.is(stdout, 'help\nautoHelp\nmeow\ncamelCaseOption');
+test('spawn cli and disabled autoHelp', verifyHelp, {
+	args: '--help --no-auto-help',
+	expected: stripIndentTrim`
+		help
+		autoHelp
+		meow
+		camelCaseOption
+	`,
 });
 
-test('spawn cli and not show help', async t => {
-	const {stdout} = await spawnFixture(['--help=all']);
-	t.is(stdout, 'help\nmeow\ncamelCaseOption');
+test('spawn cli and not show help', verifyHelp, {
+	args: '--help=all',
+	expected: stripIndentTrim`
+		help
+		meow
+		camelCaseOption
+	`,
 });
 
-test('single line help messages are not indented', t => {
-	t.is(meow({
-		importMeta,
+test('single line help messages are not indented', verifyHelp, {
+	cli: {
 		description: false,
 		help: 'single line',
-	}).help, '\nsingle line\n');
+	},
+	expected: stripIndent`
+
+		single line
+	`,
 });
 
-test('descriptions with no help are not indented', t => {
-	t.is(meow({
-		importMeta,
+test('descriptions with no help are not indented', verifyHelp, {
+	cli: {
 		help: false,
 		description: 'single line',
-	}).help, '\nsingle line\n');
+	},
+	expected: stripIndent`
+
+		single line
+	`,
+
 });
 
-test('support help shortcut with no indentation', t => {
-	t.is(meow(`
+test('support help shortcut with no indentation', verifyHelp, {
+	cli: [`
 		unicorn
 		cat
 	`, {
 		helpIndent: 0,
-		importMeta,
-	}).help, indentString('\nCLI app helper\n\nunicorn\ncat\n', 0));
+	}],
+	expected: stripIndent`
+
+		CLI app helper
+
+		unicorn
+		cat
+	`,
 });
 
-test('no description and no indentation', t => {
-	t.is(meow(`
+test('no description and no indentation', verifyHelp, {
+	cli: [`
 		unicorn
 		cat
 	`, {
 		helpIndent: 0,
 		description: false,
-		importMeta,
-	}).help, indentString('\nunicorn\ncat\n', 0));
+	}],
+	expected: stripIndent`
+
+		unicorn
+		cat
+	`,
 });
