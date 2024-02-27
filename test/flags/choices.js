@@ -104,7 +104,9 @@ test('success with isMultiple', t => {
 		},
 	});
 
-	t.deepEqual(cli.flags.animal, ['dog', 'unicorn']);
+	t.like(cli.flags, {
+		animal: ['dog', 'unicorn'],
+	});
 });
 
 test('throws with isMultiple, one unknown value', t => {

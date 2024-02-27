@@ -81,6 +81,7 @@
 		"rollup": "^4.12.0",
 		"rollup-plugin-dts": "^6.1.0",
 		"rollup-plugin-license": "^3.2.0",
+		"stack-utils": "^2.0.6",
 		"trim-newlines": "^5.0.0",
 		"tsd": "^0.30.7",
 		"type-fest": "^4.10.3",

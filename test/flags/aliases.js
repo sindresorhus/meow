@@ -15,10 +15,8 @@ test('accepts one', t => {
 		},
 	});
 
-	t.like(cli, {
-		flags: {
-			fooBar: 'baz',
-		},
+	t.like(cli.flags, {
+		fooBar: 'baz',
 	});
 });
 
@@ -35,10 +33,8 @@ test('accepts multiple', t => {
 		},
 	});
 
-	t.like(cli, {
-		flags: {
-			fooBar: ['baz1', 'baz2'],
-		},
+	t.like(cli.flags, {
+		fooBar: ['baz1', 'baz2'],
 	});
 });
 
@@ -54,10 +50,8 @@ test('can be a short flag', t => {
 		},
 	});
 
-	t.like(cli, {
-		flags: {
-			fooBar: 'baz',
-		},
+	t.like(cli.flags, {
+		fooBar: 'baz',
 	});
 });
 
@@ -75,10 +69,8 @@ test('works with short flag', t => {
 		},
 	});
 
-	t.like(cli, {
-		flags: {
-			fooBar: ['baz1', 'baz2', 'baz3'],
-		},
+	t.like(cli.flags, {
+		fooBar: ['baz1', 'baz2', 'baz3'],
 	});
 });
 
@@ -95,11 +87,9 @@ test('unnormalized flags', t => {
 		},
 	});
 
-	t.like(cli, {
-		unnormalizedFlags: {
-			fooBar: 'baz',
-			foo: 'baz',
-			f: 'baz',
-		},
+	t.like(cli.unnormalizedFlags, {
+		fooBar: 'baz',
+		foo: 'baz',
+		f: 'baz',
 	});
 });
