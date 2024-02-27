@@ -1,14 +1,10 @@
-import path from 'node:path';
-import process from 'node:process';
 import test from 'ava';
 import indentString from 'indent-string';
-import {execa} from 'execa';
 import {readPackage} from 'read-pkg';
 import meow from '../source/index.js';
 import {spawnFixture, __dirname} from './_utils.js';
 
 const importMeta = import.meta;
-const NODE_MAJOR_VERSION = process.versions.node.split('.').at(0);
 
 test('return object', t => {
 	const cli = meow({
@@ -303,16 +299,3 @@ test('supports `number` flag type - no flag but default', t => {
 
 	t.is(cli, 2);
 });
-
-if (NODE_MAJOR_VERSION >= 14) {
-	test('supports es modules', async t => {
-		try {
-			const {stdout} = await execa('node', ['estest/index.js', '--version'], {
-				importMeta: path.join(__dirname, '..'),
-			});
-			t.regex(stdout, /1.2.3/);
-		} catch (error) {
-			t.is(error, undefined);
-		}
-	});
-}
