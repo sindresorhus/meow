@@ -31,9 +31,9 @@ test('spawn CLI and test help as a known flag', async t => {
 });
 
 test('spawn CLI and test version as a known flag', async t => {
-	const pkg = await readPackage();
+	const package_ = await readPackage();
 	const {stdout} = await spawnFixture(allowUnknownFlags, ['--version']);
-	t.is(stdout, pkg.version);
+	t.is(stdout, package_.version);
 });
 
 test('spawn CLI and test help as an unknown flag', async t => {
@@ -62,7 +62,7 @@ test('spawn CLI and test help with custom config', async t => {
 });
 
 test('spawn CLI and test version with custom config', async t => {
-	const pkg = await readPackage();
+	const package_ = await readPackage();
 	const {stdout} = await spawnFixture(allowUnknownFlagsWithHelp, ['-v']);
-	t.is(stdout, pkg.version);
+	t.is(stdout, package_.version);
 });

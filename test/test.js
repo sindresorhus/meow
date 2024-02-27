@@ -35,9 +35,9 @@ test('return object', t => {
 });
 
 test('spawn cli and show version', async t => {
-	const pkg = await readPackage();
+	const package_ = await readPackage();
 	const {stdout} = await spawnFixture(['--version']);
-	t.is(stdout, pkg.version);
+	t.is(stdout, package_.version);
 });
 
 test('spawn cli and disabled autoVersion and autoHelp', async t => {

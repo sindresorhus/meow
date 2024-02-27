@@ -153,10 +153,12 @@ test('choices - throws with multiple flags', t => {
 				},
 			},
 		});
-	}, {message: stripIndent`
-		Unknown value for flag \`--animal\`: \`dog\`. Value must be one of: [\`cat\`, \`unicorn\`]
-		Unknown value for flag \`--plant\`: \`succulent\`. Value must be one of: [\`tree\`, \`flower\`]
-	`});
+	}, {
+		message: stripIndent`
+			Unknown value for flag \`--animal\`: \`dog\`. Value must be one of: [\`cat\`, \`unicorn\`]
+			Unknown value for flag \`--plant\`: \`succulent\`. Value must be one of: [\`tree\`, \`flower\`]
+		`,
+	});
 });
 
 test('choices - choices must be of the same type', t => {

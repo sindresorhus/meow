@@ -7,14 +7,14 @@ export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const getFixture = fixture => path.join(__dirname, 'fixtures', fixture);
 
-export const spawnFixture = async (fixture = 'fixture.js', args = []) => {
-	// Allow calling with args first
+export const spawnFixture = async (fixture = 'fixture.js', arguments_ = []) => {
+	// Allow calling with arguments first
 	if (Array.isArray(fixture)) {
-		args = fixture;
+		arguments_ = fixture;
 		fixture = 'fixture.js';
 	}
 
-	return execa(getFixture(fixture), args);
+	return execa(getFixture(fixture), arguments_);
 };
 
 // Use old behavior prior to zspecza/common-tags#165

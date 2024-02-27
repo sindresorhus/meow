@@ -40,7 +40,7 @@ test('main', t => {
 });
 
 test('spawn cli and show version', async t => {
-	const pkg = await readPackage();
+	const package_ = await readPackage();
 	const {stdout} = await spawnFixture(['--version']);
-	t.is(stdout, pkg.version);
+	t.is(stdout, package_.version);
 });

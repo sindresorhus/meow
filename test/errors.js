@@ -79,8 +79,10 @@ test('options - multiple validation errors', meowThrows, {
 			type: 'string',
 		},
 	},
-}, {message: `
-	Flag keys may not contain '-'. Invalid flags: \`some-thing\`
-	The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`--plant\`
-	The option \`choices\` must be an array. Invalid flags: \`--animal\`
-`});
+}, {
+	message: `
+		Flag keys may not contain '-'. Invalid flags: \`some-thing\`
+		The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`--plant\`
+		The option \`choices\` must be an array. Invalid flags: \`--animal\`
+	`,
+});
