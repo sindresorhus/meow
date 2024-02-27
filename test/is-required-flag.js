@@ -1,5 +1,5 @@
 import test from 'ava';
-import {spawnFixture} from './_utils.js';
+import {spawnFixture, stripIndentTrim} from './_utils.js';
 
 const fixtureFolder = 'required';
 
@@ -14,11 +14,12 @@ test('spawn cli and test not specifying required flags', async t => {
 		{message: /^Command failed with exit code 2/},
 	);
 
-	t.regex(stderr, /Missing required flag/);
-	t.regex(stderr, /--test, -t/);
-	t.regex(stderr, /--number/);
-	t.regex(stderr, /--kebab-case/);
-	t.notRegex(stderr, /--not-required/);
+	t.is(stderr, stripIndentTrim`
+		Missing required flags
+			--test, -t
+			--number
+			--kebab-case
+	`);
 });
 
 test('spawn cli and test specifying all required flags', async t => {
@@ -32,8 +33,11 @@ test('spawn cli and test specifying required string flag with an empty string as
 		{message: /^Command failed with exit code 2/},
 	);
 
-	t.regex(stderr, /Missing required flag/);
-	t.notRegex(stderr, /--test, -t/);
+	t.is(stderr, stripIndentTrim`
+		Missing required flags
+			--number
+			--kebab-case
+	`);
 });
 
 test('spawn cli and test specifying required number flag without a number', async t => {
@@ -42,8 +46,12 @@ test('spawn cli and test specifying required number flag without a number', asyn
 		{message: /^Command failed with exit code 2/},
 	);
 
-	t.regex(stderr, /Missing required flag/);
-	t.regex(stderr, /--number/);
+	t.is(stderr, stripIndentTrim`
+		Missing required flags
+			--test, -t
+			--number
+			--kebab-case
+	`);
 });
 
 test('spawn cli and test setting isRequired as a function and not specifying any flags', async t => {
@@ -57,8 +65,10 @@ test('spawn cli and test setting isRequired as a function and specifying only th
 		{message: /^Command failed with exit code 2/},
 	);
 
-	t.regex(stderr, /Missing required flag/);
-	t.regex(stderr, /--with-trigger/);
+	t.is(stderr, stripIndentTrim`
+		Missing required flag
+			--with-trigger
+	`);
 });
 
 test('spawn cli and test setting isRequired as a function and specifying both the flags', async t => {
@@ -72,6 +82,7 @@ test('spawn cli and test setting isRequired as a function and check if returning
 		{message: /^Command failed with exit code 1/},
 	);
 
+	// TODO: parse stack trace?
 	t.regex(stderr, /Return value for isRequired callback should be of type boolean, but string was returned./);
 });
 
@@ -91,8 +102,10 @@ test('spawn cli and test isRequired with isMultiple giving no values, but flag i
 		{message: /^Command failed with exit code 2/},
 	);
 
-	t.regex(stderr, /Missing required flag/);
-	t.regex(stderr, /--test/);
+	t.is(stderr, stripIndentTrim`
+		Missing required flag
+			--test, -t
+	`);
 });
 
 test('spawn cli and test isRequired with isMultiple giving no values, but flag is not given', async t => {
@@ -101,8 +114,10 @@ test('spawn cli and test isRequired with isMultiple giving no values, but flag i
 		{message: /^Command failed with exit code 2/},
 	);
 
-	t.regex(stderr, /Missing required flag/);
-	t.regex(stderr, /--test/);
+	t.is(stderr, stripIndentTrim`
+		Missing required flag
+			--test, -t
+	`);
 });
 
 test('spawn cli and test isRequire function that returns false with isMultiple given no values, but flag is not given', async t => {

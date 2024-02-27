@@ -1,10 +1,10 @@
 import test from 'ava';
 import meow from '../source/index.js';
-import {stripIndent} from './_utils.js';
+import {stripIndentTrim} from './_utils.js';
 
 const importMeta = import.meta;
 
-test('choices - success case', t => {
+test('success case', t => {
 	const cli = meow({
 		importMeta,
 		argv: ['--animal', 'cat', '--number=2.2'],
@@ -19,11 +19,13 @@ test('choices - success case', t => {
 		},
 	});
 
-	t.is(cli.flags.animal, 'cat');
-	t.is(cli.flags.number, 2.2);
+	t.like(cli.flags, {
+		animal: 'cat',
+		number: 2.2,
+	});
 });
 
-test('choices - throws if input does not match choices', t => {
+test('throws if input does not match choices', t => {
 	t.throws(() => {
 		meow({
 			importMeta,
@@ -38,14 +40,14 @@ test('choices - throws if input does not match choices', t => {
 			},
 		});
 	}, {
-		message: stripIndent`
+		message: stripIndentTrim`
 			Unknown value for flag \`--animal\`: \`rainbow\`. Value must be one of: [\`dog\`, \`cat\`, \`unicorn\`]
 			Unknown value for flag \`--number\`: \`5\`. Value must be one of: [\`1\`, \`2\`, \`3\`]
 		`,
 	});
 });
 
-test('choices - throws if choices is not array', t => {
+test('throws if choices is not array', t => {
 	t.throws(() => {
 		meow({
 			importMeta,
@@ -59,7 +61,7 @@ test('choices - throws if choices is not array', t => {
 	}, {message: 'The option `choices` must be an array. Invalid flags: `--animal`'});
 });
 
-test('choices - does not throw error when isRequired is false', t => {
+test('does not throw error when isRequired is false', t => {
 	t.notThrows(() => {
 		meow({
 			importMeta,
@@ -74,7 +76,7 @@ test('choices - does not throw error when isRequired is false', t => {
 	});
 });
 
-test('choices - throw error when isRequired is true', t => {
+test('throw error when isRequired is true', t => {
 	t.throws(() => {
 		meow({
 			importMeta,
@@ -89,7 +91,7 @@ test('choices - throw error when isRequired is true', t => {
 	}, {message: 'Flag `--animal` has no value. Value must be one of: [`dog`, `cat`, `unicorn`]'});
 });
 
-test('choices - success with isMultiple', t => {
+test('success with isMultiple', t => {
 	const cli = meow({
 		importMeta,
 		argv: ['--animal=dog', '--animal=unicorn'],
@@ -105,7 +107,7 @@ test('choices - success with isMultiple', t => {
 	t.deepEqual(cli.flags.animal, ['dog', 'unicorn']);
 });
 
-test('choices - throws with isMultiple, one unknown value', t => {
+test('throws with isMultiple, one unknown value', t => {
 	t.throws(() => {
 		meow({
 			importMeta,
@@ -121,7 +123,7 @@ test('choices - throws with isMultiple, one unknown value', t => {
 	}, {message: 'Unknown value for flag `--animal`: `rabbit`. Value must be one of: [`dog`, `cat`, `unicorn`]'});
 });
 
-test('choices - throws with isMultiple, multiple unknown value', t => {
+test('throws with isMultiple, multiple unknown value', t => {
 	t.throws(() => {
 		meow({
 			importMeta,
@@ -137,7 +139,7 @@ test('choices - throws with isMultiple, multiple unknown value', t => {
 	}, {message: 'Unknown values for flag `--animal`: `dog`, `rabbit`. Value must be one of: [`cat`, `unicorn`]'});
 });
 
-test('choices - throws with multiple flags', t => {
+test('throws with multiple flags', t => {
 	t.throws(() => {
 		meow({
 			importMeta,
@@ -154,14 +156,14 @@ test('choices - throws with multiple flags', t => {
 			},
 		});
 	}, {
-		message: stripIndent`
+		message: stripIndentTrim`
 			Unknown value for flag \`--animal\`: \`dog\`. Value must be one of: [\`cat\`, \`unicorn\`]
 			Unknown value for flag \`--plant\`: \`succulent\`. Value must be one of: [\`tree\`, \`flower\`]
 		`,
 	});
 });
 
-test('choices - choices must be of the same type', t => {
+test('choices must be of the same type', t => {
 	t.throws(() => {
 		meow({
 			importMeta,
@@ -179,7 +181,7 @@ test('choices - choices must be of the same type', t => {
 	}, {message: 'Each value of the option `choices` must be of the same type as its flag. Invalid flags: (`--number`, type: \'number\'), (`--boolean`, type: \'boolean\')'});
 });
 
-test('choices - success when each value of default exist within the option choices', t => {
+test('success when each value of default exist within the option choices', t => {
 	t.notThrows(() => {
 		meow({
 			importMeta,
@@ -205,7 +207,7 @@ test('choices - success when each value of default exist within the option choic
 	});
 });
 
-test('choices - throws when default does not only include valid choices', t => {
+test('throws when default does not only include valid choices', t => {
 	t.throws(() => {
 		meow({
 			importMeta,

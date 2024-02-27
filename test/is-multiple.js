@@ -3,8 +3,8 @@ import meow from '../source/index.js';
 
 const importMeta = import.meta;
 
-test('isMultiple - unset flag returns empty array', t => {
-	t.deepEqual(meow({
+test('unset flag returns empty array', t => {
+	const cli = meow({
 		importMeta,
 		argv: [],
 		flags: {
@@ -13,13 +13,15 @@ test('isMultiple - unset flag returns empty array', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: [],
 	});
 });
 
-test('isMultiple - flag set once returns array', t => {
-	t.deepEqual(meow({
+test('flag set once returns array', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo=bar'],
 		flags: {
@@ -28,13 +30,15 @@ test('isMultiple - flag set once returns array', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: ['bar'],
 	});
 });
 
-test('isMultiple - flag set multiple times', t => {
-	t.deepEqual(meow({
+test('flag set multiple times', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo=bar', '--foo=baz'],
 		flags: {
@@ -43,13 +47,15 @@ test('isMultiple - flag set multiple times', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: ['bar', 'baz'],
 	});
 });
 
-test('isMultiple - flag with space separated values', t => {
-	const {input, flags} = meow({
+test('flag with space separated values', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo', 'bar', 'baz'],
 		flags: {
@@ -60,12 +66,16 @@ test('isMultiple - flag with space separated values', t => {
 		},
 	});
 
-	t.deepEqual(input, ['baz']);
-	t.deepEqual(flags.foo, ['bar']);
+	t.like(cli, {
+		input: ['baz'],
+		flags: {
+			foo: ['bar'],
+		},
+	});
 });
 
-test('isMultiple - flag with comma separated values', t => {
-	t.deepEqual(meow({
+test('flag with comma separated values', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo', 'bar,baz'],
 		flags: {
@@ -74,13 +84,15 @@ test('isMultiple - flag with comma separated values', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: ['bar,baz'],
 	});
 });
 
-test('isMultiple - default to type string', t => {
-	t.deepEqual(meow({
+test('default to type string', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo=bar'],
 		flags: {
@@ -88,13 +100,15 @@ test('isMultiple - default to type string', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: ['bar'],
 	});
 });
 
-test('isMultiple - boolean flag', t => {
-	t.deepEqual(meow({
+test('boolean flag', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo', '--foo=false'],
 		flags: {
@@ -103,13 +117,15 @@ test('isMultiple - boolean flag', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: [true, false],
 	});
 });
 
-test('isMultiple - boolean flag is false by default', t => {
-	t.deepEqual(meow({
+test('boolean flag is false by default', t => {
+	const cli = meow({
 		importMeta,
 		argv: [],
 		flags: {
@@ -118,13 +134,15 @@ test('isMultiple - boolean flag is false by default', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: [false],
 	});
 });
 
-test('isMultiple - number flag', t => {
-	t.deepEqual(meow({
+test('number flag', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo=1.3', '--foo=-1'],
 		flags: {
@@ -133,13 +151,15 @@ test('isMultiple - number flag', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: [1.3, -1],
 	});
 });
 
-test('isMultiple - flag default values', t => {
-	t.deepEqual(meow({
+test('flag default values', t => {
+	const cli = meow({
 		importMeta,
 		argv: [],
 		flags: {
@@ -159,15 +179,17 @@ test('isMultiple - flag default values', t => {
 				default: [0.5],
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		string: ['foo'],
 		boolean: [true],
 		number: [0.5],
 	});
 });
 
-test('isMultiple - multiple flag default values', t => {
-	t.deepEqual(meow({
+test('multiple flag default values', t => {
+	const cli = meow({
 		importMeta,
 		argv: [],
 		flags: {
@@ -187,7 +209,9 @@ test('isMultiple - multiple flag default values', t => {
 				default: [0.5, 1],
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		string: ['foo', 'bar'],
 		boolean: [true, false],
 		number: [0.5, 1],
@@ -195,8 +219,8 @@ test('isMultiple - multiple flag default values', t => {
 });
 
 // Happened in production 2020-05-10: https://github.com/sindresorhus/meow/pull/143#issuecomment-626287226
-test('isMultiple - handles multi-word flag name', t => {
-	t.deepEqual(meow({
+test('handles multi-word flag name', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo-bar=baz'],
 		flags: {
@@ -205,7 +229,9 @@ test('isMultiple - handles multi-word flag name', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		fooBar: ['baz'],
 	});
 });

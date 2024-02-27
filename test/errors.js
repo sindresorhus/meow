@@ -1,6 +1,6 @@
 import test from 'ava';
 import meow from '../source/index.js';
-import {stripIndent} from './_utils.js';
+import {stripIndentTrim} from './_utils.js';
 
 const importMeta = import.meta;
 
@@ -16,7 +16,7 @@ const meowThrows = test.macro((t, options, {message}) => {
 		...options,
 	};
 
-	message = stripIndent(message);
+	message = stripIndentTrim(message);
 
 	t.throws(() => meow(options), {message});
 });
@@ -32,7 +32,11 @@ test('supports `number` flag type - throws on incorrect default value', meowThro
 }, {message: 'Expected "foo" default value to be of type "number", got "string"'});
 
 test('flag declared in kebab-case is an error', meowThrows, {
-	flags: {'kebab-case': 'boolean', test: 'boolean', 'another-one': 'boolean'},
+	flags: {
+		'kebab-case': 'boolean',
+		test: 'boolean',
+		'another-one': 'boolean',
+	},
 }, {message: 'Flag keys may not contain \'-\'. Invalid flags: `kebab-case`, `another-one`'});
 
 test('single flag set more than once is an error', meowThrows, {

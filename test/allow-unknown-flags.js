@@ -1,7 +1,7 @@
 import test from 'ava';
 import indentString from 'indent-string';
 import {readPackage} from 'read-pkg';
-import {spawnFixture} from './_utils.js';
+import {spawnFixture, stripIndentTrim} from './_utils.js';
 
 const fixtureFolder = 'allow-unknown-flags';
 
@@ -14,10 +14,11 @@ test('spawn CLI and test specifying unknown flags', async t => {
 		{message: /^Command failed with exit code 2/},
 	);
 
-	t.regex(stderr, /Unknown flags/);
-	t.regex(stderr, /--unspecified-a/);
-	t.regex(stderr, /--unspecified-b/);
-	t.notRegex(stderr, /input-is-allowed/);
+	t.is(stderr, stripIndentTrim`
+		Unknown flags
+		--unspecified-a
+		--unspecified-b
+	`);
 });
 
 test('spawn CLI and test specifying known flags', async t => {
@@ -42,8 +43,10 @@ test('spawn CLI and test help as an unknown flag', async t => {
 		{message: /^Command failed with exit code 2/},
 	);
 
-	t.regex(stderr, /Unknown flag/);
-	t.regex(stderr, /--help/);
+	t.is(stderr, stripIndentTrim`
+		Unknown flag
+		--help
+	`);
 });
 
 test('spawn CLI and test version as an unknown flag', async t => {
@@ -52,8 +55,10 @@ test('spawn CLI and test version as an unknown flag', async t => {
 		{message: /^Command failed with exit code 2/},
 	);
 
-	t.regex(stderr, /Unknown flag/);
-	t.regex(stderr, /--version/);
+	t.is(stderr, stripIndentTrim`
+		Unknown flag
+		--version
+	`);
 });
 
 test('spawn CLI and test help with custom config', async t => {

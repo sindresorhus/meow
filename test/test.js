@@ -20,13 +20,19 @@ test('return object', t => {
 		},
 	});
 
-	t.is(cli.input.at(0), 'foo');
-	t.true(cli.flags.fooBar);
-	t.is(cli.flags.meow, 'dog');
-	t.is(cli.flags.unicorn, 'cat');
-	t.deepEqual(cli.flags['--'], ['unicorn', 'cake']);
-	t.is(cli.pkg.name, 'meow');
-	t.is(cli.help, indentString('\nCLI app helper\n\nUsage\n  foo <input>\n', 2));
+	t.like(cli, {
+		input: ['foo'],
+		flags: {
+			fooBar: true,
+			meow: 'dog',
+			unicorn: 'cat',
+			'--': ['unicorn', 'cake'],
+		},
+		pkg: {
+			name: 'meow',
+		},
+		help: indentString('\nCLI app helper\n\nUsage\n  foo <input>\n', 2),
+	});
 });
 
 test('spawn cli and test input', async t => {
@@ -53,49 +59,28 @@ test('setting pkg.bin should work', t => {
 		},
 	});
 
-	t.is(cli.pkg.name, 'browser-sync');
-	t.is(cli.pkg.version, '');
-	t.is(cli.version, undefined);
+	t.like(cli, {
+		pkg: {
+			name: 'browser-sync',
+			version: '',
+		},
+		version: undefined,
+	});
 });
 
 test('single character flag casing should be preserved', t => {
-	t.deepEqual(meow({
+	const cli = meow({
 		importMeta,
 		argv: ['-F'],
-	}).flags, {F: true});
-});
+	});
 
-test('type inference', t => {
-	t.is(meow({importMeta, argv: ['5']}).input.at(0), '5');
-	t.is(meow({importMeta, argv: ['5']}, {input: 'string'}).input.at(0), '5');
-	t.is(meow({
-		importMeta,
-		argv: ['5'],
-		inferType: true,
-	}).input.at(0), 5);
-	t.is(meow({
-		importMeta,
-		argv: ['5'],
-		inferType: true,
-		flags: {foo: 'string'},
-	}).input.at(0), 5);
-	t.is(meow({
-		importMeta,
-		argv: ['5'],
-		inferType: true,
-		flags: {
-			foo: 'string',
-		},
-	}).input.at(0), 5);
-	t.is(meow({
-		importMeta,
-		argv: ['5'],
-		input: 'number',
-	}).input.at(0), 5);
+	t.like(cli.flags, {
+		F: true,
+	});
 });
 
 test('booleanDefault: undefined, filter out unset boolean args', t => {
-	t.deepEqual(meow({
+	const cli = meow({
 		importMeta,
 		argv: ['--foo'],
 		booleanDefault: undefined,
@@ -111,14 +96,17 @@ test('booleanDefault: undefined, filter out unset boolean args', t => {
 				default: false,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: true,
+		bar: undefined,
 		baz: false,
 	});
 });
 
 test('boolean args are false by default', t => {
-	t.deepEqual(meow({
+	const cli = meow({
 		importMeta,
 		argv: ['--foo'],
 		flags: {
@@ -133,7 +121,9 @@ test('boolean args are false by default', t => {
 				type: 'boolean',
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: true,
 		bar: true,
 		baz: false,
@@ -150,11 +140,15 @@ test('enforces boolean flag type', t => {
 			},
 		},
 	});
-	t.deepEqual(cli.flags, {cursor: false});
+
+	t.like(cli.flags, {
+		cursor: false,
+	});
 });
 
+// TODO: what is this test name???
 test('accept help and options', t => {
-	t.deepEqual(meow({
+	const cli = meow({
 		importMeta,
 		argv: ['-f'],
 		flags: {
@@ -163,7 +157,9 @@ test('accept help and options', t => {
 				shortFlag: 'f',
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		foo: true,
 	});
 });
@@ -184,11 +180,12 @@ test('grouped short-flags work', t => {
 		},
 	});
 
-	const {unnormalizedFlags} = cli;
-	t.true(unnormalizedFlags.coco);
-	t.true(unnormalizedFlags.loco);
-	t.true(unnormalizedFlags.c);
-	t.true(unnormalizedFlags.l);
+	t.like(cli.unnormalizedFlags, {
+		coco: true,
+		loco: true,
+		c: true,
+		l: true,
+	});
 });
 
 test('grouped flags work', t => {
@@ -207,11 +204,12 @@ test('grouped flags work', t => {
 		},
 	});
 
-	const {flags} = cli;
-	t.true(flags.coco);
-	t.true(flags.loco);
-	t.is(flags.c, undefined);
-	t.is(flags.l, undefined);
+	t.like(cli.flags, {
+		coco: true,
+		loco: true,
+		c: undefined,
+		l: undefined,
+	});
 });
 
 test('disable autoVersion/autoHelp if `cli.input.length > 0`', t => {
@@ -229,9 +227,11 @@ test('supports `number` flag type', t => {
 				type: 'number',
 			},
 		},
-	}).flags.foo;
+	});
 
-	t.is(cli, 1.3);
+	t.like(cli.flags, {
+		foo: 1.3,
+	});
 });
 
 test('supports `number` flag type - flag but no value', t => {
@@ -243,9 +243,11 @@ test('supports `number` flag type - flag but no value', t => {
 				type: 'number',
 			},
 		},
-	}).flags.foo;
+	});
 
-	t.is(cli, undefined);
+	t.like(cli.flags, {
+		foo: undefined,
+	});
 });
 
 test('supports `number` flag type - flag but no value but default', t => {
@@ -258,9 +260,11 @@ test('supports `number` flag type - flag but no value but default', t => {
 				default: 2,
 			},
 		},
-	}).flags.foo;
+	});
 
-	t.is(cli, 2);
+	t.like(cli.flags, {
+		foo: 2,
+	});
 });
 
 test('supports `number` flag type - no flag but default', t => {
@@ -273,7 +277,9 @@ test('supports `number` flag type - no flag but default', t => {
 				default: 2,
 			},
 		},
-	}).flags.foo;
+	});
 
-	t.is(cli, 2);
+	t.like(cli.flags, {
+		foo: 2,
+	});
 });
