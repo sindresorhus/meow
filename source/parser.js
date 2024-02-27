@@ -23,7 +23,7 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 
 		if (flag.isMultiple) {
 			flag.type = flag.type ? `${flag.type}-array` : 'array';
-			flag.default = flag.default ?? [];
+			flag.default ??= [];
 			delete flag.isMultiple;
 		}
 
