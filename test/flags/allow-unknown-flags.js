@@ -1,7 +1,7 @@
 import test from 'ava';
 import indentString from 'indent-string';
 import {readPackage} from 'read-pkg';
-import {spawnFixture, stripIndentTrim} from './_utils.js';
+import {spawnFixture, stripIndentTrim} from '../_utils.js';
 
 const fixtureFolder = 'allow-unknown-flags';
 

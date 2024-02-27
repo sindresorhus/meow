@@ -1,5 +1,5 @@
 import test from 'ava';
-import {spawnFixture, stripIndentTrim} from './_utils.js';
+import {spawnFixture, stripIndentTrim} from '../_utils.js';
 
 const fixtureFolder = 'required';
 

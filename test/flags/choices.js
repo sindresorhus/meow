@@ -1,6 +1,6 @@
 import test from 'ava';
-import meow from '../source/index.js';
-import {stripIndentTrim} from './_utils.js';
+import meow from '../../source/index.js';
+import {stripIndentTrim} from '../_utils.js';
 
 const importMeta = import.meta;
 

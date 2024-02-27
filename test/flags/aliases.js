@@ -1,5 +1,5 @@
 import test from 'ava';
-import meow from '../source/index.js';
+import meow from '../../source/index.js';
 
 const importMeta = import.meta;
 
