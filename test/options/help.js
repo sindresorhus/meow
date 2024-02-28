@@ -1,12 +1,7 @@
 import test from 'ava';
 import indentString from 'indent-string';
 import meow from '../../source/index.js';
-import {
-	_verifyCli,
-	spawnFixture,
-	stripIndent,
-	stripIndentTrim,
-} from '../_utils.js';
+import {_verifyCli, stripIndent, stripIndentTrim} from '../_utils.js';
 
 const importMeta = import.meta;
 
