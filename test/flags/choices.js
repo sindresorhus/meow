@@ -1,37 +1,9 @@
 import test from 'ava';
 import {oneLine} from 'common-tags';
-import meow from '../../source/index.js';
 import {stripIndentTrim} from '../_utils.js';
+import {_verifyFlags} from './_utils.js';
 
-const importMeta = import.meta;
-
-const verifyChoices = test.macro(async (t, {flags, args, expected, error}) => {
-	const assertions = await t.try(async tt => {
-		const arguments_ = args?.split(' ') ?? [];
-		const meowOptions = {importMeta, argv: arguments_, flags};
-
-		tt.log('arguments:', arguments_);
-
-		if (error) {
-			tt.throws(() => meow(meowOptions), {
-				message(message) {
-					tt.log('error:\n', message);
-					return tt.is(message, error);
-				},
-			});
-		} else {
-			const cli = meow(meowOptions);
-
-			if (expected) {
-				tt.like(cli.flags, expected);
-			} else {
-				tt.pass();
-			}
-		}
-	});
-
-	assertions.commit({retainLogs: !assertions.passed});
-});
+const verifyChoices = _verifyFlags(import.meta);
 
 test('success case', verifyChoices, {
 	flags: {

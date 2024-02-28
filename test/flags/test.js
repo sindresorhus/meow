@@ -1,10 +1,8 @@
 import test from 'ava';
-import meow from '../../source/index.js';
+import {stripIndentTrim} from '../_utils.js';
+import {_verifyFlags} from './_utils.js';
 
-const verifyFlags = test.macro((t, {flags = {}, args, expected}) => {
-	const cli = meow({importMeta: import.meta, argv: args.split(' '), flags});
-	t.like(cli.flags, expected);
-});
+const verifyFlags = _verifyFlags(import.meta);
 
 test('flag types', verifyFlags, {
 	flags: {
@@ -18,6 +16,16 @@ test('flag types', verifyFlags, {
 		bar: 1.3,
 		baz: false,
 	},
+});
+
+test('throws if default value is not of the correct type', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'number',
+			default: 'x',
+		},
+	},
+	error: 'Expected "foo" default value to be of type "number", got "string"',
 });
 
 test('flag, no value', verifyFlags, {
@@ -61,4 +69,44 @@ test('single character flag casing should be preserved', verifyFlags, {
 	expected: {
 		F: true,
 	},
+});
+
+test('flag declared in kebab-case is an error', verifyFlags, {
+	flags: {
+		'kebab-case': {type: 'boolean'},
+		test: {type: 'boolean'},
+		'another-one': {type: 'boolean'},
+	},
+	error: 'Flag keys may not contain \'-\'. Invalid flags: `kebab-case`, `another-one`',
+});
+
+test('single flag set more than once is an error', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'string',
+		},
+	},
+	args: '--foo=bar --foo=baz',
+	error: 'The flag --foo can only be set once.',
+});
+
+test('options - multiple validation errors', verifyFlags, {
+	flags: {
+		animal: {
+			type: 'string',
+			choices: 'cat',
+		},
+		plant: {
+			type: 'string',
+			alias: 'p',
+		},
+		'some-thing': {
+			type: 'string',
+		},
+	},
+	error: stripIndentTrim`
+		Flag keys may not contain '-'. Invalid flags: \`some-thing\`
+		The option \`alias\` has been renamed to \`shortFlag\`. The following flags need to be updated: \`--plant\`
+		The option \`choices\` must be an array. Invalid flags: \`--animal\`
+	`,
 });

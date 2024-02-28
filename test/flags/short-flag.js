@@ -1,7 +1,9 @@
 import test from 'ava';
 import meow from '../../source/index.js';
+import {_verifyFlags} from './_utils.js';
 
 const importMeta = import.meta;
+const verifyFlags = _verifyFlags(importMeta);
 
 test('can be used in place of long flags', t => {
 	const cli = meow({
@@ -55,4 +57,22 @@ test('grouped flags work', t => {
 		c: true,
 		l: true,
 	});
+});
+
+test('suggests renaming alias to shortFlag', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'string',
+			alias: 'f',
+		},
+		bar: {
+			type: 'string',
+			alias: 'b',
+		},
+		baz: {
+			type: 'string',
+			shortFlag: 'z',
+		},
+	},
+	error: 'The option `alias` has been renamed to `shortFlag`. The following flags need to be updated: `--foo`, `--bar`',
 });
