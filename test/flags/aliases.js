@@ -1,10 +1,10 @@
 import test from 'ava';
-import meow from '../source/index.js';
+import meow from '../../source/index.js';
 
 const importMeta = import.meta;
 
-test('aliases - accepts one', t => {
-	t.deepEqual(meow({
+test('accepts one', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo=baz'],
 		flags: {
@@ -13,13 +13,15 @@ test('aliases - accepts one', t => {
 				aliases: ['foo'],
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		fooBar: 'baz',
 	});
 });
 
-test('aliases - accepts multiple', t => {
-	t.deepEqual(meow({
+test('accepts multiple', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo=baz1', '--bar=baz2'],
 		flags: {
@@ -29,13 +31,15 @@ test('aliases - accepts multiple', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		fooBar: ['baz1', 'baz2'],
 	});
 });
 
-test('aliases - can be a short flag', t => {
-	t.deepEqual(meow({
+test('can be a short flag', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--f=baz'],
 		flags: {
@@ -44,13 +48,15 @@ test('aliases - can be a short flag', t => {
 				aliases: ['f'],
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		fooBar: 'baz',
 	});
 });
 
-test('aliases - works with short flag', t => {
-	t.deepEqual(meow({
+test('works with short flag', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo=baz1', '--bar=baz2', '-f=baz3'],
 		flags: {
@@ -61,13 +67,15 @@ test('aliases - works with short flag', t => {
 				isMultiple: true,
 			},
 		},
-	}).flags, {
+	});
+
+	t.like(cli.flags, {
 		fooBar: ['baz1', 'baz2', 'baz3'],
 	});
 });
 
-test('aliases - unnormalized flags', t => {
-	t.deepEqual(meow({
+test('unnormalized flags', t => {
+	const cli = meow({
 		importMeta,
 		argv: ['--foo=baz'],
 		flags: {
@@ -77,7 +85,9 @@ test('aliases - unnormalized flags', t => {
 				shortFlag: 'f',
 			},
 		},
-	}).unnormalizedFlags, {
+	});
+
+	t.like(cli.unnormalizedFlags, {
 		fooBar: 'baz',
 		foo: 'baz',
 		f: 'baz',

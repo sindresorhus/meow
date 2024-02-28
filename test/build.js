@@ -1,7 +1,8 @@
 import test from 'ava';
-import {readPackage} from 'read-pkg';
 import meow from '../build/index.js';
-import {spawnFixture} from './_utils.js';
+import {_verifyCli, meowVersion} from './_utils.js';
+
+const verifyCli = _verifyCli();
 
 test('main', t => {
 	const cli = meow(`
@@ -39,8 +40,7 @@ test('main', t => {
 	});
 });
 
-test('spawn cli and show version', async t => {
-	const pkg = await readPackage();
-	const {stdout} = await spawnFixture(['--version']);
-	t.is(stdout, pkg.version);
+test('spawn cli and show version', verifyCli, {
+	args: '--version',
+	expected: meowVersion,
 });

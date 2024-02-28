@@ -1,0 +1,7 @@
+{
+	"name": "foo",
+	"bin": {
+		"bar": "./fixture.js"
+	},
+	"type": "module"
+}
