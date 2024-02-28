@@ -25,12 +25,25 @@ test('support help shortcut', verifyHelp, {
 		unicorn
 		cat
 	`],
-	expected: indentString('\nCLI app helper\n\nunicorn\ncat\n', 2),
+	expected: indentString(stripIndent`
+
+		CLI app helper
+
+		unicorn
+		cat
+	`, 2),
 });
 
 test('spawn cli and show help screen', verifyCli, {
 	args: '--help',
-	expected: indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2),
+	expected: indentString(stripIndent`
+
+		Custom description
+
+		Usage
+		  foo <input>
+
+	`, 2),
 });
 
 test('spawn cli and disabled autoHelp', verifyCli, {

@@ -3,13 +3,11 @@ import parseArguments from 'yargs-parser';
 import camelCaseKeys from 'camelcase-keys';
 import {trimNewlines} from 'trim-newlines';
 import redent from 'redent';
-import normalizePackageData from 'normalize-package-data';
 import {buildOptions} from './options.js';
 import {buildParserOptions} from './parser.js';
 import {validate, checkUnknownFlags, checkMissingRequiredFlags} from './validate.js';
 
-const buildResult = (options, parserOptions) => {
-	const {pkg: package_} = options;
+const buildResult = ({pkg: packageJson, ...options}, parserOptions) => {
 	const argv = parseArguments(options.argv, parserOptions);
 	let help = '';
 
@@ -23,12 +21,16 @@ const buildResult = (options, parserOptions) => {
 		help = `\n${help}`;
 	}
 
-	normalizePackageData(package_);
+	if (options.description !== false) {
+		let {description} = options;
 
-	let description = options.description ?? package_.description;
+		if (description) {
+			description = help ? redent(`\n${description}\n`, options.helpIndent) : `\n${description}`;
+			help = `${description}${help}`;
+		}
+	}
 
-	description &&= help ? redent(`\n${description}\n`, options.helpIndent) : `\n${description}`;
-	help = `${description || ''}${help}\n`;
+	help += '\n';
 
 	const showHelp = code => {
 		console.log(help);
@@ -36,7 +38,7 @@ const buildResult = (options, parserOptions) => {
 	};
 
 	const showVersion = () => {
-		console.log(typeof options.version === 'string' ? options.version : package_.version);
+		console.log(typeof options.version === 'string' ? options.version : packageJson.version);
 		process.exit(0);
 	};
 
@@ -76,7 +78,7 @@ const buildResult = (options, parserOptions) => {
 		input,
 		flags,
 		unnormalizedFlags,
-		pkg: package_,
+		pkg: packageJson,
 		help,
 		showHelp,
 		showVersion,

@@ -2,6 +2,7 @@ import process from 'node:process';
 import {dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {readPackageUpSync} from 'read-package-up';
+import normalizePackageData from 'normalize-package-data';
 import {decamelizeFlagKey, joinFlagKeys} from './utils.js';
 
 const validateOptions = options => {
@@ -63,17 +64,21 @@ export const buildOptions = (helpText, options) => {
 		throw new TypeError('The `importMeta` option is required. Its value must be `import.meta`.');
 	}
 
-	const foundPackage = readPackageUpSync({
+	const foundPackage = options.pkg ?? readPackageUpSync({
 		cwd: dirname(fileURLToPath(options.importMeta.url)),
 		normalize: false,
-	});
+	})?.packageJson;
+
+	// eslint-disable-next-line unicorn/prevent-abbreviations
+	const pkg = foundPackage ?? {};
+	normalizePackageData(pkg);
 
 	const parsedOptions = {
-		pkg: foundPackage ? foundPackage.packageJson : {},
 		argv: process.argv.slice(2),
 		flags: {},
 		inferType: false,
 		input: 'string',
+		description: pkg.description ?? false,
 		help: helpText,
 		autoHelp: true,
 		autoVersion: true,
@@ -82,6 +87,7 @@ export const buildOptions = (helpText, options) => {
 		allowParentFlags: true,
 		helpIndent: 2,
 		...options,
+		pkg,
 	};
 
 	validateOptions(parsedOptions);
