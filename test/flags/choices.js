@@ -1,236 +1,215 @@
 import test from 'ava';
+import {oneLine} from 'common-tags';
 import meow from '../../source/index.js';
 import {stripIndentTrim} from '../_utils.js';
 
 const importMeta = import.meta;
 
-test('success case', t => {
-	const cli = meow({
-		importMeta,
-		argv: ['--animal', 'cat', '--number=2.2'],
-		flags: {
-			animal: {
-				choices: ['dog', 'cat', 'unicorn'],
-			},
-			number: {
-				type: 'number',
-				choices: [1.1, 2.2, 3.3],
-			},
-		},
+const verifyChoices = test.macro(async (t, {flags, args, expected, error}) => {
+	const assertions = await t.try(async tt => {
+		const arguments_ = args?.split(' ') ?? [];
+		const meowOptions = {importMeta, argv: arguments_, flags};
+
+		tt.log('arguments:', arguments_);
+
+		if (error) {
+			tt.throws(() => meow(meowOptions), {
+				message(message) {
+					tt.log('error:\n', message);
+					return tt.is(message, error);
+				},
+			});
+		} else {
+			const cli = meow(meowOptions);
+
+			if (expected) {
+				tt.like(cli.flags, expected);
+			} else {
+				tt.pass();
+			}
+		}
 	});
 
-	t.like(cli.flags, {
+	assertions.commit({retainLogs: !assertions.passed});
+});
+
+test('success case', verifyChoices, {
+	flags: {
+		animal: {
+			choices: ['dog', 'cat', 'unicorn'],
+		},
+		number: {
+			type: 'number',
+			choices: [1.1, 2.2, 3.3],
+		},
+	},
+	args: '--animal cat --number=2.2',
+	expected: {
 		animal: 'cat',
 		number: 2.2,
-	});
+	},
 });
 
-test('throws if input does not match choices', t => {
-	t.throws(() => {
-		meow({
-			importMeta,
-			argv: ['--animal', 'rainbow', '--number', 5],
-			flags: {
-				animal: {
-					choices: ['dog', 'cat', 'unicorn'],
-				},
-				number: {
-					choices: [1, 2, 3],
-				},
-			},
-		});
-	}, {
-		message: stripIndentTrim`
-			Unknown value for flag \`--animal\`: \`rainbow\`. Value must be one of: [\`dog\`, \`cat\`, \`unicorn\`]
-			Unknown value for flag \`--number\`: \`5\`. Value must be one of: [\`1\`, \`2\`, \`3\`]
-		`,
-	});
-});
-
-test('throws if choices is not array', t => {
-	t.throws(() => {
-		meow({
-			importMeta,
-			argv: ['--animal', 'cat'],
-			flags: {
-				animal: {
-					choices: 'cat',
-				},
-			},
-		});
-	}, {message: 'The option `choices` must be an array. Invalid flags: `--animal`'});
-});
-
-test('does not throw error when isRequired is false', t => {
-	t.notThrows(() => {
-		meow({
-			importMeta,
-			argv: [],
-			flags: {
-				animal: {
-					isRequired: false,
-					choices: ['dog', 'cat', 'unicorn'],
-				},
-			},
-		});
-	});
-});
-
-test('throw error when isRequired is true', t => {
-	t.throws(() => {
-		meow({
-			importMeta,
-			argv: [],
-			flags: {
-				animal: {
-					isRequired: true,
-					choices: ['dog', 'cat', 'unicorn'],
-				},
-			},
-		});
-	}, {message: 'Flag `--animal` has no value. Value must be one of: [`dog`, `cat`, `unicorn`]'});
-});
-
-test('success with isMultiple', t => {
-	const cli = meow({
-		importMeta,
-		argv: ['--animal=dog', '--animal=unicorn'],
-		flags: {
-			animal: {
-				type: 'string',
-				isMultiple: true,
-				choices: ['dog', 'cat', 'unicorn'],
-			},
+test('throws if input does not match choices', verifyChoices, {
+	flags: {
+		animal: {
+			choices: ['dog', 'cat', 'unicorn'],
 		},
-	});
+		number: {
+			choices: [1, 2, 3],
+		},
+	},
+	args: '--animal rainbow --number 5',
+	error: stripIndentTrim`
+		Unknown value for flag \`--animal\`: \`rainbow\`. Value must be one of: [\`dog\`, \`cat\`, \`unicorn\`]
+		Unknown value for flag \`--number\`: \`5\`. Value must be one of: [\`1\`, \`2\`, \`3\`]
+	`,
+});
 
-	t.like(cli.flags, {
+test('throws if choices is not array', verifyChoices, {
+	flags: {
+		animal: {
+			choices: 'cat',
+		},
+	},
+	args: '--animal cat',
+	error: 'The option `choices` must be an array. Invalid flags: `--animal`',
+});
+
+test('does not throw error when isRequired is false', verifyChoices, {
+	flags: {
+		animal: {
+			isRequired: false,
+			choices: ['dog', 'cat', 'unicorn'],
+		},
+	},
+});
+
+test('throw error when isRequired is true', verifyChoices, {
+	flags: {
+		animal: {
+			isRequired: true,
+			choices: ['dog', 'cat', 'unicorn'],
+		},
+	},
+	error: 'Flag `--animal` has no value. Value must be one of: [`dog`, `cat`, `unicorn`]',
+});
+
+test('success with isMultiple', verifyChoices, {
+	flags: {
+		animal: {
+			type: 'string',
+			isMultiple: true,
+			choices: ['dog', 'cat', 'unicorn'],
+		},
+	},
+	args: '--animal=dog --animal=unicorn',
+	expected: {
 		animal: ['dog', 'unicorn'],
-	});
+	},
 });
 
-test('throws with isMultiple, one unknown value', t => {
-	t.throws(() => {
-		meow({
-			importMeta,
-			argv: ['--animal=dog', '--animal=rabbit'],
-			flags: {
-				animal: {
-					type: 'string',
-					isMultiple: true,
-					choices: ['dog', 'cat', 'unicorn'],
-				},
-			},
-		});
-	}, {message: 'Unknown value for flag `--animal`: `rabbit`. Value must be one of: [`dog`, `cat`, `unicorn`]'});
+test('throws with isMultiple, one unknown value', verifyChoices, {
+	flags: {
+		animal: {
+			type: 'string',
+			isMultiple: true,
+			choices: ['dog', 'cat', 'unicorn'],
+		},
+	},
+	args: '--animal=dog --animal=rabbit',
+	error: 'Unknown value for flag `--animal`: `rabbit`. Value must be one of: [`dog`, `cat`, `unicorn`]',
 });
 
-test('throws with isMultiple, multiple unknown value', t => {
-	t.throws(() => {
-		meow({
-			importMeta,
-			argv: ['--animal=dog', '--animal=rabbit'],
-			flags: {
-				animal: {
-					type: 'string',
-					isMultiple: true,
-					choices: ['cat', 'unicorn'],
-				},
-			},
-		});
-	}, {message: 'Unknown values for flag `--animal`: `dog`, `rabbit`. Value must be one of: [`cat`, `unicorn`]'});
+test('throws with isMultiple, multiple unknown value', verifyChoices, {
+	flags: {
+		animal: {
+			type: 'string',
+			isMultiple: true,
+			choices: ['cat', 'unicorn'],
+		},
+	},
+	args: '--animal=dog --animal=rabbit',
+	error: 'Unknown values for flag `--animal`: `dog`, `rabbit`. Value must be one of: [`cat`, `unicorn`]',
 });
 
-test('throws with multiple flags', t => {
-	t.throws(() => {
-		meow({
-			importMeta,
-			argv: ['--animal=dog', '--plant=succulent'],
-			flags: {
-				animal: {
-					type: 'string',
-					choices: ['cat', 'unicorn'],
-				},
-				plant: {
-					type: 'string',
-					choices: ['tree', 'flower'],
-				},
-			},
-		});
-	}, {
-		message: stripIndentTrim`
-			Unknown value for flag \`--animal\`: \`dog\`. Value must be one of: [\`cat\`, \`unicorn\`]
-			Unknown value for flag \`--plant\`: \`succulent\`. Value must be one of: [\`tree\`, \`flower\`]
-		`,
-	});
+test('throws with multiple flags', verifyChoices, {
+	flags: {
+		animal: {
+			type: 'string',
+			choices: ['cat', 'unicorn'],
+		},
+		plant: {
+			type: 'string',
+			choices: ['tree', 'flower'],
+		},
+	},
+	args: '--animal=dog --plant=succulent',
+	error: stripIndentTrim`
+		Unknown value for flag \`--animal\`: \`dog\`. Value must be one of: [\`cat\`, \`unicorn\`]
+		Unknown value for flag \`--plant\`: \`succulent\`. Value must be one of: [\`tree\`, \`flower\`]
+	`,
 });
 
-test('choices must be of the same type', t => {
-	t.throws(() => {
-		meow({
-			importMeta,
-			flags: {
-				number: {
-					type: 'number',
-					choices: [1, '2'],
-				},
-				boolean: {
-					type: 'boolean',
-					choices: [true, 'false'],
-				},
-			},
-		});
-	}, {message: 'Each value of the option `choices` must be of the same type as its flag. Invalid flags: (`--number`, type: \'number\'), (`--boolean`, type: \'boolean\')'});
+test('choices must be of the same type', verifyChoices, {
+	flags: {
+		number: {
+			type: 'number',
+			choices: [1, '2'],
+		},
+		boolean: {
+			type: 'boolean',
+			choices: [true, 'false'],
+		},
+	},
+	error: oneLine`
+		Each value of the option \`choices\` must be of the same type as its flag.
+		Invalid flags: (\`--number\`, type: 'number'), (\`--boolean\`, type: 'boolean')
+	`,
 });
 
-test('success when each value of default exist within the option choices', t => {
-	t.notThrows(() => {
-		meow({
-			importMeta,
-			flags: {
-				number: {
-					type: 'number',
-					choices: [1, 2, 3],
-					default: 1,
-				},
-				string: {
-					type: 'string',
-					choices: ['dog', 'cat', 'unicorn'],
-					default: 'dog',
-				},
-				multiString: {
-					type: 'string',
-					choices: ['dog', 'cat', 'unicorn'],
-					default: ['dog', 'cat'],
-					isMultiple: true,
-				},
-			},
-		});
-	});
+test('success when each value of default exist within the option choices', verifyChoices, {
+	flags: {
+		number: {
+			type: 'number',
+			choices: [1, 2, 3],
+			default: 1,
+		},
+		string: {
+			type: 'string',
+			choices: ['dog', 'cat', 'unicorn'],
+			default: 'dog',
+		},
+		multiString: {
+			type: 'string',
+			choices: ['dog', 'cat', 'unicorn'],
+			default: ['dog', 'cat'],
+			isMultiple: true,
+		},
+	},
 });
 
-test('throws when default does not only include valid choices', t => {
-	t.throws(() => {
-		meow({
-			importMeta,
-			flags: {
-				number: {
-					type: 'number',
-					choices: [1, 2, 3],
-					default: 8,
-				},
-				string: {
-					type: 'string',
-					choices: ['dog', 'cat'],
-					default: 'unicorn',
-				},
-				multiString: {
-					type: 'string',
-					choices: ['dog', 'cat'],
-					default: ['dog', 'unicorn'],
-					isMultiple: true,
-				},
-			},
-		});
-	}, {message: 'Each value of the option `default` must exist within the option `choices`. Invalid flags: `--number`, `--string`, `--multiString`'});
+test('throws when default does not only include valid choices', verifyChoices, {
+	flags: {
+		number: {
+			type: 'number',
+			choices: [1, 2, 3],
+			default: 8,
+		},
+		string: {
+			type: 'string',
+			choices: ['dog', 'cat'],
+			default: 'unicorn',
+		},
+		multiString: {
+			type: 'string',
+			choices: ['dog', 'cat'],
+			default: ['dog', 'unicorn'],
+			isMultiple: true,
+		},
+	},
+	error: oneLine`
+		Each value of the option \`default\` must exist within the option \`choices\`.
+		Invalid flags: \`--number\`, \`--string\`, \`--multiString\`
+	`,
 });

@@ -235,3 +235,21 @@ test('handles multi-word flag name', t => {
 		fooBar: ['baz'],
 	});
 });
+
+test('works with short flags', t => {
+	const cli = meow({
+		importMeta,
+		argv: ['-f', 'bar', '-f', 'baz'],
+		flags: {
+			foo: {
+				type: 'string',
+				shortFlag: 'f',
+				isMultiple: true,
+			},
+		},
+	});
+
+	t.like(cli.flags, {
+		foo: ['bar', 'baz'],
+	});
+});
