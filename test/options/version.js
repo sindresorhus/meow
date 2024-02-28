@@ -1,16 +1,7 @@
 import test from 'ava';
-import {spawnFixture, stripIndentTrim} from '../_utils.js';
+import {_verifyCli, defaultFixture, stripIndentTrim} from '../_utils.js';
 
-const verifyVersion = test.macro(async (t, {fixture = 'version/fixture.js', args, execaOptions, expected}) => {
-	const assertions = await t.try(async tt => {
-		const {stdout} = await spawnFixture(fixture, args.split(' '), execaOptions);
-
-		tt.log('version:', stdout);
-		tt.is(stdout, expected);
-	});
-
-	assertions.commit({retainLogs: !assertions.passed});
-});
+const verifyVersion = _verifyCli('version/fixture.js');
 
 test('spawn cli and show version', verifyVersion, {
 	args: '--version',
@@ -18,7 +9,7 @@ test('spawn cli and show version', verifyVersion, {
 });
 
 test('spawn cli and disabled autoVersion', verifyVersion, {
-	fixture: 'fixture.js',
+	fixture: defaultFixture,
 	args: '--version --no-auto-version',
 	expected: stripIndentTrim`
 		version
@@ -29,7 +20,7 @@ test('spawn cli and disabled autoVersion', verifyVersion, {
 });
 
 test('spawn cli and not show version', verifyVersion, {
-	fixture: 'fixture.js',
+	fixture: defaultFixture,
 	args: '--version=beta',
 	expected: stripIndentTrim`
 		version

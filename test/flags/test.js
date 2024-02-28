@@ -18,6 +18,19 @@ test('flag types', verifyFlags, {
 	},
 });
 
+test('supports negation via --no', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'boolean',
+			default: true,
+		},
+	},
+	args: '--no-foo',
+	expected: {
+		foo: false,
+	},
+});
+
 test('throws if default value is not of the correct type', verifyFlags, {
 	flags: {
 		foo: {

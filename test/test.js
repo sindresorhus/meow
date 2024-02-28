@@ -36,6 +36,16 @@ test('return object', t => {
 	});
 });
 
+test('spawn cli and disabled autoVersion and autoHelp', verifyCli, {
+	args: '--version --help',
+	expected: stripIndentTrim`
+		version
+		help
+		meow
+		camelCaseOption
+	`,
+});
+
 test('spawn cli and test input', verifyCli, {
 	args: '-u cat',
 	expected: stripIndentTrim`

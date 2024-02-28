@@ -6,13 +6,15 @@ import {readPackage} from 'read-pkg';
 import {createTag, stripIndentTransformer, trimResultTransformer} from 'common-tags';
 import StackUtils from 'stack-utils';
 
+export const defaultFixture = 'fixture.js';
+
 const getFixture = fixture => fileURLToPath(new URL(`fixtures/${fixture}`, import.meta.url));
 
-export const spawnFixture = async (fixture = 'fixture.js', arguments_ = [], options = {}) => {
+export const spawnFixture = async (fixture = defaultFixture, arguments_ = [], options = {}) => {
 	// Allow calling with arguments first
 	if (Array.isArray(fixture)) {
 		arguments_ = fixture;
-		fixture = 'fixture.js';
+		fixture = defaultFixture;
 	}
 
 	return execa(getFixture(fixture), arguments_, options);
@@ -33,8 +35,8 @@ const stackUtils = new StackUtils();
 
 export const stackToErrorMessage = stack => stackUtils.clean(stack).split('\n').at(0);
 
-export const _verifyCli = (defaultFixture = 'fixture.js') => test.macro(
-	async (t, {fixture = defaultFixture, args, execaOptions, expected, error}) => {
+export const _verifyCli = (baseFixture = defaultFixture) => test.macro(
+	async (t, {fixture = baseFixture, args, execaOptions, expected, error}) => {
 		const assertions = await t.try(async tt => {
 			const arguments_ = args ? args.split(' ') : [];
 			const {stdout, stderr, exitCode} = await spawnFixture(fixture, arguments_, {reject: false, ...execaOptions});

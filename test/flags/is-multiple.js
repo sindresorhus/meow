@@ -1,57 +1,46 @@
 import test from 'ava';
 import meow from '../../source/index.js';
+import {_verifyFlags} from './_utils.js';
 
 const importMeta = import.meta;
+const verifyFlags = _verifyFlags(importMeta);
 
-test('unset flag returns empty array', t => {
-	const cli = meow({
-		importMeta,
-		argv: [],
-		flags: {
-			foo: {
-				type: 'string',
-				isMultiple: true,
-			},
+test('unset flag returns empty array', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'string',
+			isMultiple: true,
 		},
-	});
-
-	t.like(cli.flags, {
+	},
+	expected: {
 		foo: [],
-	});
+	},
 });
 
-test('flag set once returns array', t => {
-	const cli = meow({
-		importMeta,
-		argv: ['--foo=bar'],
-		flags: {
-			foo: {
-				type: 'string',
-				isMultiple: true,
-			},
+test('flag set once returns array', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'string',
+			isMultiple: true,
 		},
-	});
-
-	t.like(cli.flags, {
+	},
+	args: '--foo=bar',
+	expected: {
 		foo: ['bar'],
-	});
+	},
 });
 
-test('flag set multiple times', t => {
-	const cli = meow({
-		importMeta,
-		argv: ['--foo=bar', '--foo=baz'],
-		flags: {
-			foo: {
-				type: 'string',
-				isMultiple: true,
-			},
+test('flag set multiple times', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'string',
+			isMultiple: true,
 		},
-	});
-
-	t.like(cli.flags, {
+	},
+	args: '--foo=bar --foo=baz',
+	expected: {
 		foo: ['bar', 'baz'],
-	});
+	},
 });
 
 test('flag with space separated values', t => {
@@ -74,182 +63,143 @@ test('flag with space separated values', t => {
 	});
 });
 
-test('flag with comma separated values', t => {
-	const cli = meow({
-		importMeta,
-		argv: ['--foo', 'bar,baz'],
-		flags: {
-			foo: {
-				type: 'string',
-				isMultiple: true,
-			},
+test('does not support comma separated values', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'string',
+			isMultiple: true,
 		},
-	});
-
-	t.like(cli.flags, {
+	},
+	args: '--foo bar,baz',
+	expected: {
 		foo: ['bar,baz'],
-	});
+	},
 });
 
-test('default to type string', t => {
-	const cli = meow({
-		importMeta,
-		argv: ['--foo=bar'],
-		flags: {
-			foo: {
-				isMultiple: true,
-			},
+test('default to type string', verifyFlags, {
+	flags: {
+		foo: {
+			isMultiple: true,
 		},
-	});
-
-	t.like(cli.flags, {
+	},
+	args: '--foo=bar',
+	expected: {
 		foo: ['bar'],
-	});
+	},
 });
 
-test('boolean flag', t => {
-	const cli = meow({
-		importMeta,
-		argv: ['--foo', '--foo=false'],
-		flags: {
-			foo: {
-				type: 'boolean',
-				isMultiple: true,
-			},
+test('boolean flag', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'boolean',
+			isMultiple: true,
 		},
-	});
-
-	t.like(cli.flags, {
+	},
+	args: '--foo --foo=false',
+	expected: {
 		foo: [true, false],
-	});
+	},
 });
 
-test('boolean flag is false by default', t => {
-	const cli = meow({
-		importMeta,
-		argv: [],
-		flags: {
-			foo: {
-				type: 'boolean',
-				isMultiple: true,
-			},
+test('boolean flag is false by default', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'boolean',
+			isMultiple: true,
 		},
-	});
-
-	t.like(cli.flags, {
+	},
+	expected: {
 		foo: [false],
-	});
+	},
 });
 
-test('number flag', t => {
-	const cli = meow({
-		importMeta,
-		argv: ['--foo=1.3', '--foo=-1'],
-		flags: {
-			foo: {
-				type: 'number',
-				isMultiple: true,
-			},
+test('number flag', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'number',
+			isMultiple: true,
 		},
-	});
-
-	t.like(cli.flags, {
+	},
+	args: '--foo=1.3 --foo=-1',
+	expected: {
 		foo: [1.3, -1],
-	});
+	},
 });
 
-test('flag default values', t => {
-	const cli = meow({
-		importMeta,
-		argv: [],
-		flags: {
-			string: {
-				type: 'string',
-				isMultiple: true,
-				default: ['foo'],
-			},
-			boolean: {
-				type: 'boolean',
-				isMultiple: true,
-				default: [true],
-			},
-			number: {
-				type: 'number',
-				isMultiple: true,
-				default: [0.5],
-			},
+test('flag default values', verifyFlags, {
+	flags: {
+		string: {
+			type: 'string',
+			isMultiple: true,
+			default: ['foo'],
 		},
-	});
-
-	t.like(cli.flags, {
+		boolean: {
+			type: 'boolean',
+			isMultiple: true,
+			default: [true],
+		},
+		number: {
+			type: 'number',
+			isMultiple: true,
+			default: [0.5],
+		},
+	},
+	expected: {
 		string: ['foo'],
 		boolean: [true],
 		number: [0.5],
-	});
+	},
 });
 
-test('multiple flag default values', t => {
-	const cli = meow({
-		importMeta,
-		argv: [],
-		flags: {
-			string: {
-				type: 'string',
-				isMultiple: true,
-				default: ['foo', 'bar'],
-			},
-			boolean: {
-				type: 'boolean',
-				isMultiple: true,
-				default: [true, false],
-			},
-			number: {
-				type: 'number',
-				isMultiple: true,
-				default: [0.5, 1],
-			},
+test('multiple flag default values', verifyFlags, {
+	flags: {
+		string: {
+			type: 'string',
+			isMultiple: true,
+			default: ['foo', 'bar'],
 		},
-	});
-
-	t.like(cli.flags, {
+		boolean: {
+			type: 'boolean',
+			isMultiple: true,
+			default: [true, false],
+		},
+		number: {
+			type: 'number',
+			isMultiple: true,
+			default: [0.5, 1],
+		},
+	},
+	expected: {
 		string: ['foo', 'bar'],
 		boolean: [true, false],
 		number: [0.5, 1],
-	});
+	},
 });
 
 // Happened in production 2020-05-10: https://github.com/sindresorhus/meow/pull/143#issuecomment-626287226
-test('handles multi-word flag name', t => {
-	const cli = meow({
-		importMeta,
-		argv: ['--foo-bar=baz'],
-		flags: {
-			fooBar: {
-				type: 'string',
-				isMultiple: true,
-			},
+test('handles multi-word flag name', verifyFlags, {
+	flags: {
+		fooBar: {
+			type: 'string',
+			isMultiple: true,
 		},
-	});
-
-	t.like(cli.flags, {
+	},
+	args: '--foo-bar=baz',
+	expected: {
 		fooBar: ['baz'],
-	});
+	},
 });
 
-test('works with short flags', t => {
-	const cli = meow({
-		importMeta,
-		argv: ['-f', 'bar', '-f', 'baz'],
-		flags: {
-			foo: {
-				type: 'string',
-				shortFlag: 'f',
-				isMultiple: true,
-			},
+test('works with short flags', verifyFlags, {
+	flags: {
+		foo: {
+			type: 'string',
+			shortFlag: 'f',
+			isMultiple: true,
 		},
-	});
-
-	t.like(cli.flags, {
+	},
+	args: '-f bar -f baz',
+	expected: {
 		foo: ['bar', 'baz'],
-	});
+	},
 });
