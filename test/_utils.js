@@ -18,6 +18,8 @@ export const spawnFixture = async (fixture = 'fixture.js', arguments_ = [], opti
 	return execa(getFixture(fixture), arguments_, options);
 };
 
+export {stripIndent} from 'common-tags';
+
 // Use old behavior prior to zspecza/common-tags#165
 export const stripIndentTrim = createTag(
 	stripIndentTransformer(),
@@ -34,8 +36,9 @@ export const stackToErrorMessage = stack => stackUtils.clean(stack).split('\n').
 export const _verifyCli = (defaultFixture = 'fixture.js') => test.macro(
 	async (t, {fixture = defaultFixture, args, execaOptions, expected, error}) => {
 		const assertions = await t.try(async tt => {
-			const {stdout, stderr, exitCode} = await spawnFixture(fixture, args.split(' '), {reject: false, ...execaOptions});
-			tt.log('args:', args.split(' '));
+			const arguments_ = args ? args.split(' ') : [];
+			const {stdout, stderr, exitCode} = await spawnFixture(fixture, arguments_, {reject: false, ...execaOptions});
+			tt.log('args:', arguments_);
 
 			if (error) {
 				tt.log(`error (code ${exitCode}):\n`, stderr);

@@ -1,6 +1,57 @@
 import test from 'ava';
+import {_verifyCli, stripIndent} from '../_utils.js';
+import meow from '../../source/index.js';
 
-test.todo('description');
+const importMeta = import.meta;
+
+const verifyPackage = _verifyCli('with-package-json/default/fixture.js');
+
+test('description', t => {
+	const cli = meow({
+		importMeta,
+		pkg: {
+			description: 'Unicorn and rainbow creator',
+		},
+	});
+
+	t.is(cli.help, stripIndent`
+
+		Unicorn and rainbow creator
+	`);
+});
+
 test.todo('version');
-test.todo('process title - bin');
-test.todo('process title - name');
+
+test('overriding pkg still normalizes', t => {
+	const cli = meow({
+		importMeta,
+		pkg: {
+			name: 'browser-sync',
+			bin: './bin/browser-sync.js',
+		},
+	});
+
+	t.like(cli, {
+		pkg: {
+			name: 'browser-sync',
+			version: '',
+		},
+	});
+
+	// TODO: test that showVersion logs undefined
+});
+
+test('process title - bin default', verifyPackage, {
+	expected: 'foo',
+});
+
+test('process title - bin custom', verifyPackage, {
+	fixture: 'with-package-json/custom-bin/fixture.js',
+	expected: 'bar',
+});
+
+test('process title - name backup', verifyPackage, {
+	fixture: 'with-package-json/no-bin/fixture.js',
+	expected: 'foo',
+});
+

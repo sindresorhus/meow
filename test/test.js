@@ -45,29 +45,6 @@ test('spawn cli and test input flag', async t => {
 	t.is(stdout, 'bar');
 });
 
-test('spawn cli and test process title', async t => {
-	const {stdout} = await spawnFixture('with-package-json/fixture.js');
-	t.is(stdout, 'foo');
-});
-
-test('setting pkg.bin should work', t => {
-	const cli = meow({
-		importMeta,
-		pkg: {
-			name: 'browser-sync',
-			bin: './bin/browser-sync.js',
-		},
-	});
-
-	t.like(cli, {
-		pkg: {
-			name: 'browser-sync',
-			version: '',
-		},
-		version: undefined,
-	});
-});
-
 // TODO: what is this test name???
 test('accept help and options', t => {
 	const cli = meow({

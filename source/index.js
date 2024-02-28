@@ -25,10 +25,7 @@ const buildResult = (options, parserOptions) => {
 
 	normalizePackageData(package_);
 
-	let {description} = options;
-	if (!description && description !== false) {
-		({description} = package_);
-	}
+	let description = options.description ?? package_.description;
 
 	description &&= help ? redent(`\n${description}\n`, options.helpIndent) : `\n${description}`;
 	help = `${description || ''}${help}\n`;

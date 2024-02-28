@@ -11,7 +11,6 @@ const conditionalRequiredMultiple = `${fixtureFolder}/fixture-conditional-requir
 const verifyFlags = _verifyCli(required);
 
 test('not specifying required flags', verifyFlags, {
-	args: '',
 	error: stripIndentTrim`
 		Missing required flags
 			--test, -t
@@ -46,7 +45,6 @@ test('specifying required number flag without a number', verifyFlags, {
 
 test('setting isRequired as a function and not specifying any flags', verifyFlags, {
 	fixture: requiredFunction,
-	args: '',
 	expected: 'false,undefined',
 });
 
@@ -98,7 +96,6 @@ test('isRequired with isMultiple giving no values, but flag is given', verifyFla
 
 test('isRequired with isMultiple giving no values, but flag is not given', verifyFlags, {
 	fixture: requiredMultiple,
-	args: '',
 	error: stripIndentTrim`
 		Missing required flag
 			--test, -t
@@ -107,6 +104,5 @@ test('isRequired with isMultiple giving no values, but flag is not given', verif
 
 test('isRequire function that returns false with isMultiple given no values, but flag is not given', verifyFlags, {
 	fixture: conditionalRequiredMultiple,
-	args: '',
 	expected: '[]',
 });
