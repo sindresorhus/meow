@@ -39,24 +39,29 @@ export const _verifyCli = (baseFixture = defaultFixture) => test.macro(
 	async (t, {fixture = baseFixture, args, execaOptions, expected, error}) => {
 		const assertions = await t.try(async tt => {
 			const arguments_ = args ? args.split(' ') : [];
-			const {stdout, stderr, exitCode} = await spawnFixture(fixture, arguments_, {reject: false, ...execaOptions});
+			const {all: output, exitCode} = await spawnFixture(fixture, arguments_, {reject: false, all: true, ...execaOptions});
 			tt.log('args:', arguments_);
 
 			if (error) {
-				tt.log(`error (code ${exitCode}):\n`, stderr);
+				tt.log(`error (code ${exitCode}):\n`, output);
 
 				if (typeof error === 'string') {
-					tt.is(stderr, error);
+					tt.is(output, error);
 					tt.is(exitCode, 2);
 				} else {
-					const error_ = error.clean ? stackToErrorMessage(stderr) : stderr;
+					const error_ = error.clean ? stackToErrorMessage(output) : output;
 
 					tt.is(error_, error.message);
 					tt.is(exitCode, error.code);
 				}
 			} else {
-				tt.log('output:\n', stdout);
-				tt.is(stdout, expected);
+				tt.log('output:\n', output);
+
+				if (expected) {
+					tt.is(output, expected);
+				} else {
+					tt.pass();
+				}
 			}
 		});
 

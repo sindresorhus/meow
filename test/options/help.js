@@ -1,25 +1,25 @@
 import test from 'ava';
 import indentString from 'indent-string';
 import meow from '../../source/index.js';
-import {spawnFixture, stripIndent, stripIndentTrim} from '../_utils.js';
+import {
+	_verifyCli,
+	spawnFixture,
+	stripIndent,
+	stripIndentTrim,
+} from '../_utils.js';
 
 const importMeta = import.meta;
 
-const verifyHelp = test.macro(async (t, {cli: cliArguments, args, expected}) => {
+const verifyCli = _verifyCli();
+
+const verifyHelp = test.macro(async (t, {cli: cliArguments, expected}) => {
 	const assertions = await t.try(async tt => {
-		if (args) {
-			const {stdout} = await spawnFixture(args.split(' '));
+		const cli = Array.isArray(cliArguments)
+			? meow(cliArguments.at(0), {importMeta, ...cliArguments.at(1)})
+			: meow({importMeta, ...cliArguments});
 
-			tt.log('help text:\n', stdout);
-			tt.is(stdout, expected);
-		} else {
-			const cli = Array.isArray(cliArguments)
-				? meow(cliArguments.at(0), {importMeta, ...cliArguments.at(1)})
-				: meow({importMeta, ...cliArguments});
-
-			tt.log('help text:\n', cli.help);
-			tt.is(cli.help, expected);
-		}
+		tt.log('help text:\n', cli.help);
+		tt.is(cli.help, expected);
 	});
 
 	assertions.commit({retainLogs: !assertions.passed});
@@ -33,12 +33,12 @@ test('support help shortcut', verifyHelp, {
 	expected: indentString('\nCLI app helper\n\nunicorn\ncat\n', 2),
 });
 
-test('spawn cli and show help screen', verifyHelp, {
+test('spawn cli and show help screen', verifyCli, {
 	args: '--help',
 	expected: indentString('\nCustom description\n\nUsage\n  foo <input>\n\n', 2),
 });
 
-test('spawn cli and disabled autoHelp', verifyHelp, {
+test('spawn cli and disabled autoHelp', verifyCli, {
 	args: '--help --no-auto-help',
 	expected: stripIndentTrim`
 		help
@@ -48,7 +48,7 @@ test('spawn cli and disabled autoHelp', verifyHelp, {
 	`,
 });
 
-test('spawn cli and not show help', verifyHelp, {
+test('spawn cli and not show help', verifyCli, {
 	args: '--help=all',
 	expected: stripIndentTrim`
 		help
@@ -108,5 +108,30 @@ test('no description and no indentation', verifyHelp, {
 
 		unicorn
 		cat
+	`,
+});
+
+test('exits with code 0 by default', verifyCli, {
+	args: '--help',
+});
+
+test('showHelp exits with code 2 by default', verifyCli, {
+	fixture: 'help/fixture.js',
+	args: '--show-help',
+	error: {
+		message: stripIndent`
+
+			foo
+		`,
+		code: 2,
+	},
+});
+
+test('showHelp exits with given code', verifyCli, {
+	fixture: 'help/fixture.js',
+	args: '--show-help --code=0',
+	expected: stripIndent`
+
+		foo
 	`,
 });
