@@ -1,5 +1,4 @@
 /* eslint-disable ava/no-ignored-test-files */
-import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import test from 'ava';
 import {execa} from 'execa';
@@ -7,10 +6,7 @@ import {readPackage} from 'read-pkg';
 import {createTag, stripIndentTransformer, trimResultTransformer} from 'common-tags';
 import StackUtils from 'stack-utils';
 
-// TODO: URL?
-export const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const getFixture = fixture => path.join(__dirname, 'fixtures', fixture);
+const getFixture = fixture => fileURLToPath(new URL(`fixtures/${fixture}`, import.meta.url));
 
 export const spawnFixture = async (fixture = 'fixture.js', arguments_ = [], options = {}) => {
 	// Allow calling with arguments first
