@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
@@ -16,10 +17,11 @@ const stripComments = createTag(
 	replaceResultTransformer(emptyLineRegex, ''),
 );
 
+const sourceDirectory = 'source';
 const outputDirectory = 'build';
 
 const config = defineConfig({
-	input: await globby('source/**/*.js'),
+	input: await globby(`${sourceDirectory}/**/*.js`),
 	output: {
 		dir: outputDirectory,
 		interop: 'esModule',
@@ -58,7 +60,7 @@ const config = defineConfig({
 });
 
 const dtsConfig = defineConfig({
-	input: './source/index.d.ts',
+	input: `./${sourceDirectory}/index.d.ts`,
 	output: {
 		file: `./${outputDirectory}/index.d.ts`,
 		format: 'es',
@@ -67,6 +69,18 @@ const dtsConfig = defineConfig({
 		dts({
 			respectExternal: true,
 		}),
+		{
+			name: 'copy-tsd',
+			async generateBundle() {
+				let tsdFile = await fs.readFile('./test-d/index.ts', 'utf8');
+				tsdFile = tsdFile.replace(
+					`import meow from '../${sourceDirectory}/index.js'`,
+					`import meow from '../${outputDirectory}/index.js'`,
+				);
+
+				await fs.writeFile(`./test-d/${outputDirectory}.ts`, tsdFile);
+			},
+		},
 	],
 });
 
