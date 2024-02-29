@@ -80,7 +80,7 @@ export const buildOptions = (helpText, options) => {
 		input: 'string',
 		description: pkg.description ?? false,
 		help: helpText,
-		version: foundPackage?.packageJson.version || 'No version found',
+		version: pkg.version || 'No version found',
 		autoHelp: true,
 		autoVersion: true,
 		booleanDefault: false,
