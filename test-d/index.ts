@@ -6,7 +6,8 @@ type AnyFlag = NonNullable<NonNullable<Parameters<typeof meow>[0]>['flags']>[str
 
 const importMeta = import.meta;
 
-expectType<Result<never>>(meow('Help text'));
+expectError(meow('Help text'));
+expectError(meow('Help text', {}));
 expectType<Result<never>>(meow('Help text', {importMeta, hardRejection: false}));
 expectAssignable<{flags: {foo: number}}>(
 	meow({importMeta: import.meta, flags: {foo: {type: 'number', isRequired: true}}}),

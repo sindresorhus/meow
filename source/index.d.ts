@@ -395,7 +395,7 @@ const cli = meow(`
 	  $ foo unicorns --rainbow
 	  🌈 unicorns 🌈
 `, {
-	importMeta: import.meta,
+	importMeta: import.meta, // This is required
 	flags: {
 		rainbow: {
 			type: 'boolean',
@@ -413,5 +413,5 @@ const cli = meow(`
 foo(cli.input.at(0), cli.flags);
 ```
 */
-export default function meow<Flags extends AnyFlags>(helpMessage: string, options?: Options<Flags>): Result<Flags>;
-export default function meow<Flags extends AnyFlags>(options?: Options<Flags>): Result<Flags>;
+export default function meow<Flags extends AnyFlags>(helpMessage: string, options: Options<Flags>): Result<Flags>;
+export default function meow<Flags extends AnyFlags>(options: Options<Flags>): Result<Flags>;

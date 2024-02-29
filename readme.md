@@ -45,7 +45,7 @@ const cli = meow(`
 	  $ foo unicorns --rainbow
 	  🌈 unicorns 🌈
 `, {
-	importMeta: import.meta,
+	importMeta: import.meta, // This is required
 	flags: {
 		rainbow: {
 			type: 'boolean',
@@ -66,7 +66,7 @@ foo(cli.input.at(0), cli.flags);
 
 ## API
 
-### meow(helpText, options?)
+### meow(helpText, options)
 ### meow(options)
 
 Returns an `object` with:
@@ -91,6 +91,7 @@ Type: `object`
 
 ##### importMeta
 
+**Required**\
 Type: `object`
 
 Pass in [`import.meta`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_import_meta). This is used to find the correct package.json file.
