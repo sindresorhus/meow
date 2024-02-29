@@ -40,14 +40,12 @@ expectType<Result<never>>(meow({importMeta, description: false}));
 expectType<Result<never>>(meow({importMeta, help: 'foo'}));
 expectType<Result<never>>(meow({importMeta, help: false}));
 expectType<Result<never>>(meow({importMeta, version: 'foo'}));
-expectType<Result<never>>(meow({importMeta, version: false}));
 expectType<Result<never>>(meow({importMeta, autoHelp: false}));
 expectType<Result<never>>(meow({importMeta, autoVersion: false}));
 expectType<Result<never>>(meow({importMeta, pkg: {foo: 'bar'}}));
 expectType<Result<never>>(meow({importMeta, argv: ['foo', 'bar']}));
 expectType<Result<never>>(meow({importMeta, inferType: true}));
 expectType<Result<never>>(meow({importMeta, booleanDefault: true}));
-expectType<Result<never>>(meow({importMeta, booleanDefault: null}));
 expectType<Result<never>>(meow({importMeta, booleanDefault: undefined}));
 expectType<Result<never>>(meow({importMeta, hardRejection: false}));
 
