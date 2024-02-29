@@ -114,6 +114,8 @@ type AnyFlags = Record<string, AnyFlag>;
 export type Options<Flags extends AnyFlags> = {
 	/**
 	Pass in [`import.meta`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_import_meta). This is used to find the correct package.json file.
+
+	`meow` will throw if this is not set.
 	*/
 	readonly importMeta: ImportMeta;
 
@@ -398,7 +400,7 @@ const cli = meow(`
 	  $ foo unicorns --rainbow
 	  🌈 unicorns 🌈
 `, {
-	importMeta: import.meta,
+	importMeta: import.meta, // This is required
 	flags: {
 		rainbow: {
 			type: 'boolean',
