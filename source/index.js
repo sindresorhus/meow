@@ -36,7 +36,7 @@ const buildResult = (options, parserOptions) => {
 	};
 
 	const showVersion = () => {
-		console.log(typeof options.version === 'string' ? options.version : package_.version);
+		console.log(options.version);
 		process.exit(0);
 	};
 
