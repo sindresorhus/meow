@@ -180,10 +180,8 @@ export type Options<Flags extends AnyFlags> = {
 
 	/**
 	Set a custom version output. Default: The package.json `"version"` property.
-
-	Set it to `false` to disable it altogether.
 	*/
-	readonly version?: string | false;
+	readonly version?: string;
 
 	/**
 	Automatically show the help text when the `--help` flag is present. Useful to set this value to `false` when a CLI manages child CLIs with their own help text.

@@ -75,6 +75,7 @@ export const buildOptions = (helpText, options) => {
 		inferType: false,
 		input: 'string',
 		help: helpText,
+		version: foundPackage?.packageJson.version || 'No version found',
 		autoHelp: true,
 		autoVersion: true,
 		booleanDefault: false,

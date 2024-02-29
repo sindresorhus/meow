@@ -38,10 +38,16 @@ test('custom version', verifyVersion, {
 test('version = false has no effect', verifyVersion, {
 	args: '--version',
 	execaOptions: {env: {VERSION: 'false'}},
-	expected: '1.0.0',
+	expected: 'false',
 });
 
 test('manual showVersion', verifyVersion, {
 	args: '--show-version',
 	expected: '1.0.0',
+});
+
+test('no version fallback message', verifyVersion, {
+	fixture: 'with-package-json/default/fixture.js',
+	args: '--version',
+	expected: 'No version found',
 });
