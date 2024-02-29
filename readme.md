@@ -91,11 +91,10 @@ Type: `object`
 
 ##### importMeta
 
+**Required**\
 Type: `object`
 
 Pass in [`import.meta`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_import_meta). This is used to find the correct package.json file.
-
-`meow` will throw if this is not set.
 
 ##### flags
 
