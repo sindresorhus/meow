@@ -143,7 +143,7 @@ flags: {
 
 ##### description
 
-Type: `string | boolean`\
+Type: `string | false`\
 Default: The package.json `"description"` property
 
 Description to show above the help text.
@@ -152,13 +152,15 @@ Set it to `false` to disable it altogether.
 
 ##### help
 
-Type: `string | boolean`
+Type: `string | false`
 
 The help text you want shown.
 
 The input is reindented and starting/ending newlines are trimmed which means you can use a [template literal](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/template_strings) without having to care about using the correct amount of indent.
 
 The description will be shown above your help text automatically.
+
+Set it to `false` to disable it altogether.
 
 ##### version
 
