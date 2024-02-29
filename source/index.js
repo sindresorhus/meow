@@ -34,7 +34,7 @@ const buildResult = ({pkg: packageJson, ...options}, parserOptions) => {
 
 	const showHelp = code => {
 		console.log(help);
-		process.exit(typeof code === 'number' ? code : 2);
+		process.exit(typeof code === 'number' ? code : 2); // Default to code 2 for incorrect usage (#47)
 	};
 
 	const showVersion = () => {
