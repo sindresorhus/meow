@@ -66,7 +66,7 @@ foo(cli.input.at(0), cli.flags);
 
 ## API
 
-### meow(helpText, options?)
+### meow(helpText, options)
 ### meow(options)
 
 Returns an `object` with:
