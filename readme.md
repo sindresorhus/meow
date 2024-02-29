@@ -300,10 +300,6 @@ Default: `2`
 
 The number of spaces to use for indenting the help text.
 
-## Promises
-
-Meow will make unhandled rejected promises [fail hard](https://github.com/sindresorhus/hard-rejection) instead of the default silent fail. Meaning you don't have to manually `.catch()` promises used in your CLI.
-
 ## Tips
 
 See [`chalk`](https://github.com/chalk/chalk) if you want to colorize the terminal output.
