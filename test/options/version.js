@@ -38,7 +38,7 @@ test('custom version', verifyVersion, {
 test('version = false has no effect', verifyVersion, {
 	args: '--version',
 	execaOptions: {env: {VERSION: 'false'}},
-	expected: '1.0.0',
+	expected: 'false',
 });
 
 test('manual showVersion', verifyVersion, {

@@ -161,7 +161,7 @@ The description will be shown above your help text automatically.
 
 ##### version
 
-Type: `string | boolean`\
+Type: `string`\
 Default: The package.json `"version"` property
 
 Set a custom version output.
