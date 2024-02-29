@@ -13,11 +13,7 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 			delete flag.shortFlag;
 		}
 
-		if (
-			booleanDefault !== undefined
-				&& flag.type === 'boolean'
-				&& !Object.hasOwn(flag, 'default')
-		) {
+		if (booleanDefault !== undefined && flag.type === 'boolean' && !Object.hasOwn(flag, 'default')) {
 			flag.default = flag.isMultiple ? [booleanDefault] : booleanDefault;
 		}
 

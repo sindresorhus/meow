@@ -2,10 +2,16 @@
 import test from 'ava';
 import meow from '../../source/index.js';
 
-export const _verifyFlags = importMeta => test.macro(async (t, {flags = {}, args, expected, error}) => {
+export const _verifyFlags = importMeta => test.macro(async (t, {flags = {}, args, expected, error, ...meowOptions}) => {
 	const assertions = await t.try(async tt => {
 		const arguments_ = args?.split(' ') ?? [];
-		const meowOptions = {importMeta, argv: arguments_, flags};
+
+		meowOptions = {
+			...meowOptions,
+			importMeta,
+			argv: arguments_,
+			flags,
+		};
 
 		tt.log('arguments:', arguments_);
 
