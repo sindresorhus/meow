@@ -213,7 +213,7 @@ By default, the argument `5` in `$ foo 5` becomes a string. Enabling this would 
 
 ##### booleanDefault
 
-Type: `boolean | null | undefined`\
+Type: `boolean | undefined`\
 Default: `false`
 
 Value of `boolean` flags not defined in `argv`.

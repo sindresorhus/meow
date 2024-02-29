@@ -291,8 +291,7 @@ export type Options<Flags extends AnyFlags> = {
 	//}
 	```
 	*/
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	readonly booleanDefault?: boolean | null | undefined;
+	readonly booleanDefault?: boolean | undefined;
 
 	// TODO: Remove this in meow 14.
 	/**

@@ -47,7 +47,6 @@ expectType<Result<never>>(meow({importMeta, pkg: {foo: 'bar'}}));
 expectType<Result<never>>(meow({importMeta, argv: ['foo', 'bar']}));
 expectType<Result<never>>(meow({importMeta, inferType: true}));
 expectType<Result<never>>(meow({importMeta, booleanDefault: true}));
-expectType<Result<never>>(meow({importMeta, booleanDefault: null}));
 expectType<Result<never>>(meow({importMeta, booleanDefault: undefined}));
 expectType<Result<never>>(meow({importMeta}));
 
