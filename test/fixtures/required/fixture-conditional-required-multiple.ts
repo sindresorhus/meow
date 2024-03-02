@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsimp
 import meow from '../../../source/index.js';
 
 const cli = meow({
@@ -12,7 +12,7 @@ const cli = meow({
 		test: {
 			type: 'number',
 			shortFlag: 't',
-			isRequired: true,
+			isRequired: () => false,
 			isMultiple: true,
 		},
 	},

@@ -124,7 +124,7 @@ test('exits with code 0 by default', verifyCli, {
 });
 
 test('showHelp exits with code 2 by default', verifyCli, {
-	fixture: 'help/fixture.js',
+	fixture: 'help/fixture.ts',
 	args: '--show-help',
 	error: {
 		message: stripIndent`
@@ -136,7 +136,7 @@ test('showHelp exits with code 2 by default', verifyCli, {
 });
 
 test('showHelp exits with given code', verifyCli, {
-	fixture: 'help/fixture.js',
+	fixture: 'help/fixture.ts',
 	args: '--show-help --code=0',
 	expected: stripIndent`
 

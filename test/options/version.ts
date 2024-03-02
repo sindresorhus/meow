@@ -47,7 +47,7 @@ test('manual showVersion', verifyVersion, {
 });
 
 test('no version fallback message', verifyVersion, {
-	fixture: 'with-package-json/default/fixture.js',
+	fixture: 'with-package-json/default/fixture.ts',
 	args: '--version',
 	expected: 'No version found',
 });

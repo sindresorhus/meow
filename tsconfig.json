@@ -1,19 +1,9 @@
 {
-	"include": [
-		"source/index.d.ts",
-		"test-d",
-	],
+	"extends": "@sindresorhus/tsconfig",
+	"exclude": ["build", "node_modules"],
+	"include": ["source", "test", "test-d"],
 	"compilerOptions": {
-		"strict": true,
-		"jsx": "react",
-		"target": "ES2021", // Node.js 16
-		"lib": [
-			"ES2021"
-		],
-		"module": "ES2020",
-		"moduleResolution": "node",
-		"noImplicitAny": true,
-		"strictNullChecks": true,
-		"noUnusedLocals": true
-	}
+		"moduleResolution": "Bundler",
+		"module": "ES2022",
+	},
 }

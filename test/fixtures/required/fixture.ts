@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsimp
 import meow from '../../../source/index.js';
 
 const cli = meow({

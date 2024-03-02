@@ -6,7 +6,7 @@ import {readPackage} from 'read-pkg';
 import {createTag, stripIndentTransformer, trimResultTransformer} from 'common-tags';
 import StackUtils from 'stack-utils';
 
-export const defaultFixture = 'fixture.js';
+export const defaultFixture = 'fixture.ts';
 
 const getFixture = fixture => fileURLToPath(new URL(`fixtures/${fixture}`, import.meta.url));
 

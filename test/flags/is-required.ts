@@ -3,10 +3,10 @@ import {_verifyCli, stripIndentTrim} from '../_utils.js';
 
 const fixtureFolder = 'required';
 
-const required = `${fixtureFolder}/fixture.js`;
-const requiredFunction = `${fixtureFolder}/fixture-required-function.js`;
-const requiredMultiple = `${fixtureFolder}/fixture-required-multiple.js`;
-const conditionalRequiredMultiple = `${fixtureFolder}/fixture-conditional-required-multiple.js`;
+const required = `${fixtureFolder}/fixture.ts`;
+const requiredFunction = `${fixtureFolder}/fixture-required-function.ts`;
+const requiredMultiple = `${fixtureFolder}/fixture-required-multiple.ts`;
+const conditionalRequiredMultiple = `${fixtureFolder}/fixture-conditional-required-multiple.ts`;
 
 const verifyFlags = _verifyCli(required);
 

@@ -4,8 +4,8 @@ import {_verifyCli, stripIndentTrim, meowVersion} from '../_utils.js';
 
 const fixtureFolder = 'allow-unknown-flags';
 
-const allowUnknownFlags = `${fixtureFolder}/fixture.js`;
-const allowUnknownFlagsWithHelp = `${fixtureFolder}/fixture-with-help.js`;
+const allowUnknownFlags = `${fixtureFolder}/fixture.ts`;
+const allowUnknownFlagsWithHelp = `${fixtureFolder}/fixture-with-help.ts`;
 
 const verifyFlags = _verifyCli(allowUnknownFlags);
 

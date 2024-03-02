@@ -4,7 +4,7 @@ import meow from '../../source/index.js';
 
 const importMeta = import.meta;
 
-const verifyPackage = _verifyCli('with-package-json/default/fixture.js');
+const verifyPackage = _verifyCli('with-package-json/default/fixture.ts');
 
 test('description', t => {
 	const cli = meow({
@@ -46,12 +46,12 @@ test('process title - bin default', verifyPackage, {
 });
 
 test('process title - bin custom', verifyPackage, {
-	fixture: 'with-package-json/custom-bin/fixture.js',
+	fixture: 'with-package-json/custom-bin/fixture.ts',
 	expected: 'bar',
 });
 
 test('process title - name backup', verifyPackage, {
-	fixture: 'with-package-json/no-bin/fixture.js',
+	fixture: 'with-package-json/no-bin/fixture.ts',
 	expected: 'foo',
 });
 

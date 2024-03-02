@@ -63,8 +63,12 @@
 		"@rollup/plugin-commonjs": "^25.0.7",
 		"@rollup/plugin-json": "^6.1.0",
 		"@rollup/plugin-node-resolve": "^15.2.3",
+		"@sindresorhus/tsconfig": "^5.0.0",
+		"@types/common-tags": "^1.8.4",
 		"@types/minimist": "^1.2.5",
-		"ava": "^6.1.1",
+		"@types/node": "18",
+		"@types/yargs-parser": "^21.0.3",
+		"ava": "^6.1.2",
 		"camelcase-keys": "^9.1.3",
 		"common-tags": "^2.0.0-alpha.1",
 		"decamelize": "^6.0.0",
@@ -81,9 +85,11 @@
 		"rollup": "^4.12.0",
 		"rollup-plugin-dts": "^6.1.0",
 		"rollup-plugin-license": "^3.2.0",
+		"rollup-plugin-ts": "^3.4.5",
 		"stack-utils": "^2.0.6",
 		"trim-newlines": "^5.0.0",
 		"tsd": "^0.30.7",
+		"tsimp": "^2.0.11",
 		"type-fest": "^4.10.3",
 		"typescript": "~5.3.3",
 		"xo": "^0.57.0",
@@ -92,10 +98,23 @@
 	"xo": {
 		"rules": {
 			"unicorn/no-process-exit": "off",
-			"unicorn/error-message": "off"
+			"unicorn/error-message": "off",
+			"@typescript-eslint/no-dynamic-delete": "off"
 		},
 		"ignores": [
 			"build"
 		]
+	},
+	"ava": {
+		"extensions": {
+			"ts": "module",
+			"js": true
+		},
+		"nodeArguments": [
+			"--import=tsimp"
+		],
+		"environmentVariables": {
+			"TSIMP_DIAG": "ignore"
+		}
 	}
 }

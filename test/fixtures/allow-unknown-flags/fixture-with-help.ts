@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsimp
 import meow from '../../../source/index.js';
 
 const cli = meow({
@@ -8,14 +8,17 @@ const cli = meow({
 		Usage
 		  foo <input>
   	`,
+	allowUnknownFlags: false,
 	flags: {
-		test: {
-			type: 'number',
-			shortFlag: 't',
-			isRequired: () => false,
-			isMultiple: true,
+		help: {
+			shortFlag: 'h',
+			type: 'boolean',
+		},
+		version: {
+			shortFlag: 'v',
+			type: 'boolean',
 		},
 	},
 });
 
-console.log(cli.flags.test);
+console.log(cli.flags.help);
