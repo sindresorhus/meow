@@ -46,6 +46,7 @@ test('boolean args are false by default', verifyFlags, {
 	},
 });
 
+// @ts-expect-error: invalid booleanDefault
 test('throws if default is null', verifyFlags, {
 	booleanDefault: null,
 	flags: {

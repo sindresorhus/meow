@@ -1,8 +1,7 @@
 import {expectAssignable, expectError, expectType} from 'tsd';
 import type {PackageJson} from 'type-fest';
-import meow, {type Result} from '../source/index.js';
-
-type AnyFlag = NonNullable<NonNullable<Parameters<typeof meow>[0]>['flags']>[string];
+import meow from '../source/index.js';
+import type {Result, AnyFlag} from './types.js';
 
 const importMeta = import.meta;
 
@@ -71,10 +70,10 @@ expectType<string>(result.flags.bar);
 expectType<string[] | undefined>(result.flags.abc);
 expectType<string | undefined>(result.flags.baz);
 expectType<boolean | undefined>(result.unnormalizedFlags.foo);
-expectType<unknown>(result.unnormalizedFlags.f);
+expectType<unknown>(result.unnormalizedFlags['f']);
 expectType<number | undefined>(result.unnormalizedFlags['foo-bar']);
-expectType<unknown>(result.unnormalizedFlags.foobar);
-expectType<unknown>(result.unnormalizedFlags.fooBar);
+expectType<unknown>(result.unnormalizedFlags['foobar']);
+expectType<unknown>(result.unnormalizedFlags['fooBar']);
 expectType<string>(result.unnormalizedFlags.bar);
 expectType<string[] | undefined>(result.unnormalizedFlags.abc);
 expectType<string | undefined>(result.unnormalizedFlags.baz);

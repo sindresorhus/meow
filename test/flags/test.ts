@@ -31,6 +31,7 @@ test('supports negation via --no', verifyFlags, {
 	},
 });
 
+// @ts-expect-error: invalid default
 test('throws if default value is not of the correct type', verifyFlags, {
 	flags: {
 		foo: {
@@ -80,7 +81,7 @@ test('default - no flag', verifyFlags, {
 test('single character flag casing should be preserved', verifyFlags, {
 	args: '-F',
 	expected: {
-		F: true,
+		F: true, // eslint-disable-line @typescript-eslint/naming-convention
 	},
 });
 
@@ -103,6 +104,7 @@ test('single flag set more than once is an error', verifyFlags, {
 	error: 'The flag --foo can only be set once.',
 });
 
+// @ts-expect-error: invalid choices, unknown key alias
 test('options - multiple validation errors', verifyFlags, {
 	flags: {
 		animal: {

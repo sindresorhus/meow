@@ -1,11 +1,21 @@
-import constructParserOptions from 'minimist-options';
+import constructParserOptions, {
+	type Options as ParserFlags,
+	type MinimistOptions,
+	type AnyOption as ParserFlag,
+} from 'minimist-options';
+import type {Options as YargsOptions} from 'yargs-parser';
 import decamelizeKeys from 'decamelize-keys';
+import type {Writable} from 'type-fest';
+import type {ParsedOptions, AnyFlag} from './types.js';
 
-const buildParserFlags = ({flags, booleanDefault}) => {
-	const parserFlags = {};
+type ParserOptions = YargsOptions & MinimistOptions;
+
+const buildParserFlags = ({flags, booleanDefault}: ParsedOptions): ParserFlags => {
+	const parserFlags: ParserFlags = {};
 
 	for (const [flagKey, flagValue] of Object.entries(flags)) {
-		const flag = {...flagValue};
+		// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+		const flag = {...flagValue} as Writable<AnyFlag & ParserFlag>;
 
 		// `minimist-options` expects `flag.alias`
 		if (flag.shortFlag) {
@@ -14,10 +24,14 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 		}
 
 		if (booleanDefault !== undefined && flag.type === 'boolean' && !Object.hasOwn(flag, 'default')) {
+			// TODO:
+			// @ts-expect-error: not sure
 			flag.default = flag.isMultiple ? [booleanDefault] : booleanDefault;
 		}
 
 		if (flag.isMultiple) {
+			// TODO:
+			// @ts-expect-error: doesn't allow array types?
 			flag.type = flag.type ? `${flag.type}-array` : 'array';
 			flag.default ??= [];
 			delete flag.isMultiple;
@@ -25,41 +39,40 @@ const buildParserFlags = ({flags, booleanDefault}) => {
 
 		if (Array.isArray(flag.aliases)) {
 			if (flag.alias) {
-				flag.aliases.push(flag.alias);
+				flag.aliases.push(flag.alias as string);
 			}
 
 			flag.alias = flag.aliases;
 			delete flag.aliases;
 		}
 
-		parserFlags[flagKey] = flag;
+		parserFlags[flagKey] = flag as ParserFlag;
 	}
 
 	return parserFlags;
 };
 
-export const buildParserOptions = options => {
-	let parserOptions = buildParserFlags(options);
-	parserOptions.arguments = options.input;
+export const buildParserOptions = (options: ParsedOptions): YargsOptions => {
+	let parserFlags = buildParserFlags(options);
 
-	parserOptions = decamelizeKeys(parserOptions, {separator: '-', exclude: ['stopEarly', '--']});
-
-	if (options.inferType) {
-		delete parserOptions.arguments;
+	if (!options.inferType) {
+		parserFlags.arguments = options.input;
 	}
+
+	parserFlags = decamelizeKeys(parserFlags, {separator: '-', exclude: ['stopEarly', '--']});
 
 	// Add --help and --version to known flags if autoHelp or autoVersion are set
 	if (!options.allowUnknownFlags) {
-		if (options.autoHelp && !parserOptions.help) {
-			parserOptions.help = {type: 'boolean'};
+		if (options.autoHelp && !parserFlags['help']) {
+			parserFlags['help'] = {type: 'boolean'};
 		}
 
-		if (options.autoVersion && !parserOptions.version) {
-			parserOptions.version = {type: 'boolean'};
+		if (options.autoVersion && !parserFlags['version']) {
+			parserFlags['version'] = {type: 'boolean'};
 		}
 	}
 
-	parserOptions = constructParserOptions(parserOptions);
+	const parserOptions = constructParserOptions(parserFlags) as ParserOptions;
 
 	parserOptions.configuration = {
 		...parserOptions.configuration,

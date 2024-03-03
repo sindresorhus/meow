@@ -1,7 +1,13 @@
 import test from 'ava';
 import meow from '../../source/index.js';
+import type {MeowOptions} from '../_utils.js';
 
-const verifyTypeInference = test.macro((t, {cli: cliArguments, expected}) => {
+type MacroArguments = [{
+	cli: MeowOptions;
+	expected: string | number;
+}];
+
+const verifyTypeInference = test.macro<MacroArguments>((t, {cli: cliArguments, expected}) => {
 	const cli = meow({importMeta: import.meta, ...cliArguments});
 	t.like(cli.input, [expected]);
 });
@@ -22,10 +28,10 @@ test('type inference', verifyTypeInference, {
 });
 
 test('with input type', verifyTypeInference, {
-	cli: {
+	cli: { // eslint-disable-line @typescript-eslint/consistent-type-assertions
 		argv: ['5'],
 		input: 'number',
-	},
+	} as MeowOptions,
 	expected: 5,
 });
 
@@ -33,7 +39,9 @@ test('works with flags', verifyTypeInference, {
 	cli: {
 		argv: ['5'],
 		inferType: true,
-		flags: {foo: 'string'},
+		flags: {
+			foo: {type: 'string'},
+		},
 	},
 	expected: 5,
 });

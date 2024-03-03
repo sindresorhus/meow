@@ -1,12 +1,27 @@
 import process from 'node:process';
 import {dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {readPackageUpSync} from 'read-package-up';
+import {readPackageUpSync, type PackageJson} from 'read-package-up';
 import normalizePackageData from 'normalize-package-data';
 import {decamelizeFlagKey, joinFlagKeys} from './utils.js';
+import type {
+	Options,
+	ParsedOptions,
+	AnyFlag,
+	AnyFlags,
+} from './types.js';
 
-const validateOptions = options => {
-	const invalidOptionFilters = {
+type InvalidOptionFilter = {
+	filter: (flag: [flagKey: string, flag: AnyFlag]) => boolean;
+	message: (flagKeys: string[]) => string;
+};
+
+type InvalidOptionFilters = {
+	flags: Record<string, InvalidOptionFilter>;
+};
+
+const validateOptions = (options: ParsedOptions): void => {
+	const invalidOptionFilters: InvalidOptionFilters = {
 		flags: {
 			keyContainsDashes: {
 				filter: ([flagKey]) => flagKey.includes('-') && flagKey !== '--',
@@ -21,22 +36,23 @@ const validateOptions = options => {
 				message: flagKeys => `The option \`choices\` must be an array. Invalid flags: ${joinFlagKeys(flagKeys)}`,
 			},
 			choicesNotMatchFlagType: {
-				filter: ([, flag]) => flag.type && Array.isArray(flag.choices) && flag.choices.some(choice => typeof choice !== flag.type),
+				filter: ([, flag]) => flag.type !== undefined && Array.isArray(flag.choices) && flag.choices.some(choice => typeof choice !== flag.type),
 				message(flagKeys) {
-					const flagKeysAndTypes = flagKeys.map(flagKey => `(\`${decamelizeFlagKey(flagKey)}\`, type: '${options.flags[flagKey].type}')`);
+					const flagKeysAndTypes = flagKeys.map(flagKey => `(\`${decamelizeFlagKey(flagKey)}\`, type: '${options.flags[flagKey]!.type}')`);
 					return `Each value of the option \`choices\` must be of the same type as its flag. Invalid flags: ${flagKeysAndTypes.join(', ')}`;
 				},
 			},
 			defaultNotInChoices: {
-				filter: ([, flag]) => flag.default && Array.isArray(flag.choices) && ![flag.default].flat().every(value => flag.choices.includes(value)),
+				filter: ([, flag]) => flag.default !== undefined && Array.isArray(flag.choices) && ![flag.default].flat().every(value => flag.choices!.includes(value as never)), // TODO: never?
 				message: flagKeys => `Each value of the option \`default\` must exist within the option \`choices\`. Invalid flags: ${joinFlagKeys(flagKeys)}`,
 			},
 		},
 	};
 
 	const errorMessages = [];
+	type Entry = ['flags', Record<string, InvalidOptionFilter>];
 
-	for (const [optionKey, filters] of Object.entries(invalidOptionFilters)) {
+	for (const [optionKey, filters] of Object.entries(invalidOptionFilters) as Entry[]) {
 		const optionEntries = Object.entries(options[optionKey]);
 
 		for (const {filter, message} of Object.values(filters)) {
@@ -54,17 +70,12 @@ const validateOptions = options => {
 	}
 };
 
-export const buildOptions = (helpText, options) => {
-	if (typeof helpText !== 'string') {
-		options = helpText;
-		helpText = '';
-	}
-
-	if (!options.importMeta?.url) {
+export const buildOptions = (helpMessage: string, options: Options<AnyFlags>): ParsedOptions => {
+	if (!options?.importMeta?.url) {
 		throw new TypeError('The `importMeta` option is required. Its value must be `import.meta`.');
 	}
 
-	const foundPackage = options.pkg ?? readPackageUpSync({
+	const foundPackage = options.pkg as PackageJson ?? readPackageUpSync({
 		cwd: dirname(fileURLToPath(options.importMeta.url)),
 		normalize: false,
 	})?.packageJson;
@@ -73,14 +84,14 @@ export const buildOptions = (helpText, options) => {
 	const pkg = foundPackage ?? {};
 	normalizePackageData(pkg);
 
-	const parsedOptions = {
+	const parsedOptions: ParsedOptions = {
 		argv: process.argv.slice(2),
 		flags: {},
 		inferType: false,
-		input: 'string',
+		input: 'string', // TODO: undocumented option?
 		description: pkg.description ?? false,
-		help: helpText,
-		version: pkg.version || 'No version found',
+		help: helpMessage,
+		version: pkg.version || 'No version found', // eslint-disable-line @typescript-eslint/prefer-nullish-coalescing
 		autoHelp: true,
 		autoVersion: true,
 		booleanDefault: false,

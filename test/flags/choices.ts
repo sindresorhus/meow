@@ -38,6 +38,7 @@ test('throws if input does not match choices', verifyChoices, {
 	`,
 });
 
+// @ts-expect-error: invalid choices
 test('throws if choices is not array', verifyChoices, {
 	flags: {
 		animal: {
@@ -123,6 +124,7 @@ test('throws with multiple flags', verifyChoices, {
 	`,
 });
 
+// @ts-expect-error: invalid choices
 test('choices must be of the same type', verifyChoices, {
 	flags: {
 		number: {

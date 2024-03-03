@@ -5,6 +5,9 @@ import type {
 
 export type FlagType = 'string' | 'boolean' | 'number';
 
+export type ParsedFlag = string | boolean | number;
+export type ParsedFlags = Readonly<Record<string, ParsedFlag | ParsedFlag[]>>;
+
 /**
 Callback function to determine if a flag is required during runtime.
 
@@ -108,8 +111,8 @@ export type Flag<PrimitiveType extends FlagType, Type, IsMultiple = false> = {
 type StringFlag = Flag<'string', string> | Flag<'string', string[], true>;
 type BooleanFlag = Flag<'boolean', boolean> | Flag<'boolean', boolean[], true>;
 type NumberFlag = Flag<'number', number> | Flag<'number', number[], true>;
-type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
-type AnyFlags = Record<string, AnyFlag>;
+export type AnyFlag = StringFlag | BooleanFlag | NumberFlag;
+export type AnyFlags = Record<string, AnyFlag>;
 
 export type Options<Flags extends AnyFlags> = {
 	/**
@@ -315,21 +318,28 @@ export type Options<Flags extends AnyFlags> = {
 	readonly helpIndent?: number;
 };
 
+type BooleanDefault = Pick<Options<AnyFlags>, 'booleanDefault'>;
+
+export type ParsedOptions = Required<Omit<Options<AnyFlags>, 'booleanDefault' | 'hardRejection'>> & BooleanDefault & {
+	input: string;
+	allowParentFlags: boolean;
+};
+
 type TypedFlag<Flag extends AnyFlag> =
-		Flag extends {type: 'number'}
-			? number
-			: Flag extends {type: 'string'}
-				? string
-				: Flag extends {type: 'boolean'}
-					? boolean
-					: unknown;
+	Flag extends {type: 'number'}
+		? number
+		: Flag extends {type: 'string'}
+			? string
+			: Flag extends {type: 'boolean'}
+				? boolean
+				: unknown;
 
 type PossiblyOptionalFlag<Flag extends AnyFlag, FlagType> =
-		Flag extends {isRequired: true}
+	Flag extends {isRequired: true}
+		? FlagType
+		: Flag extends {default: any}
 			? FlagType
-			: Flag extends {default: any}
-				? FlagType
-				: FlagType | undefined;
+			: FlagType | undefined;
 
 export type TypedFlags<Flags extends AnyFlags> = {
 	[F in keyof Flags]: Flags[F] extends {isMultiple: true}
@@ -375,43 +385,3 @@ export type Result<Flags extends AnyFlags> = {
 	*/
 	showVersion: () => void;
 };
-/**
-@param helpMessage - Shortcut for the `help` option.
-
-@example
-```
-#!/usr/bin/env node
-import meow from 'meow';
-import foo from './index.js';
-
-const cli = meow(`
-	Usage
-	  $ foo <input>
-
-	Options
-	  --rainbow, -r  Include a rainbow
-
-	Examples
-	  $ foo unicorns --rainbow
-	  🌈 unicorns 🌈
-`, {
-	importMeta: import.meta, // This is required
-	flags: {
-		rainbow: {
-			type: 'boolean',
-			shortFlag: 'r'
-		}
-	}
-});
-
-//{
-//	input: ['unicorns'],
-//	flags: {rainbow: true},
-//	...
-//}
-
-foo(cli.input.at(0), cli.flags);
-```
-*/
-export default function meow<Flags extends AnyFlags>(helpMessage: string, options: Options<Flags>): Result<Flags>;
-export default function meow<Flags extends AnyFlags>(options: Options<Flags>): Result<Flags>;

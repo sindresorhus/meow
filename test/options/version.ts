@@ -1,7 +1,7 @@
 import test from 'ava';
 import {_verifyCli, defaultFixture, stripIndentTrim} from '../_utils.js';
 
-const verifyVersion = _verifyCli('version/fixture.js');
+const verifyVersion = _verifyCli('version/fixture.ts');
 
 test('spawn cli and show version', verifyVersion, {
 	args: '--version',
@@ -31,13 +31,13 @@ test('spawn cli and not show version', verifyVersion, {
 
 test('custom version', verifyVersion, {
 	args: '--version',
-	execaOptions: {env: {VERSION: 'beta'}},
+	execaOptions: {env: {VERSION: 'beta'}}, // eslint-disable-line @typescript-eslint/naming-convention
 	expected: 'beta',
 });
 
 test('version = false has no effect', verifyVersion, {
 	args: '--version',
-	execaOptions: {env: {VERSION: 'false'}},
+	execaOptions: {env: {VERSION: 'false'}}, // eslint-disable-line @typescript-eslint/naming-convention
 	expected: 'false',
 });
 

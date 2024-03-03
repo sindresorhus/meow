@@ -79,9 +79,10 @@ const dtsConfig = defineConfig({
 			name: 'copy-tsd',
 			async generateBundle() {
 				let tsdFile = await fs.readFile('./test-d/index.ts', 'utf8');
+
 				tsdFile = tsdFile.replace(
-					`import meow from '../${sourceDirectory}/index.js'`,
-					`import meow from '../${outputDirectory}/index.js'`,
+					`../${sourceDirectory}/index.js`,
+					`../${outputDirectory}/index.js`,
 				);
 
 				await fs.writeFile(`./test-d/${outputDirectory}.ts`, tsdFile);

@@ -2,3 +2,4 @@ node_modules
 build
 yarn.lock
 test-d/build.ts
+.tsimp

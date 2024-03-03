@@ -59,6 +59,7 @@ test('grouped flags work', t => {
 	});
 });
 
+// @ts-expect-error: unknown key alias
 test('suggests renaming alias to shortFlag', verifyFlags, {
 	flags: {
 		foo: {

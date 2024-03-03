@@ -1,16 +1,26 @@
 import test from 'ava';
 import indentString from 'indent-string';
 import meow from '../../source/index.js';
-import {_verifyCli, stripIndent, stripIndentTrim} from '../_utils.js';
+import {
+	_verifyCli,
+	type MeowOptions,
+	stripIndent,
+	stripIndentTrim,
+} from '../_utils.js';
 
 const importMeta = import.meta;
 
 const verifyCli = _verifyCli();
 
-const verifyHelp = test.macro(async (t, {cli: cliArguments, expected}) => {
+type VerifyHelpMacroArguments = [{
+	cli: MeowOptions | [helpMessage: string, options?: MeowOptions];
+	expected: string;
+}];
+
+const verifyHelp = test.macro<VerifyHelpMacroArguments>(async (t, {cli: cliArguments, expected}) => {
 	const assertions = await t.try(async tt => {
 		const cli = Array.isArray(cliArguments)
-			? meow(cliArguments.at(0), {importMeta, ...cliArguments.at(1)})
+			? meow(cliArguments[0], {importMeta, ...cliArguments[1]})
 			: meow({importMeta, ...cliArguments});
 
 		tt.log('help text:\n', cli.help);
