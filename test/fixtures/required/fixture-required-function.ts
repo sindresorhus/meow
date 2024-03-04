@@ -16,8 +16,7 @@ const cli = meow({
 		withTrigger: {
 			type: 'string',
 			// TODO: change type to allow truthy / falsy values?
-			// @ts-expect-error: falsy trigger is still boolean
-			isRequired: (flags, _) => flags.trigger,
+			isRequired: (flags, _) => Boolean(flags.trigger),
 		},
 		allowError: {
 			type: 'boolean',
@@ -25,12 +24,9 @@ const cli = meow({
 		},
 		shouldError: {
 			type: 'boolean',
-			// @ts-expect-error: invalid string return
-			isRequired: (flags, _) => flags.allowError ? 'should error' : false,
+			isRequired: (flags, _) => (flags.allowError ? 'should error' : false) as boolean,
 		},
 	},
 });
 
-// TODO: errors above make flags untyped
-// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 console.log(`${cli.flags.trigger},${cli.flags.withTrigger}`);
