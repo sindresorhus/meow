@@ -92,7 +92,7 @@
 		"trim-newlines": "^5.0.0",
 		"tsd": "^0.30.7",
 		"tsimp": "^2.0.11",
-		"type-fest": "^4.10.3",
+		"type-fest": "4.10.3",
 		"typescript": "~5.3.3",
 		"xo": "^0.57.0",
 		"yargs-parser": "^21.1.1"
