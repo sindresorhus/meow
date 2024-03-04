@@ -46,17 +46,16 @@ declare module 'minimist-options' {
 
 	export type MinimistOption = Pick<MinimistOptions, 'stopEarly' | 'unknown' | '--'>;
 
-	export type Options = MinimistOption & {
-		[key: string]: (
-			| OptionType
-			| StringOption
-			| BooleanOption
-			| NumberOption
-			| DefaultArrayOption
-			| StringArrayOption
-			| BooleanArrayOption
-			| NumberArrayOption
-		);
+	export type Options = MinimistOption & Record<string, (
+		| OptionType
+		| StringOption
+		| BooleanOption
+		| NumberOption
+		| DefaultArrayOption
+		| StringArrayOption
+		| BooleanArrayOption
+		| NumberArrayOption
+	)> & {
 		arguments?: string;
 	};
 

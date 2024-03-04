@@ -86,6 +86,9 @@ const dtsConfig = defineConfig({
 				);
 
 				await fs.writeFile(`./test-d/${outputDirectory}.ts`, tsdFile);
+
+				const minimistFile = await fs.readFile(`./${sourceDirectory}/minimist-options.d.ts`, 'utf8');
+				await fs.writeFile('./test-d/minimist-options.d.ts', minimistFile);
 			},
 		},
 	],

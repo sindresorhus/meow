@@ -1,4 +1,4 @@
-#!/usr/bin/env tsimp
+#!/usr/bin/env node
 import process from 'node:process';
 import meow from '../../build/index.js';
 

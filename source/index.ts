@@ -13,7 +13,7 @@ import type {
 	AnyFlags,
 } from './types.js';
 
-const buildResult = <Flags extends AnyFlags = AnyFlags>({pkg: packageJson, ...options}: ParsedOptions, parserOptions: ParserOptions): Result<Flags> => {
+const buildResult = <Flags extends AnyFlags = never>({pkg: packageJson, ...options}: ParsedOptions, parserOptions: ParserOptions): Result<Flags> => {
 	const {_: input, ...argv} = parseArguments(options.argv as string[], parserOptions);
 	let help = '';
 
@@ -130,10 +130,10 @@ const cli = meow(`
 foo(cli.input.at(0), cli.flags);
 ```
 */
-export default function meow<Flags extends AnyFlags>(helpMessage: string, options: Options<Flags>): Result<Flags>;
-export default function meow<Flags extends AnyFlags>(options: Options<Flags>): Result<Flags>;
+export default function meow<Flags extends AnyFlags = never>(helpMessage: string, options: Options<Flags>): Result<Flags>;
+export default function meow<Flags extends AnyFlags = never>(options: Options<Flags>): Result<Flags>;
 
-export default function meow<Flags extends AnyFlags = AnyFlags>(helpMessage: string | Options<Flags>, options?: Options<Flags>): Result<Flags> {
+export default function meow<Flags extends AnyFlags = never>(helpMessage: string | Options<Flags>, options?: Options<Flags>): Result<Flags> {
 	if (typeof helpMessage !== 'string') {
 		options = helpMessage;
 		helpMessage = '';

@@ -2,7 +2,7 @@ import test from 'ava';
 import meow from '../build/index.js';
 import {_verifyCli, meowVersion} from './_utils.js';
 
-const verifyCli = _verifyCli();
+const verifyCli = _verifyCli('build.js');
 
 test('main', t => {
 	const cli = meow(`
