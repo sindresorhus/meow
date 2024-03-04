@@ -3,7 +3,9 @@ import meow from '../../source/index.js';
 import type {MeowOptions} from '../_utils.js';
 
 type MacroArguments = [{
-	cli: MeowOptions;
+	cli: MeowOptions & {
+		input?: 'string' | 'number';
+	};
 	expected: string | number;
 }];
 
@@ -28,10 +30,10 @@ test('type inference', verifyTypeInference, {
 });
 
 test('with input type', verifyTypeInference, {
-	cli: { // eslint-disable-line @typescript-eslint/consistent-type-assertions
+	cli: {
 		argv: ['5'],
 		input: 'number',
-	} as MeowOptions,
+	},
 	expected: 5,
 });
 

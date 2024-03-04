@@ -88,7 +88,7 @@ export const buildOptions = (helpMessage: string, options: Options<AnyFlags>): P
 		argv: process.argv.slice(2),
 		flags: {},
 		inferType: false,
-		input: 'string', // TODO: undocumented option?
+		input: 'string',
 		description: pkg.description ?? false,
 		help: helpMessage,
 		version: pkg.version || 'No version found', // eslint-disable-line @typescript-eslint/prefer-nullish-coalescing
