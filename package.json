@@ -67,7 +67,7 @@
 		"@sindresorhus/tsconfig": "^5.0.0",
 		"@types/common-tags": "^1.8.4",
 		"@types/minimist": "^1.2.5",
-		"@types/node": "18",
+		"@types/node": "18.x",
 		"@types/stack-utils": "^2.0.3",
 		"@types/yargs-parser": "^21.0.3",
 		"ava": "^6.1.2",

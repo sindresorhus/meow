@@ -17,7 +17,7 @@ test('return object', t => {
 		flags: {
 			unicorn: {shortFlag: 'u'},
 			meow: {default: 'dog'},
-			'--': true,
+			'--': true as never,
 		},
 	});
 
