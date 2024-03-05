@@ -1,7 +1,6 @@
-
-import process from 'node:process';
+/* eslint-disable ava/no-ignored-test-files */
 import {fileURLToPath} from 'node:url';
-import test, {registerCompletionHandler} from 'ava';
+import test from 'ava';
 import {
 	execa,
 	type ExecaChildProcess,
@@ -60,10 +59,6 @@ type VerifyCliMacroArguments = [{
 		clean?: boolean;
 	};
 }, 'expected' | 'error'>];
-
-registerCompletionHandler(() => {
-	process.exit(0);
-});
 
 export const _verifyCli = (baseFixture = defaultFixture) => test.macro<VerifyCliMacroArguments>(
 	async (t, {fixture = baseFixture, args, execaOptions, expected, error}) => {
