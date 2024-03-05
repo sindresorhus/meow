@@ -1,6 +1,8 @@
 /* eslint-disable ava/no-ignored-test-files */
+import process from 'node:process';
 import {fileURLToPath} from 'node:url';
 import test from 'ava';
+import {Semaphore} from '@shopify/semaphore';
 import {
 	execa,
 	type ExecaChildProcess,
@@ -60,8 +62,12 @@ type VerifyCliMacroArguments = [{
 	};
 }, 'expected' | 'error'>];
 
+const semaphore = new Semaphore(Number(process.env['concurrency']) || 5);
+
 export const _verifyCli = (baseFixture = defaultFixture) => test.macro<VerifyCliMacroArguments>(
 	async (t, {fixture = baseFixture, args, execaOptions, expected, error}) => {
+		const permit = await semaphore.acquire();
+
 		const assertions = await t.try(async tt => {
 			const arguments_ = args ? args.split(' ') : [];
 			const {all: output, exitCode} = await spawnFixture(fixture, arguments_, {reject: false, all: true, ...execaOptions}) as ExecaReturnValue & {all: string};
@@ -91,5 +97,6 @@ export const _verifyCli = (baseFixture = defaultFixture) => test.macro<VerifyCli
 		});
 
 		assertions.commit({retainLogs: !assertions.passed});
+		await permit.release();
 	},
 );

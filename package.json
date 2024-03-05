@@ -63,6 +63,7 @@
 		"@rollup/plugin-commonjs": "^25.0.7",
 		"@rollup/plugin-json": "^6.1.0",
 		"@rollup/plugin-node-resolve": "^15.2.3",
+		"@shopify/semaphore": "^3.0.2",
 		"@sindresorhus/is": "^6.2.0",
 		"@sindresorhus/tsconfig": "^5.0.0",
 		"@types/common-tags": "^1.8.4",
@@ -116,6 +117,7 @@
 			"--import=tsimp"
 		],
 		"environmentVariables": {
+			"concurrency": "20",
 			"TSIMP_DIAG": "ignore"
 		}
 	}
