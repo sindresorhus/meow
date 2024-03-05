@@ -39,7 +39,7 @@ const validateChoicesByFlag = (flagKey: string, flagValue: AnyFlag, receivedInpu
 	}
 
 	if (Array.isArray(receivedInput)) {
-		const unknownValues = receivedInput.filter(index => !choices.includes(index as never)); // TODO: never?
+		const unknownValues = receivedInput.filter(input => !choices.includes(input as never));
 
 		if (unknownValues.length > 0) {
 			const valuesText = unknownValues.length > 1 ? 'values' : 'value';
