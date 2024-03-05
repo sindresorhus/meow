@@ -117,7 +117,7 @@
 			"--import=tsimp"
 		],
 		"environmentVariables": {
-			"concurrency": "20",
+			"concurrency": "25",
 			"TSIMP_DIAG": "ignore"
 		}
 	}
