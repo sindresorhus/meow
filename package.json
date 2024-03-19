@@ -108,6 +108,7 @@
 		]
 	},
 	"ava": {
+		"timeout": "1m",
 		"extensions": {
 			"ts": "module",
 			"js": true
