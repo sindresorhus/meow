@@ -1,0 +1,21 @@
+#!/usr/bin/env tsimp
+import meow from '../../../source/index.js';
+
+const cli = meow({
+	importMeta: import.meta,
+	description: 'Custom description',
+	help: `
+		Usage
+		  foo <input>
+  	`,
+	flags: {
+		test: {
+			type: 'number',
+			shortFlag: 't',
+			isRequired: true,
+			isMultiple: true,
+		},
+	},
+});
+
+console.log(cli.flags.test);

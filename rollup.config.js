@@ -1,13 +1,14 @@
 import fs from 'node:fs/promises';
+import {defineConfig} from 'rollup';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import typescript from 'rollup-plugin-ts';
 import json from '@rollup/plugin-json';
 import license from 'rollup-plugin-license';
 import {dts} from 'rollup-plugin-dts';
 import {globby} from 'globby';
 import {createTag, replaceResultTransformer} from 'common-tags';
 import {delete_comments as deleteComments} from 'delete_comments';
-import {defineConfig} from 'rollup';
 
 /** Matches empty lines: https://stackoverflow.com/q/16369642/10292952 */
 const emptyLineRegex = /^\s*[\r\n]/gm;
@@ -21,7 +22,9 @@ const sourceDirectory = 'source';
 const outputDirectory = 'build';
 
 const config = defineConfig({
-	input: await globby(`${sourceDirectory}/**/*.js`),
+	input: await globby(`./${sourceDirectory}/**/*.ts`, {
+		ignore: [`./${sourceDirectory}/*.d.ts`, `./${sourceDirectory}/types.ts`],
+	}),
 	output: {
 		dir: outputDirectory,
 		interop: 'esModule',
@@ -51,6 +54,9 @@ const config = defineConfig({
 			include: 'node_modules/**',
 		}),
 		json(),
+		typescript({
+			tsconfig: resolvedConfig => ({...resolvedConfig, declaration: false}),
+		}),
 		license({
 			thirdParty: {
 				output: `${outputDirectory}/licenses.md`,
@@ -60,7 +66,7 @@ const config = defineConfig({
 });
 
 const dtsConfig = defineConfig({
-	input: `./${sourceDirectory}/index.d.ts`,
+	input: `./${sourceDirectory}/index.ts`,
 	output: {
 		file: `./${outputDirectory}/index.d.ts`,
 		format: 'es',
@@ -73,12 +79,16 @@ const dtsConfig = defineConfig({
 			name: 'copy-tsd',
 			async generateBundle() {
 				let tsdFile = await fs.readFile('./test-d/index.ts', 'utf8');
+
 				tsdFile = tsdFile.replace(
-					`import meow from '../${sourceDirectory}/index.js'`,
-					`import meow from '../${outputDirectory}/index.js'`,
+					`../${sourceDirectory}/index.js`,
+					`../${outputDirectory}/index.js`,
 				);
 
 				await fs.writeFile(`./test-d/${outputDirectory}.ts`, tsdFile);
+
+				const minimistFile = await fs.readFile(`./${sourceDirectory}/minimist-options.d.ts`, 'utf8');
+				await fs.writeFile('./test-d/minimist-options.d.ts', minimistFile);
 			},
 		},
 	],
