@@ -8,12 +8,12 @@ export type FlagType = 'string' | 'boolean' | 'number';
 /**
 Callback function to determine if a flag is required during runtime.
 
-@param flags - Contains the flags converted to camel-case excluding aliases.
+@param flags - Contains the parsed flags converted to camel-case excluding aliases.
 @param input - Contains the non-flag arguments.
 
 @returns True if the flag is required, otherwise false.
 */
-export type IsRequiredPredicate = (flags: Readonly<AnyFlags>, input: readonly string[]) => boolean;
+export type IsRequiredPredicate = (flags: Readonly<Record<string, unknown>>, input: readonly unknown[]) => boolean;
 
 export type Flag<PrimitiveType extends FlagType, Type, IsMultiple = false> = {
 	/**
@@ -133,10 +133,20 @@ export type InputOption = {
 	}
 	```
 	*/
-	readonly isRequired?: boolean | ((input: readonly string[]) => boolean);
+	readonly isRequired?: boolean | ((input: readonly unknown[]) => boolean);
 };
 
-export type Options<Flags extends AnyFlags> = {
+type InvalidDashedFlagKeys<Flags extends AnyFlags> = {
+	readonly [F in keyof Flags as F extends string ? F extends '--' ? never : F extends `${string}-${string}` ? F : never : never]?: never;
+};
+
+type FlagsOption<Flags extends AnyFlags> = Flags & InvalidDashedFlagKeys<Flags>;
+
+export type Options<
+	Flags extends AnyFlags,
+	Input extends InputOption | InputOptionType | undefined = InputOption | InputOptionType | undefined,
+	InferType extends boolean | undefined = boolean | undefined,
+> = {
 	/**
 	Pass in [`import.meta`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_import_meta). This is used to find the correct package.json file.
 	*/
@@ -201,7 +211,7 @@ export type Options<Flags extends AnyFlags> = {
 	}
 	```
 	*/
-	readonly input?: InputOption | InputOptionType;
+	readonly input?: Input;
 
 	/**
 	List of valid commands. Commands must be a single argument without whitespace and must not start with `-`.
@@ -296,7 +306,7 @@ export type Options<Flags extends AnyFlags> = {
 
 	@default false
 	*/
-	readonly inferType?: boolean;
+	readonly inferType?: InferType;
 
 	/**
 	Value of `boolean` flags not defined in `argv`.
@@ -404,11 +414,35 @@ export type TypedFlags<Flags extends AnyFlags> = {
 		: PossiblyOptionalFlag<Flags[F], TypedFlag<Flags[F]>>
 };
 
-export type Result<Flags extends AnyFlags> = {
+type InputTypeName<Input> =
+	Input extends {type: infer Type extends InputOptionType}
+		? Type
+		: Input extends InputOptionType
+			? Input
+			: 'string';
+
+type TypedInputValue<Input extends InputOption | InputOptionType | undefined, InferType extends boolean | undefined> =
+	InferType extends true
+		? string | number
+		: InputTypeName<Input> extends 'number' | 'number-array'
+			? number
+			: InputTypeName<Input> extends 'boolean' | 'boolean-array'
+				? boolean
+				: InputTypeName<Input> extends 'array'
+					? unknown
+					: string;
+
+export type TypedInput<Input extends InputOption | InputOptionType | undefined, InferType extends boolean | undefined> = Array<TypedInputValue<Input, InferType>>;
+
+export type Result<
+	Flags extends AnyFlags,
+	Input extends InputOption | InputOptionType | undefined = undefined,
+	InferType extends boolean | undefined = undefined,
+> = {
 	/**
 	Non-flag arguments.
 	*/
-	input: string[];
+	input: TypedInput<Input, InferType>;
 
 	/**
 	Command name when using the `commands` option.
@@ -485,5 +519,15 @@ const cli = meow(`
 foo(cli.input.at(0), cli.flags);
 ```
 */
-export default function meow<Flags extends AnyFlags>(helpMessage: string, options: Options<Flags>): Result<Flags>;
-export default function meow<Flags extends AnyFlags>(options: Options<Flags>): Result<Flags>;
+type AnyOptions = Options<AnyFlags>;
+
+type OptionFlags<Option> = Option extends {flags?: infer Flags extends AnyFlags} ? Flags : Record<never, never>;
+
+type OptionInput<Option> = Option extends {input?: infer Input extends InputOption | InputOptionType | undefined} ? Input : undefined;
+
+type OptionInferType<Option> = Option extends {inferType?: infer InferType extends boolean | undefined} ? InferType : undefined;
+
+type ValidatedOptions<Option> = Option extends {flags?: infer Flags extends AnyFlags} ? {readonly flags?: FlagsOption<Flags>} : unknown;
+
+export default function meow<Option extends AnyOptions>(helpMessage: string, options: Option & ValidatedOptions<Option>): Result<OptionFlags<Option>, OptionInput<Option>, OptionInferType<Option>>;
+export default function meow<Option extends AnyOptions>(options: Option & ValidatedOptions<Option>): Result<OptionFlags<Option>, OptionInput<Option>, OptionInferType<Option>>;
