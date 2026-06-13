@@ -1,6 +1,6 @@
 import {expectAssignable, expectError, expectType} from 'tsd';
 import type {PackageJson} from 'type-fest';
-import meow, {type AnyFlag, type AnyFlags} from '../source/index.js';
+import meow, {type AnyFlag, type AnyFlags, type IsRequiredPredicate} from '../source/index.js';
 
 const importMeta = import.meta;
 
@@ -13,6 +13,10 @@ meow({importMeta, input: 'number'});
 meow({importMeta, input: {type: 'number'}});
 meow({importMeta, input: {type: 'number', isRequired: true}});
 meow({importMeta, input: {isRequired: true}});
+expectType<string[]>(meow({importMeta}).input);
+expectType<number[]>(meow({importMeta, input: 'number'}).input);
+expectType<number[]>(meow({importMeta, input: {type: 'number'}}).input);
+expectType<Array<string | number>>(meow({importMeta, inferType: true}).input);
 
 // Commands
 expectType<string | undefined>(meow({importMeta, commands: ['run', 'list']}).command);
@@ -21,13 +25,15 @@ expectType<string | undefined>(meow({importMeta, commands: ['run', 'list']}).com
 expectAssignable<{flags: {foo: number}}>(meow({importMeta, flags: {foo: {type: 'number', isRequired: true}}}));
 expectAssignable<{flags: {foo: string | undefined}}>(meow({importMeta, flags: {foo: {type: 'string'}}}));
 expectAssignable<{flags: {foo: boolean[] | undefined}}>(meow({importMeta, flags: {foo: {type: 'boolean', isMultiple: true}}}));
+expectAssignable<IsRequiredPredicate>((_flags, input) => Array.isArray(input));
+expectError(meow({importMeta, flags: {'foo-bar': {type: 'number'}}}));
 
 // Complete result test
 const result = meow('Help text', {
 	importMeta,
 	flags: {
 		foo: {type: 'boolean', shortFlag: 'f'},
-		'foo-bar': {type: 'number', aliases: ['foobar']},
+		fooBar: {type: 'number', aliases: ['foobar']},
 		bar: {type: 'string', default: ''},
 		abc: {type: 'string', isMultiple: true},
 		baz: {type: 'string', choices: ['rainbow', 'cat']},
